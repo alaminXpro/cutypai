@@ -1,6 +1,6 @@
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using cutypai.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace cutypai.Controllers;
 
@@ -18,6 +18,7 @@ public class HomeController : Controller
         return View();
     }
 
+    [Route("privacy")]
     public IActionResult Privacy()
     {
         return View();
