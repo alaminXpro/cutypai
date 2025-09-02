@@ -6,4 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <Target Name="BuildTailwindCSS" BeforeTargets="Build">
+        <Exec Command="npm install" WorkingDirectory="$(MSBuildProjectDirectory)"/>
+        <Exec Command="npx @tailwindcss/cli -i ./Styles/input.css -o ./wwwroot/css/tailwind.css --minify" WorkingDirectory="$(MSBuildProjectDirectory)"/>
+    </Target>
+
 </Project>

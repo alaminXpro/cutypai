@@ -1,0 +1,16 @@
+{
+  "name": "cutypai",
+  "version": "1.0.0",
+  "description": "TailwindCSS integration for cutypai .NET project",
+  "scripts": {
+    "build-css": "npx @tailwindcss/cli -i ./Styles/input.css -o ./wwwroot/css/tailwind.css --watch",
+    "build-css-prod": "npx @tailwindcss/cli -i ./Styles/input.css -o ./wwwroot/css/tailwind.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.12",
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/typography": "^0.5.15",
+    "@tailwindcss/cli": "^4.1.12"
+  }
+}
+
