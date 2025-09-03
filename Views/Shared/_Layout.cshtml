@@ -212,7 +212,13 @@
             }
             else
             {
-                <a asp-controller="Profile" asp-action="Index" class="block py-3 px-2 text-white hover:text-matte-green"><i class="fas fa-user mr-2"></i>Profile</a>
+                <a asp-controller="Auth" asp-action="Profile" class="block py-3 px-2 text-white hover:text-matte-green border-b border-gray-700"><i class="fas fa-user mr-2"></i>Profile</a>
+                <form asp-controller="Auth" asp-action="Logout" method="post" class="block">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="w-full text-left py-3 px-2 text-red-400 hover:text-red-300 border-b border-gray-700">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </form>
             }
         </div>
     </nav>

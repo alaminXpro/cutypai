@@ -1,3 +1,4 @@
+@model cutypai.Models.LoginRequest
 @{
     ViewData["Title"] = "Login Page";
 }
@@ -15,7 +16,7 @@
                 Welcome Back to <span class="text-blue-600">CutyPai</span>
             </h1>
             <p class="text-xl text-white mb-8">
-                Log in to continue exploring. Don't have an account? <a href="/Account/SignUp" class="text-blue-500 hover:text-blue-700 underline">Sign Up</a>.
+                Log in to continue exploring. Don't have an account? <a href="/signup" class="text-blue-500 hover:text-blue-700 underline">Sign Up</a>.
             </p>
         </div>
 
@@ -24,15 +25,30 @@
             <div class="card">
                 <div class="p-6">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">Log In to Your Account</h2>
-                    <form method="post" action="@Url.Action("Login", "Account")" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input type="email" name="Email" class="form-input p-3 w-full rounded-lg bg-gray-100 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Enter your email" required />
+                    
+                    <!-- Display validation errors -->
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                            <div asp-validation-summary="All" class="text-danger"></div>
                         </div>
+                    }
+
+                    <form method="post" asp-action="Login" asp-controller="Auth" class="space-y-4">
+                        @Html.AntiForgeryToken()
+                        
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                            <input type="password" name="Password" class="form-input p-3 w-full rounded-lg bg-gray-100 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Enter your password" required />
+                            <label asp-for="Email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input asp-for="Email" type="email" class="form-input p-3 w-full rounded-lg bg-gray-100 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Enter your email" required />
+                            <span asp-validation-for="Email" class="text-danger text-sm"></span>
                         </div>
+                        
+                        <div>
+                            <label asp-for="Password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <input asp-for="Password" type="password" class="form-input p-3 w-full rounded-lg bg-gray-100 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Enter your password" required />
+                            <span asp-validation-for="Password" class="text-danger text-sm"></span>
+                        </div>
+                        
                         <button type="submit" class="w-full btn-primary p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600">
                             Log In
                         </button>
@@ -44,38 +60,42 @@
         <!-- Footer with optional links -->
         <div class="text-center mt-12 mb-4">
             <p class="text-gray-600">
-                <a href="/Account/ForgotPassword" class="text-blue-500 hover:text-blue-700 underline">Forgot Password?</a>
+                <a href="/forgot-password" class="text-blue-500 hover:text-blue-700 underline">Forgot Password?</a>
             </p>
         </div>
     </div>
 
-    <!-- TailwindCSS Styles (you can include this or modify based on your project's tailwind config) -->
-    <style>
-        .btn-primary {
-            background-color: #1D4ED8; /* Blue */
-            color: white;
-        }
-
-            .btn-primary:hover {
-                background-color: #2563EB; /* Lighter Blue */
-            }
-
-        .form-input {
-            background-color: #F3F4F6;
-            border: 1px solid #D1D5DB;
-            color: #4B5563;
-        }
-
-            .form-input:focus {
-                border-color: #1D4ED8;
-                outline: none;
-            }
-
-        .card {
-            background-color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-    </style>
-
 </body>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<!-- TailwindCSS Styles (you can include this or modify based on your project's tailwind config) -->
+<style>
+    .btn-primary {
+        background-color: #1D4ED8; /* Blue */
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #2563EB; /* Lighter Blue */
+        }
+
+    .form-input {
+        background-color: #F3F4F6;
+        border: 1px solid #D1D5DB;
+        color: #4B5563;
+    }
+
+        .form-input:focus {
+            border-color: #1D4ED8;
+            outline: none;
+        }
+
+    .card {
+        background-color: #FFFFFF;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+</style>

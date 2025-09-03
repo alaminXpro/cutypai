@@ -3,6 +3,7 @@ using System.Text;
 using cutypai.Models;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
@@ -74,35 +75,30 @@ public class Program
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddScoped<IPasswordValidationService, PasswordValidationService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
 
             // ----- Enhanced JWT options -----
             builder.Services.Configure<JwtSettings>(opts =>
             {
                 builder.Configuration.GetSection(JwtSettings.SectionName).Bind(opts);
 
-                // Allow overriding key from env
                 var envKey = Environment.GetEnvironmentVariable("Jwt__Key");
                 if (!string.IsNullOrWhiteSpace(envKey)) opts.Key = envKey;
 
-                // Generate secure key if not provided
                 if (string.IsNullOrWhiteSpace(opts.Key))
                 {
                     Log.Warning("No JWT key found in configuration. Generating a secure key for this session.");
                     opts.Key = GenerateSecureJwtKey();
                 }
 
-                // Validate key security
                 if (!opts.IsKeySecure())
                     throw new InvalidOperationException("JWT Key must be at least 32 characters long for security.");
 
-                // Sensible defaults with shorter access token lifetime
                 if (opts.AccessTokenMinutes <= 0) opts.AccessTokenMinutes = 15;
                 if (opts.RefreshTokenDays <= 0) opts.RefreshTokenDays = 7;
             });
 
-            builder.Services.AddScoped<ITokenService, TokenService>();
-
-            // Enhanced AuthN/Z
+            // Get JWT settings for authentication configuration
             var jwt = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>() ?? new JwtSettings();
             var jwtKey = Environment.GetEnvironmentVariable("Jwt__Key") ?? jwt.Key;
             if (string.IsNullOrWhiteSpace(jwtKey) || jwtKey.Length < 32)
@@ -111,8 +107,19 @@ public class Program
                 jwtKey = GenerateSecureJwtKey();
             }
 
+            // Authentication setup with both Cookies and JWT
             builder.Services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddAuthentication("Cookies")
+                .AddCookie("Cookies", options =>
+                {
+                    options.LoginPath = "/login";
+                    options.LogoutPath = "/logout";
+                    options.AccessDeniedPath = "/login";
+                    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+                    options.SlidingExpiration = true;
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                })
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -170,7 +177,7 @@ public class Program
 
             app.UseCors("Default");
 
-            app.UseAuthentication(); // <-- JWT
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();

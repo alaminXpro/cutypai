@@ -4,22 +4,73 @@
 
 <div class="w-full min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-500">
 
+    <!-- Success/Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="fixed top-20 right-4 z-50 max-w-md">
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg mb-4" role="alert">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span>@TempData["SuccessMessage"]</span>
+                    <button type="button" class="ml-auto text-green-700 hover:text-green-900" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (TempData["InfoMessage"] != null)
+    {
+        <div class="fixed top-20 right-4 z-50 max-w-md">
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg shadow-lg mb-4" role="alert">
+                <div class="flex items-center">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <span>@TempData["InfoMessage"]</span>
+                    <button type="button" class="ml-auto text-blue-700 hover:text-blue-900" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
     <!-- Hero Section -->
     <div class="max-w-6xl mx-auto px-6 py-16 text-center">
-        <h1 class="text-5xl md:text-7xl font-extrabold mb-6">
-            Welcome to <span class="text-green-600 dark:text-green-400">CutyPai AI Hub</span>
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-10 italic">
-            "AI is not just intelligence; it’s inspiration coded into algorithms."
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button class="px-6 py-3 bg-green-600 dark:bg-green-500 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 dark:hover:bg-green-600 transition">
-                Explore AI Projects
-            </button>
-            <button class="px-6 py-3 border border-green-600 dark:border-green-400 text-green-700 dark:text-green-300 font-semibold rounded-lg hover:bg-green-100 dark:hover:bg-green-600 hover:text-green-800 dark:hover:text-white transition">
-                Learn More
-            </button>
-        </div>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6">
+                Welcome back, <span class="text-green-600 dark:text-green-400">@User.Identity.Name</span>!
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-10 italic">
+                "Ready to continue your AI journey? Let's build something amazing together."
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a asp-controller="Auth" asp-action="Profile" class="px-6 py-3 bg-green-600 dark:bg-green-500 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 dark:hover:bg-green-600 transition">
+                    View Profile
+                </a>
+                <button class="px-6 py-3 border border-green-600 dark:border-green-400 text-green-700 dark:text-green-300 font-semibold rounded-lg hover:bg-green-100 dark:hover:bg-green-600 hover:text-green-800 dark:hover:text-white transition">
+                    Explore AI Projects
+                </button>
+            </div>
+        }
+        else
+        {
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6">
+                Welcome to <span class="text-green-600 dark:text-green-400">CutyPai AI Hub</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-10 italic">
+                "AI is not just intelligence; it's inspiration coded into algorithms."
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a asp-controller="Auth" asp-action="Signup" class="px-6 py-3 bg-green-600 dark:bg-green-500 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 dark:hover:bg-green-600 transition">
+                    Get Started
+                </a>
+                <a asp-controller="Auth" asp-action="Login" class="px-6 py-3 border border-green-600 dark:border-green-400 text-green-700 dark:text-green-300 font-semibold rounded-lg hover:bg-green-100 dark:hover:bg-green-600 hover:text-green-800 dark:hover:text-white transition">
+                    Sign In
+                </a>
+            </div>
+        }
     </div>
 
     <!-- Stats Container -->
