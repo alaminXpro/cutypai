@@ -5,7 +5,7 @@ namespace cutypai.Models;
 
 public interface IRefreshTokenRepository
 {
-    Task<RefreshToken> CreateAsync(string userId, DateTime expiresAt, CancellationToken ct = default);
+    Task<RefreshToken?> CreateAsync(string userId, DateTime expiresAt, CancellationToken ct = default);
     Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken ct = default);
     Task<bool> RevokeTokenAsync(string token, string reason = "Revoked", CancellationToken ct = default);
 
@@ -24,7 +24,7 @@ public sealed class RefreshTokenRepository : IRefreshTokenRepository
         _collection = factory.GetCollection<RefreshToken>("refresh_tokens");
     }
 
-    public async Task<RefreshToken> CreateAsync(string userId, DateTime expiresAt, CancellationToken ct = default)
+    public async Task<RefreshToken?> CreateAsync(string userId, DateTime expiresAt, CancellationToken ct = default)
     {
         var token = new RefreshToken
         {
