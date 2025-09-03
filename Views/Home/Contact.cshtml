@@ -1,0 +1,92 @@
+﻿@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<div class="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-500 pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 animate-fadeIn">
+                Get in Touch
+            </h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300 animate-fadeIn delay-200">
+                Have questions, feedback, or just want to say hello? We’d love to hear from you.
+            </p>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <!-- Contact Info -->
+            <div class="bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg p-8 transform hover:scale-[1.02] transition duration-300">
+                <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-6">Contact Information</h2>
+                <ul class="space-y-4 text-gray-700 dark:text-gray-300">
+                    <li class="flex items-center">
+                        <i class="fas fa-map-marker-alt text-green-500 mr-3"></i>
+                        123 AI Street, Tech City, Innovationland
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-phone-alt text-green-500 mr-3"></i>
+                        +1 (234) 567-890
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-envelope text-green-500 mr-3"></i>
+                        support@aiworld.com
+                    </li>
+                </ul>
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold text-green-600 dark:text-green-400 mb-3">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/jamil.jim.946/w" class="text-gray-400 hover:text-matte-green social-icon"><i class="fab fa-facebook text-lg"></i></a>
+                        <a href="https://www.instagram.com/ipirate_jim/" class="text-gray-400 hover:text-matte-green social-icon"><i class="fab fa-instagram text-lg"></i></a>
+                        <a href="https://www.instagram.com/ipirate_jim/" class="text-gray-400 hover:text-matte-green social-icon"><i class="fab fa-twitter text-lg"></i></a>
+                        <a href="https://discord.com/" class="text-gray-400 hover:text-matte-green social-icon"><i class="fab fa-discord text-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg p-8 transform hover:scale-[1.02] transition duration-300">
+                <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-6">Send a Message</h2>
+                <form>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
+                        <input type="text" class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:outline-none transition" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+                        <input type="email" class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:outline-none transition" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-300 mb-2">Message</label>
+                        <textarea rows="4" class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:outline-none transition"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg transition transform hover:scale-105">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Animations -->
+<style>
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .animate-fadeIn {
+        animation: fadeIn 0.8s ease-in-out forwards;
+    }
+</style>

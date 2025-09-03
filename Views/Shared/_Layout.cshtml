@@ -1,63 +1,425 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@{
+    var isLoggedIn = User?.Identity?.IsAuthenticated ?? false;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - cutypai</title>
-    <link rel="stylesheet" href="~/css/tailwind.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/cutypai.styles.css" asp-append-version="true"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Cutypai</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                fontFamily: {
+                    sans: ['Inter', 'system-ui', 'sans-serif'],
+                    heading: ['Poppins', 'sans-serif']
+                },
+                extend: {
+                    colors: {
+                        'matte-green': '#2E8B57',
+                        'matte-black': '#1E1E1E',
+                        'matte-gray': '#333333',
+                        'light-ash': '#D3D3D3',
+                        'dark-gray': '#252525'
+                    },
+                    transitionProperty: {
+                        'width': 'width',
+                        'rotate': 'rotate'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            @@apply transition-colors duration-500;
+        }
+
+        /* Navbar styles */
+        .navbar-glass {
+            background: rgba(255, 255, 255, 0.05); /* Very light transparent for light mode */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dark .navbar-glass {
+            background: rgba(23, 23, 23, 0.05); /* Very dark transparent for dark mode */
+        }
+
+        .navbar-solid {
+            background: rgba(255, 255, 255, 0.9); /* Light background for solid state */
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        }
+
+        .dark .navbar-solid {
+            background: rgba(23, 23, 23, 0.95); /* Dark background for solid state */
+            box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            color: rgba(0, 0, 0, 0.8); /* Dark text for light mode */
+        }
+
+        .dark .nav-link {
+            color: rgba(255, 255, 255, 0.9); /* Light text for dark mode */
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0.125rem;
+            background-color: #2E8B57; /* matte-green */
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 70%;
+        }
+
+        /* Dark/Light toggle styles */
+        .theme-toggle-btn {
+            position: relative;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1); /* Light transparent for light mode */
+            color: #F59E0B; /* Amber color for sun */
+            cursor: pointer;
+            transition: all 0.5s;
+        }
+
+        .dark .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.1); /* Dark transparent for dark mode */
+            color: #E5E7EB; /* Light gray color for moon */
+        }
+
+        .theme-toggle-btn i {
+            position: absolute;
+            font-size: 1.125rem;
+            transition: transform 0.5s, color 0.3s;
+        }
+
+        /* Footer gradient & social icons */
+        .footer-gradient {
+            background: linear-gradient(180deg, #151515 0%, #0f0f0f 100%);
+            border-top: 1px solid rgba(46, 139, 87, 0.15);
+        }
+
+        .social-icon {
+            @@apply transition-all duration-300;
+        }
+
+            .social-icon:hover {
+                transform: translateY(-3px);
+            }
+
+        /* Sidebar animation */
+        .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+    </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
-<header>
-    <nav class="bg-white border-b shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex-shrink-0 flex items-center">
-                    <a asp-area="" asp-controller="Home" asp-action="Index" class="text-2xl font-bold text-blue-600">cutypai</a>
-                </div>
-                <div class="hidden md:flex space-x-6">
-                    <a asp-area="" asp-controller="Home" asp-action="Index" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
-                    <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-gray-700 hover:text-blue-600 font-medium">Privacy</a>
-                    <a asp-area="" asp-controller="Auth" asp-action="Login" class="text-gray-700 hover:text-blue-600 font-medium">Login</a>
-                    <a asp-area="" asp-controller="Auth" asp-action="Signup" class="text-gray-700 hover:text-blue-600 font-medium">Signup</a>
-                </div>
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-button" class="text-gray-700 hover:text-blue-600 focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
+<body class="bg-white dark:bg-matte-black text-gray-800 dark:text-gray-200 font-sans">
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 navbar-glass py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+
+            <!-- Logo -->
+            <div class="flex-shrink-0">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="text-2xl font-heading font-bold text-white flex items-center">
+                    <span class="bg-matte-green p-1 rounded mr-2"><i class="fas fa-leaf text-white"></i></span>
+                    cutypai
+                </a>
+            </div>
+
+            <!-- Centered Links -->
+            <div class="hidden md:flex space-x-8 justify-center flex-1">
+                <a asp-controller="Home" asp-action="Index" class="nav-link text-white hover:text-matte-green">Home</a>
+                <a asp-controller="Home" asp-action="About" class="nav-link text-white hover:text-matte-green">About Us</a>
+                <a asp-controller="Home" asp-action="Privacy" class="nav-link text-white hover:text-matte-green">Privacy</a>
+            </div>
+
+            <!-- Right Links -->
+            <div class="hidden md:flex items-center space-x-3">
+                @if (!isLoggedIn)
+                {
+                    <a asp-controller="Auth" asp-action="Login" class="px-4 py-2 rounded-md text-sm font-medium text-white hover:bg-matte-green/20 transition-colors duration-300">Login</a>
+                    <a asp-controller="Auth" asp-action="Signup" class="px-4 py-2 rounded-md text-sm font-medium bg-matte-green text-white hover:bg-green-600 transition-colors duration-300">Signup</a>
+                }
+                else
+                {
+                    <a asp-controller="Profile" asp-action="Index" class="nav-link text-white hover:text-matte-green flex items-center">
+                        <i class="fas fa-user-circle mr-1"></i> Profile
+                    </a>
+                    <button id="sidebar-toggle" class="ml-2 text-white p-2 rounded-md hover:bg-matte-gray/30 transition-colors duration-300">
+                        <i class="fas fa-bars-staggered text-lg"></i>
                     </button>
+                }
+
+                <!-- Animated Day/Night Toggle -->
+                <button id="theme-toggle" class="theme-toggle-btn ml-3">
+                    <i class="fas fa-sun" id="sun-icon"></i>
+                    <i class="fas fa-moon" id="moon-icon"></i>
+                </button>
+            </div>
+
+            <!-- Mobile -->
+            <div class="md:hidden flex items-center space-x-3">
+                <button id="theme-toggle-mobile" class="theme-toggle-btn">
+                    <i class="fas fa-sun" id="sun-icon-mobile"></i>
+                    <i class="fas fa-moon" id="moon-icon-mobile"></i>
+                </button>
+                <button id="mobile-menu-button" class="text-white focus:outline-none p-2 rounded-md hover:bg-matte-gray/30">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden px-4 pt-2 pb-4 mt-2 bg-dark-gray rounded-lg shadow-xl border border-gray-800">
+            <a asp-controller="Home" asp-action="Index" class="block py-3 px-2 text-white hover:text-matte-green border-b border-gray-700"><i class="fas fa-home mr-2"></i>Home</a>
+            <a asp-controller="Home" asp-action="About" class="block py-3 px-2 text-white hover:text-matte-green border-b border-gray-700"><i class="fas fa-info-circle mr-2"></i>About Us</a>
+            <a asp-controller="Home" asp-action="Privacy" class="block py-3 px-2 text-white hover:text-matte-green border-b border-gray-700"><i class="fas fa-shield-alt mr-2"></i>Privacy Policy</a>
+            @if (!isLoggedIn)
+            {
+                <a asp-controller="Auth" asp-action="Login" class="block py-3 px-2 text-white hover:text-matte-green border-b border-gray-700"><i class="fas fa-sign-in-alt mr-2"></i>Login</a>
+                <a asp-controller="Auth" asp-action="Signup" class="block py-3 px-2 text-matte-green hover:text-green-400"><i class="fas fa-user-plus mr-2"></i>Signup</a>
+            }
+            else
+            {
+                <a asp-controller="Profile" asp-action="Index" class="block py-3 px-2 text-white hover:text-matte-green"><i class="fas fa-user mr-2"></i>Profile</a>
+            }
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 bg-dark-gray text-white z-50 p-6 shadow-xl border-r border-gray-800">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-xl font-heading font-bold flex items-center">
+                <i class="fas fa-compass mr-2 text-matte-green"></i> Menu
+            </h2>
+            <button id="close-sidebar" class="text-white p-2 hover:bg-matte-gray/30 rounded-md"><i class="fas fa-times"></i></button>
+        </div>
+        <div>
+            <h3 class="text-matte-green font-semibold mb-4 flex items-center">
+                <i class="fas fa-user mr-2"></i> User
+            </h3>
+            <ul class="space-y-3">
+                <li>
+                    <a asp-controller="Dashboard" asp-action="Index" class="flex items-center py-2 px-3 rounded-md hover:bg-matte-gray/30 transition-colors duration-300">
+                        <i class="fas fa-tachometer-alt mr-3 text-matte-green"></i>Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Settings" asp-action="Index" class="flex items-center py-2 px-3 rounded-md hover:bg-matte-gray/30 transition-colors duration-300">
+                        <i class="fas fa-cog mr-3 text-matte-green"></i>Settings
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Profile" asp-action="Info" class="flex items-center py-2 px-3 rounded-md hover:bg-matte-gray/30 transition-colors duration-300">
+                        <i class="fas fa-info-circle mr-3 text-matte-green"></i>Information
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full p-6 border-t border-gray-800 flex justify-center space-x-4">
+            <a href="https://www.facebook.com/jamil.jim.946/w" class="text-gray-400 hover:text-matte-green social-icon"><i class="fab fa-facebook text-lg"></i></a>
+            <a href="https://www.instagram.com/ipirate_jim/" class="text-gray-400 hover:text-matte-green social-icon"><i class="fab fa-instagram text-lg"></i></a>
+            <a href="https://www.instagram.com/ipirate_jim/" class="text-gray-400 hover:text-matte-green social-icon"><i class="fab fa-twitter text-lg"></i></a>
+            <a href="https://discord.com/" class="text-gray-400 hover:text-matte-green social-icon"><i class="fab fa-discord text-lg"></i></a>
+        </div>
+    </div>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Main Body -->
+    <main class="pt-28">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-gradient text-white pt-12 pb-6">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="lg:col-span-1">
+                <div class="flex items-center mb-4">
+                    <span class="bg-matte-green p-1 rounded mr-2"><i class="fas fa-leaf text-white"></i></span>
+                    <h3 class="text-xl font-heading font-bold">cutypai</h3>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Modern web apps with cutting-edge technology and elegant design.</p>
+                <div class="flex space-x-3">
+                    <a href="https://www.facebook.com/jamil.jim.946/w" class="text-gray-400 hover:text-matte-green social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.instagram.com/ipirate_jim/" class="text-gray-400 hover:text-matte-green social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://x.com/" class="text-gray-400 hover:text-matte-green social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://discord.com/" class="text-gray-400 hover:text-matte-green social-icon">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="font-semibold text-lg mb-4 relative inline-block">
+                    Legal
+                    <span class="absolute bottom-0 left-0 w-8 h-0.5 bg-matte-green"></span>
+                </h4>
+                <ul class="space-y-2">
+                    <li><a asp-controller="Home" asp-action="Terms" class="text-gray-400 hover:text-matte-green transition-colors duration-300">Terms of Service</a></li>
+                    <li><a asp-controller="Home" asp-action="Privacy" class="text-gray-400 hover:text-matte-green transition-colors duration-300">Privacy Policy</a></li>
+                    <li><a asp-controller="Home" asp-action="Cookies" class="text-gray-400 hover:text-matte-green transition-colors duration-300">Cookie Policy</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold text-lg mb-4 relative inline-block">
+                    Resources
+                    <span class="absolute bottom-0 left-0 w-8 h-0.5 bg-matte-green"></span>
+                </h4>
+                <ul class="space-y-2">
+                    <li><a asp-controller="Home" asp-action="Help" class="text-gray-400 hover:text-matte-green transition-colors duration-300">Help Center</a></li>
+                    <li><a asp-controller="Home" asp-action="About" class="text-gray-400 hover:text-matte-green transition-colors duration-300">About Us</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact" class="text-gray-400 hover:text-matte-green transition-colors duration-300">Contact</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold text-lg mb-4 relative inline-block">
+                    Newsletter
+                    <span class="absolute bottom-0 left-0 w-8 h-0.5 bg-matte-green"></span>
+                </h4>
+                <p class="text-gray-400 text-sm mb-3">Subscribe to our newsletter for the latest updates.</p>
+                <form class="flex flex-col space-y-2">
+                    <input type="email" placeholder="Your email" class="px-3 py-2 bg-matte-gray border border-gray-700 rounded text-white text-sm focus:outline-none focus:ring-1 focus:ring-matte-green">
+                    <button type="submit" class="px-3 py-2 bg-matte-green text-white rounded text-sm hover:bg-green-600 transition-colors duration-300">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 mt-10 pt-6 border-t border-gray-800">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-gray-400 text-sm">&copy; @DateTime.Now.Year Cutypai. All rights reserved.</div>
+                <div class="flex space-x-4 mt-3 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-matte-green text-sm">Terms</a>
+                    <a href="#" class="text-gray-400 hover:text-matte-green text-sm">Privacy</a>
+                    <a href="#" class="text-gray-400 hover:text-matte-green text-sm">Cookies</a>
                 </div>
             </div>
         </div>
-        <div id="mobile-menu" class="md:hidden hidden px-4 pb-4">
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Home</a>
-            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Privacy</a>
-            <a asp-area="" asp-controller="Auth" asp-action="Login" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Login</a>
-            <a asp-area="" asp-controller="Auth" asp-action="Signup" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Signup</a>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const btn = document.getElementById('mobile-menu-button');
-                const menu = document.getElementById('mobile-menu');
-                btn.addEventListener('click', function () {
-                    menu.classList.toggle('hidden');
-                });
-            });
-        </script>
-    </nav>
-</header>
-<div class="flex-1">
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        @RenderBody()
-    </main>
-</div>
-<footer class="border-t bg-white text-gray-500 py-4 mt-8">
-    <div class="max-w-7xl mx-auto px-4">
-        &copy; 2025 - cutypai - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="hover:text-blue-600">Privacy</a>
-    </div>
-</footer>
-@await RenderSectionAsync("Scripts", false)
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        // Dark Mode with animated toggle
+          const themeBtn = document.getElementById('theme-toggle');
+          const themeBtnMobile = document.getElementById('theme-toggle-mobile');
+
+          function setThemeIcons() {
+              const sun = document.querySelectorAll('#sun-icon, #sun-icon-mobile');
+              const moon = document.querySelectorAll('#moon-icon, #moon-icon-mobile');
+
+              if(document.documentElement.classList.contains('dark')){
+                  // Dark mode - sun transitions to yellow, moon to white
+                  sun.forEach(i => {
+                      i.style.transform = 'rotate(180deg) scale(0)';
+                      i.style.color = '#FBBF24'; // Sun yellow color
+                  });
+                  moon.forEach(i => {
+                      i.style.transform = 'rotate(0deg) scale(1)';
+                      i.style.color = '#FFFFFF'; // Moon white color
+                  });
+              } else {
+                  // Light mode - sun transitions to yellow, moon to white
+                  sun.forEach(i => {
+                      i.style.transform = 'rotate(0deg) scale(1)';
+                      i.style.color = '#FBBF24'; // Sun yellow color
+                  });
+                  moon.forEach(i => {
+                      i.style.transform = 'rotate(180deg) scale(0)';
+                      i.style.color = '#FFFFFF'; // Moon white color
+                  });
+              }
+          }
+
+          function toggleTheme() {
+              document.documentElement.classList.toggle('dark');
+              localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+              setThemeIcons();
+          }
+
+          themeBtn.addEventListener('click', toggleTheme);
+          themeBtnMobile.addEventListener('click', toggleTheme);
+
+          // Initialize theme
+          if (localStorage.getItem('theme') === 'dark') {
+              document.documentElement.classList.add('dark');
+          }
+          setThemeIcons();
+
+          // Sidebar
+          const sidebar = document.getElementById('sidebar');
+          const overlay = document.getElementById('sidebar-overlay');
+          document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
+              sidebar.classList.add('open');
+              overlay.classList.remove('hidden');
+          });
+          document.getElementById('close-sidebar')?.addEventListener('click', () => {
+              sidebar.classList.remove('open');
+              overlay.classList.add('hidden');
+          });
+          overlay.addEventListener('click', () => {
+              sidebar.classList.remove('open');
+              overlay.classList.add('hidden');
+          });
+
+          // Mobile menu toggle
+          const mobileMenuButton = document.getElementById('mobile-menu-button');
+          const mobileMenu = document.getElementById('mobile-menu');
+          mobileMenuButton.addEventListener('click', () => {
+              mobileMenu.classList.toggle('hidden');
+          });
+
+          // Navbar scroll
+          const navbar = document.getElementById('navbar');
+          window.addEventListener('scroll', () => {
+              if (window.scrollY > 50) {
+                  navbar.classList.add('navbar-solid');
+                  navbar.classList.remove('navbar-glass');
+              } else {
+                  navbar.classList.add('navbar-glass');
+                  navbar.classList.remove('navbar-solid');
+              }
+          });
+
+
+    </script>
 </body>
 </html>
