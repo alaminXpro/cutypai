@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "About Us";
+}
+
+<div class="min-h-screen bg-gray-50 dark:bg-matte-black pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-10">
+
+        <!-- Sidebar -->
+        <aside class="lg:w-80 flex-shrink-0">
+            <div class="sticky top-28 space-y-6">
+
+                <!-- Table of Contents -->
+                <div class="bg-white dark:bg-matte-gray rounded-2xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-matte-black dark:text-white mb-4">About Us</h3>
+                    <nav>
+                        <ul class="space-y-3 text-sm">
+                            <li>
+                                <a href="#mission" class="flex items-center py-2 border-b border-gray-100 dark:border-gray-700 hover:text-matte-green transition">
+                                    <span class="w-2 h-2 bg-matte-green rounded-full mr-3"></span>
+                                    Our Mission
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#who-we-are" class="flex items-center py-2 border-b border-gray-100 dark:border-gray-700 hover:text-matte-green transition">
+                                    <span class="w-2 h-2 bg-matte-green rounded-full mr-3"></span>
+                                    Who We Are
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#how-we-help" class="flex items-center py-2 border-b border-gray-100 dark:border-gray-700 hover:text-matte-green transition">
+                                    <span class="w-2 h-2 bg-matte-green rounded-full mr-3"></span>
+                                    How We Help
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#testimonials" class="flex items-center py-2 hover:text-matte-green transition">
+                                    <span class="w-2 h-2 bg-matte-green rounded-full mr-3"></span>
+                                    Testimonials
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 space-y-10">
+            <div class="bg-white dark:bg-matte-gray rounded-2xl shadow-lg p-8">
+
+                <!-- Header Section -->
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-heading font-bold text-matte-black dark:text-white mb-4">About Us</h1>
+                    <p class="text-matte-gray dark:text-light-ash text-lg max-w-2xl mx-auto">
+                        Learn more about our mission, our values, and how we help clients achieve their financial goals.
+                    </p>
+                </div>
+
+                <!-- Mission Section -->
+                <section id="mission" class="mb-12 scroll-mt-24">
+                    <h2 class="text-2xl font-heading font-semibold text-matte-black dark:text-white mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-matte-green rounded-full flex items-center justify-center text-white mr-3 text-sm">1</span>
+                        Our Mission
+                    </h2>
+                    <p class="text-matte-gray dark:text-light-ash">
+                        Our mission is to challenge the status quo by delivering transparent, customer-focused financial advice
+                        and services. We believe in empowering our clients with knowledge and guiding them through every step of their journey.
+                    </p>
+                </section>
+
+                <!-- Who We Are Section -->
+                <section id="who-we-are" class="mb-12 scroll-mt-24">
+                    <h2 class="text-2xl font-heading font-semibold text-matte-black dark:text-white mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-matte-green rounded-full flex items-center justify-center text-white mr-3 text-sm">2</span>
+                        Who We Are
+                    </h2>
+                    <p class="text-matte-gray dark:text-light-ash mb-6">
+                        We are a team of dedicated professionals passionate about helping individuals and families find the best financial solutions.
+                        With a blend of expertise and innovation, we aim to make financial decisions simple, clear, and effective.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <img src="/images/team1.jpg" alt="Team 1" class="rounded-xl shadow-md object-cover w-full h-64" />
+                        <img src="/images/team2.jpg" alt="Team 2" class="rounded-xl shadow-md object-cover w-full h-64" />
+                    </div>
+                </section>
+
+                <!-- How We Help Section -->
+                <section id="how-we-help" class="mb-12 scroll-mt-24">
+                    <h2 class="text-2xl font-heading font-semibold text-matte-black dark:text-white mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-matte-green rounded-full flex items-center justify-center text-white mr-3 text-sm">3</span>
+                        How We Help
+                    </h2>
+                    <p class="text-matte-gray dark:text-light-ash mb-6">
+                        We support our clients through personalized advice, clear communication, and flexible solutions.
+                        Whether you're buying your first home, investing, or looking to save, we provide step-by-step guidance.
+                    </p>
+                    <ul class="list-disc pl-6 text-matte-gray dark:text-light-ash space-y-2">
+                        <li>Tailored mortgage advice</li>
+                        <li>Step-by-step financial guidance</li>
+                        <li>Transparent and reliable communication</li>
+                    </ul>
+                </section>
+
+                <!-- Testimonials Section -->
+                <section id="testimonials" class="scroll-mt-24">
+                    <h2 class="text-2xl font-heading font-semibold text-matte-black dark:text-white mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-matte-green rounded-full flex items-center justify-center text-white mr-3 text-sm">4</span>
+                        Testimonials
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-gray-50 dark:bg-matte-black rounded-xl shadow p-6">
+                            <p class="text-matte-gray dark:text-light-ash italic mb-4">"Fantastic service — they helped us every step of the way!"</p>
+                            <h4 class="font-semibold text-matte-black dark:text-white">Al Amin</h4>
+                            <p class="text-yellow-500">★★★★★</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-matte-black rounded-xl shadow p-6">
+                            <p class="text-matte-gray dark:text-light-ash italic mb-4">"Professional, transparent, and highly supportive."</p>
+                            <h4 class="font-semibold text-matte-black dark:text-white">Jamil Jim</h4>
+                            <p class="text-yellow-500">★★★★</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-matte-black rounded-xl shadow p-6">
+                            <p class="text-matte-gray dark:text-light-ash italic mb-4">"Made complex financial decisions simple and stress-free."</p>
+                            <h4 class="font-semibold text-matte-black dark:text-white">Harique Jaif</h4>
+                            <p class="text-yellow-500">★★★★★</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+</script>

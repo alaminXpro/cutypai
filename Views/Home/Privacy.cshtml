@@ -1,6 +1,267 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="min-h-screen bg-gray-50 dark:bg-matte-black pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
+
+        <!-- Sidebar (Table of Contents + Download) -->
+        <aside class="lg:w-80 flex-shrink-0">
+            <div class="sticky top-24 space-y-6">
+
+                <!-- Table of Contents -->
+                <div class="bg-white dark:bg-matte-gray rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-matte-black dark:text-white mb-4">Table of Contents</h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="#data-collection" class="text-matte-gray dark:text-light-ash hover:text-matte-green transition-colors flex items-center py-2 border-b border-gray-100 dark:border-gray-700">
+                                <span class="w-2 h-2 bg-matte-green rounded-full mr-3"></span> Information We Collect
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#data-usage" class="text-matte-gray dark:text-light-ash hover:text-matte-green transition-colors flex items-center py-2 border-b border-gray-100 dark:border-gray-700">
+                                <span class="w-2 h-2 bg-matte-green rounded-full mr-3"></span> How We Use Information
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#cookies" class="text-matte-gray dark:text-light-ash hover:text-matte-green transition-colors flex items-center py-2 border-b border-gray-100 dark:border-gray-700">
+                                <span class="w-2 h-2 bg-matte-green rounded-full mr-3"></span> Cookies & Tracking
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#rights" class="text-matte-gray dark:text-light-ash hover:text-matte-green transition-colors flex items-center py-2">
+                                <span class="w-2 h-2 bg-matte-green rounded-full mr-3"></span> Your Privacy Rights
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Download Section -->
+                <div class="bg-white dark:bg-matte-gray rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-matte-black dark:text-white mb-4">Download Policy</h3>
+                    <p class="text-matte-gray dark:text-light-ash text-sm mb-4">Save a copy for your records.</p>
+                    <button class="w-full bg-matte-black dark:bg-black text-white py-2 px-4 rounded-md hover:bg-matte-green transition-colors flex items-center justify-center">
+                        <i class="fas fa-download mr-2"></i> Download PDF
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 space-y-10">
+            <div class="bg-white dark:bg-matte-gray rounded-2xl shadow-lg p-8">
+
+                <!-- Header Section -->
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-heading font-bold text-matte-black dark:text-white mb-4">Privacy Policy</h1>
+                    <p class="text-matte-gray dark:text-light-ash text-lg">Last updated: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+                </div>
+
+                <!-- Introduction -->
+                <div class="mb-10">
+                    <p class="text-matte-gray dark:text-light-ash mb-6">
+                        At Cutypai, we take your privacy seriously. This Privacy Policy describes how we collect, use, and share your personal information when you use our services.
+                    </p>
+                    <div class="bg-gray-50 dark:bg-matte-black p-5 rounded-lg border-l-4 border-matte-green">
+                        <p class="text-matte-black dark:text-white"><strong>Summary:</strong> We only collect information necessary to provide our services. We never sell your data to third parties.</p>
+                    </div>
+                </div>
+
+                <!-- Data Collection Section -->
+                <section id="data-collection" class="mb-10 scroll-mt-24">
+                    <h2 class="text-2xl font-heading font-semibold text-matte-black dark:text-white mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-matte-green rounded-full flex items-center justify-center text-white mr-3 text-sm">1</span>
+                        Information We Collect
+                    </h2>
+                    <div class="bg-white dark:bg-matte-gray p-6 rounded-lg shadow-sm">
+                        <p class="text-matte-gray dark:text-light-ash mb-4">We collect information to provide better services to all our users. The types of information we collect include:</p>
+
+                        <div class="mb-5">
+                            <h3 class="text-lg font-medium text-matte-black dark:text-white mb-2">Information you provide to us</h3>
+                            <ul class="list-disc pl-5 text-matte-gray dark:text-light-ash space-y-1">
+                                <li>Account information (name, email address, profile details)</li>
+                                <li>Content you create, upload, or receive</li>
+                                <li>Communications between you and Cutypai</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-medium text-matte-black dark:text-white mb-2">Information we collect automatically</h3>
+                            <ul class="list-disc pl-5 text-matte-gray dark:text-light-ash space-y-1">
+                                <li>Device information and identifiers</li>
+                                <li>Usage data and analytics</li>
+                                <li>IP address and browser type</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data Usage Section -->
+                <section id="data-usage" class="mb-10 scroll-mt-24">
+                    <h2 class="text-2xl font-heading font-semibold text-matte-black dark:text-white mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-matte-green rounded-full flex items-center justify-center text-white mr-3 text-sm">2</span>
+                        How We Use Your Information
+                    </h2>
+                    <div class="bg-white dark:bg-matte-gray p-6 rounded-lg shadow-sm">
+                        <p class="text-matte-gray dark:text-light-ash mb-4">We use the information we collect for the following purposes:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 dark:bg-matte-black p-4 rounded-lg">
+                                <div class="w-10 h-10 bg-matte-green bg-opacity-20 rounded-lg flex items-center justify-center text-matte-green mb-3">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <h3 class="font-medium text-matte-black dark:text-white mb-1">Service Operation</h3>
+                                <p class="text-sm text-matte-gray dark:text-light-ash">To provide, maintain, and improve our services</p>
+                            </div>
+
+                            <div class="bg-gray-50 dark:bg-matte-black p-4 rounded-lg">
+                                <div class="w-10 h-10 bg-matte-green bg-opacity-20 rounded-lg flex items-center justify-center text-matte-green mb-3">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <h3 class="font-medium text-matte-black dark:text-white mb-1">Security</h3>
+                                <p class="text-sm text-matte-gray dark:text-light-ash">To protect against fraud and abuse</p>
+                            </div>
+
+                            <div class="bg-gray-50 dark:bg-matte-black p-4 rounded-lg">
+                                <div class="w-10 h-10 bg-matte-green bg-opacity-20 rounded-lg flex items-center justify-center text-matte-green mb-3">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <h3 class="font-medium text-matte-black dark:text-white mb-1">Communications</h3>
+                                <p class="text-sm text-matte-gray dark:text-light-ash">To send important notices and updates</p>
+                            </div>
+
+                            <div class="bg-gray-50 dark:bg-matte-black p-4 rounded-lg">
+                                <div class="w-10 h-10 bg-matte-green bg-opacity-20 rounded-lg flex items-center justify-center text-matte-green mb-3">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h3 class="font-medium text-matte-black dark:text-white mb-1">Analytics</h3>
+                                <p class="text-sm text-matte-gray dark:text-light-ash">To understand how our services are used</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cookies Section -->
+                <section id="cookies" class="mb-10 scroll-mt-24">
+                    <h2 class="text-2xl font-heading font-semibold text-matte-black dark:text-white mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-matte-green rounded-full flex items-center justify-center text-white mr-3 text-sm">3</span>
+                        Cookies and Tracking Technologies
+                    </h2>
+                    <div class="bg-white dark:bg-matte-gray p-6 rounded-lg shadow-sm">
+                        <p class="text-matte-gray dark:text-light-ash mb-4">We use cookies and similar technologies to enhance your experience, analyze usage, and assist in our marketing efforts.</p>
+
+                        <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden mb-4">
+                            <div class="grid grid-cols-3 bg-gray-100 dark:bg-matte-black text-matte-black dark:text-white font-medium text-sm">
+                                <div class="p-3">Cookie Type</div>
+                                <div class="p-3">Purpose</div>
+                                <div class="p-3">Duration</div>
+                            </div>
+                            <div class="grid grid-cols-3 border-t border-gray-200 dark:border-gray-700 text-sm">
+                                <div class="p-3 font-medium text-matte-black dark:text-white">Essential</div>
+                                <div class="p-3 text-matte-gray dark:text-light-ash">Site functionality</div>
+                                <div class="p-3 text-matte-gray dark:text-light-ash">Session</div>
+                            </div>
+                            <div class="grid grid-cols-3 border-t border-gray-200 dark:border-gray-700 text-sm">
+                                <div class="p-3 font-medium text-matte-black dark:text-white">Analytics</div>
+                                <div class="p-3 text-matte-gray dark:text-light-ash">Usage statistics</div>
+                                <div class="p-3 text-matte-gray dark:text-light-ash">2 years</div>
+                            </div>
+                            <div class="grid grid-cols-3 border-t border-gray-200 dark:border-gray-700 text-sm">
+                                <div class="p-3 font-medium text-matte-black dark:text-white">Preferences</div>
+                                <div class="p-3 text-matte-gray dark:text-light-ash">Remember settings</div>
+                                <div class="p-3 text-matte-gray dark:text-light-ash">1 year</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 dark:bg-matte-black p-4 rounded-lg">
+                            <h3 class="font-medium text-matte-black dark:text-white mb-2">Cookie Preferences</h3>
+                            <p class="text-sm text-matte-gray dark:text-light-ash mb-3">You can manage your cookie preferences at any time through your browser settings.</p>
+                            <button class="text-sm bg-matte-green text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">Manage Cookie Settings</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Your Rights Section -->
+                <section id="rights" class="mb-10 scroll-mt-24">
+                    <h2 class="text-2xl font-heading font-semibold text-matte-black dark:text-white mb-4 flex items-center">
+                        <span class="w-8 h-8 bg-matte-green rounded-full flex items-center justify-center text-white mr-3 text-sm">4</span>
+                        Your Privacy Rights
+                    </h2>
+                    <div class="bg-white dark:bg-matte-gray p-6 rounded-lg shadow-sm">
+                        <p class="text-matte-gray dark:text-light-ash mb-4">Depending on your location, you may have the following rights regarding your personal information:</p>
+
+                        <div class="space-y-4">
+                            <!-- Right Cards -->
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-matte-green bg-opacity-20 rounded-full flex items-center justify-center text-matte-green mt-1 mr-3 flex-shrink-0">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium text-matte-black dark:text-white">Right to Access</h3>
+                                    <p class="text-matte-gray dark:text-light-ash text-sm">You can request copies of your personal data.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-matte-green bg-opacity-20 rounded-full flex items-center justify-center text-matte-green mt-1 mr-3 flex-shrink-0">
+                                    <i class="fas fa-edit text-xs"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium text-matte-black dark:text-white">Right to Rectification</h3>
+                                    <p class="text-matte-gray dark:text-light-ash text-sm">You can request correction of inaccurate information.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-matte-green bg-opacity-20 rounded-full flex items-center justify-center text-matte-green mt-1 mr-3 flex-shrink-0">
+                                    <i class="fas fa-trash-alt text-xs"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium text-matte-black dark:text-white">Right to Erasure</h3>
+                                    <p class="text-matte-gray dark:text-light-ash text-sm">You can request deletion of your personal data.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-matte-green bg-opacity-20 rounded-full flex items-center justify-center text-matte-green mt-1 mr-3 flex-shrink-0">
+                                    <i class="fas fa-ban text-xs"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium text-matte-black dark:text-white">Right to Restrict Processing</h3>
+                                    <p class="text-matte-gray dark:text-light-ash text-sm">You can request limitation of how we use your data.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="w-6 h-6 bg-matte-green bg-opacity-20 rounded-full flex items-center justify-center text-matte-green mt-1 mr-3 flex-shrink-0">
+                                    <i class="fas fa-download text-xs"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium text-matte-black dark:text-white">Right to Data Portability</h3>
+                                    <p class="text-matte-gray dark:text-light-ash text-sm">You can request transfer of your data to another organization.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+</script>

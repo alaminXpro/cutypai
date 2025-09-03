@@ -19,7 +19,22 @@ public class HomeController : Controller
     }
 
     [Route("privacy")]
+    [Route("about")]
+    [Route("contact")]
+    [Route("help")]
     public IActionResult Privacy()
+    {
+        return View();
+    }
+    public IActionResult About()
+    {
+        return View();
+    }
+    public IActionResult Contact()
+    {
+        return View();
+    }
+    public IActionResult Help()
     {
         return View();
     }
