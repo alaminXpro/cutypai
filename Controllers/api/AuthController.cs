@@ -47,6 +47,10 @@ public sealed class AuthApiController : ControllerBase
         if (registeredUser == null) return BadRequest(new { message = "Registration failed" });
 
         var token = await _tokens.CreateTokensAsync(registeredUser);
+        
+        // Set refresh token as HTTP-only cookie
+        SetRefreshTokenCookie(token.RefreshToken);
+        
         return Ok(token);
     }
 
@@ -61,18 +65,36 @@ public sealed class AuthApiController : ControllerBase
         if (user is null) return Unauthorized(new { message = "Invalid credentials." });
 
         var token = await _tokens.CreateTokensAsync(user);
+        
+        // Set refresh token as HTTP-only cookie
+        SetRefreshTokenCookie(token.RefreshToken);
+        
         return Ok(token);
     }
 
     // POST /api/auth/refresh
     [HttpPost("refresh")]
     [AllowAnonymous]
-    public async Task<ActionResult<AuthResponse>> Refresh([FromBody] RefreshTokenRequest req, CancellationToken ct)
+    public async Task<ActionResult<AuthResponse>> Refresh([FromBody] RefreshTokenRequest? req, CancellationToken ct)
     {
-        if (!ModelState.IsValid) return ValidationProblem(ModelState);
+        // Try to get refresh token from cookies first, then from request body
+        var refreshToken = Request.Cookies["refreshToken"] ?? req?.RefreshToken;
+        
+        if (string.IsNullOrWhiteSpace(refreshToken))
+        {
+            return BadRequest(new { message = "Refresh token is required either in cookies or request body" });
+        }
 
-        var token = await _tokens.RefreshTokenAsync(req.RefreshToken);
-        if (token == null) return Unauthorized(new { message = "Invalid or expired refresh token" });
+        var token = await _tokens.RefreshTokenAsync(refreshToken);
+        if (token == null) 
+        {
+            // Clear the cookie if token is invalid
+            ClearRefreshTokenCookie();
+            return Unauthorized(new { message = "Invalid or expired refresh token" });
+        }
+
+        // Set new refresh token as HTTP-only cookie
+        SetRefreshTokenCookie(token.RefreshToken);
 
         return Ok(token);
     }
@@ -80,12 +102,21 @@ public sealed class AuthApiController : ControllerBase
     // POST /api/auth/revoke
     [HttpPost("revoke")]
     [Authorize]
-    public async Task<ActionResult> Revoke([FromBody] RefreshTokenRequest req, CancellationToken ct)
+    public async Task<ActionResult> Revoke([FromBody] RefreshTokenRequest? req, CancellationToken ct)
     {
-        if (!ModelState.IsValid) return ValidationProblem(ModelState);
+        // Try to get refresh token from cookies first, then from request body
+        var refreshToken = Request.Cookies["refreshToken"] ?? req?.RefreshToken;
+        
+        if (string.IsNullOrWhiteSpace(refreshToken))
+        {
+            return BadRequest(new { message = "Refresh token is required either in cookies or request body" });
+        }
 
-        var success = await _tokens.RevokeTokenAsync(req.RefreshToken);
+        var success = await _tokens.RevokeTokenAsync(refreshToken);
         if (!success) return BadRequest(new { message = "Failed to revoke token" });
+
+        // Clear the cookie after revoking
+        ClearRefreshTokenCookie();
 
         return Ok(new { message = "Token revoked successfully" });
     }
@@ -100,6 +131,9 @@ public sealed class AuthApiController : ControllerBase
 
         var success = await _tokens.RevokeAllUserTokensAsync(sub);
         if (!success) return BadRequest(new { message = "Failed to revoke tokens" });
+
+        // Clear the cookie after revoking all tokens
+        ClearRefreshTokenCookie();
 
         return Ok(new { message = "All tokens revoked successfully" });
     }
@@ -127,5 +161,35 @@ public sealed class AuthApiController : ControllerBase
             created_at = user.CreatedAtUtc,
             last_login = user.LastLoginUtc
         });
+    }
+
+    private void SetRefreshTokenCookie(string refreshToken)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = Request.IsHttps || !HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
+            SameSite = SameSiteMode.Lax, // Better compatibility than Strict
+            Expires = DateTime.UtcNow.AddDays(7), // Match your refresh token expiry
+            Path = "/",
+            Domain = null // Let browser determine domain automatically
+        };
+
+        Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+    }
+
+    private void ClearRefreshTokenCookie()
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = Request.IsHttps || !HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
+            SameSite = SameSiteMode.Lax,
+            Expires = DateTime.UtcNow.AddDays(-1), // Expire the cookie
+            Path = "/",
+            Domain = null
+        };
+
+        Response.Cookies.Append("refreshToken", "", cookieOptions);
     }
 }

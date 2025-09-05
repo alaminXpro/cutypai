@@ -32,7 +32,7 @@ public sealed class LoginRequest
 
 public sealed class RefreshTokenRequest
 {
-    [Required] public string RefreshToken { get; set; } = string.Empty;
+    public string? RefreshToken { get; set; } = string.Empty;
 }
 
 public sealed class AuthResponse
