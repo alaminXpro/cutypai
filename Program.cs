@@ -110,8 +110,19 @@ public class Program
             builder.Services
                 .AddAuthentication(options =>
                 {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = "SmartScheme";
+                    options.DefaultChallengeScheme = "SmartScheme";
+                })
+                .AddPolicyScheme("SmartScheme", "JWT or Cookie", options =>
+                {
+                    options.ForwardDefaultSelector = context =>
+                    {
+                        // Use JWT for API requests, Cookie for others
+                        var path = context.Request.Path;
+                        if (path.StartsWithSegments("/api"))
+                            return JwtBearerDefaults.AuthenticationScheme;
+                        return "Cookies";
+                    };
                 })
                 .AddCookie("Cookies", options =>
                 {
