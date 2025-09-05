@@ -3,10 +3,10 @@ using cutypai.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace cutypai.Controllers;
+namespace cutypai.Controllers.api;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public sealed class AuthApiController : ControllerBase
 {
     private readonly ITokenService _tokens;

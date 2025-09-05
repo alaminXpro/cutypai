@@ -3,7 +3,6 @@ using System.Text;
 using cutypai.Models;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
@@ -109,7 +108,11 @@ public class Program
 
             // Authentication setup with both Cookies and JWT
             builder.Services
-                .AddAuthentication("Cookies")
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddCookie("Cookies", options =>
                 {
                     options.LoginPath = "/login";
