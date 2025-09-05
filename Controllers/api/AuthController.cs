@@ -2,6 +2,7 @@ using System.Security.Claims;
 using cutypai.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 
 namespace cutypai.Controllers.api;
 
@@ -47,10 +48,10 @@ public sealed class AuthApiController : ControllerBase
         if (registeredUser == null) return BadRequest(new { message = "Registration failed" });
 
         var token = await _tokens.CreateTokensAsync(registeredUser);
-        
+
         // Set refresh token as HTTP-only cookie
         SetRefreshTokenCookie(token.RefreshToken);
-        
+
         return Ok(token);
     }
 
@@ -65,10 +66,10 @@ public sealed class AuthApiController : ControllerBase
         if (user is null) return Unauthorized(new { message = "Invalid credentials." });
 
         var token = await _tokens.CreateTokensAsync(user);
-        
+
         // Set refresh token as HTTP-only cookie
         SetRefreshTokenCookie(token.RefreshToken);
-        
+
         return Ok(token);
     }
 
@@ -79,14 +80,12 @@ public sealed class AuthApiController : ControllerBase
     {
         // Try to get refresh token from cookies first, then from request body
         var refreshToken = Request.Cookies["refreshToken"] ?? req?.RefreshToken;
-        
+
         if (string.IsNullOrWhiteSpace(refreshToken))
-        {
             return BadRequest(new { message = "Refresh token is required either in cookies or request body" });
-        }
 
         var token = await _tokens.RefreshTokenAsync(refreshToken);
-        if (token == null) 
+        if (token == null)
         {
             // Clear the cookie if token is invalid
             ClearRefreshTokenCookie();
@@ -106,11 +105,9 @@ public sealed class AuthApiController : ControllerBase
     {
         // Try to get refresh token from cookies first, then from request body
         var refreshToken = Request.Cookies["refreshToken"] ?? req?.RefreshToken;
-        
+
         if (string.IsNullOrWhiteSpace(refreshToken))
-        {
             return BadRequest(new { message = "Refresh token is required either in cookies or request body" });
-        }
 
         var success = await _tokens.RevokeTokenAsync(refreshToken);
         if (!success) return BadRequest(new { message = "Failed to revoke token" });
@@ -159,7 +156,8 @@ public sealed class AuthApiController : ControllerBase
             status = user.Status.ToString(),
             avatar_url = user.AvatarUrl,
             created_at = user.CreatedAtUtc,
-            last_login = user.LastLoginUtc
+            last_login = user.LastLoginUtc,
+            preferences = user.Preferences?.ToJson() ?? "{}"
         });
     }
 
@@ -168,7 +166,8 @@ public sealed class AuthApiController : ControllerBase
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = Request.IsHttps || !HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
+            Secure = Request.IsHttps ||
+                     !HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
             SameSite = SameSiteMode.Lax, // Better compatibility than Strict
             Expires = DateTime.UtcNow.AddDays(7), // Match your refresh token expiry
             Path = "/",
@@ -183,7 +182,8 @@ public sealed class AuthApiController : ControllerBase
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = Request.IsHttps || !HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
+            Secure = Request.IsHttps ||
+                     !HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
             SameSite = SameSiteMode.Lax,
             Expires = DateTime.UtcNow.AddDays(-1), // Expire the cookie
             Path = "/",
