@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using cutypai.Models;
+using cutypai.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -12,11 +13,13 @@ public sealed class AuthApiController : ControllerBase
 {
     private readonly ITokenService _tokens;
     private readonly IUserRepository _users;
+    private readonly IGoogleTokenVerificationService _googleTokenService;
 
-    public AuthApiController(IUserRepository users, ITokenService tokens)
+    public AuthApiController(IUserRepository users, ITokenService tokens, IGoogleTokenVerificationService googleTokenService)
     {
         _users = users;
         _tokens = tokens;
+        _googleTokenService = googleTokenService;
     }
 
     // POST /api/auth/register
@@ -191,5 +194,54 @@ public sealed class AuthApiController : ControllerBase
         };
 
         Response.Cookies.Append("refreshToken", "", cookieOptions);
+    }
+
+    // POST /api/auth/sso/google
+    [HttpPost("sso/google")]
+    [AllowAnonymous]
+    public async Task<ActionResult<AuthResponse>> GoogleSso([FromBody] GoogleSsoRequest req, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(req.Token))
+            return BadRequest(new { message = "Google token is required" });
+
+        var googleUser = await _googleTokenService.VerifyTokenAsync(req.Token);
+        if (googleUser == null)
+            return Unauthorized(new { message = "Invalid Google token" });
+
+        // Find existing user by email or external ID
+        var user = await _users.GetByEmailAsync(googleUser.Email) ?? 
+                   await _users.FindByExternalIdAsync("google", googleUser.Id);
+
+        if (user == null)
+        {
+            // Create new user from Google data
+            user = await _users.CreateFromSsoAsync(
+                googleUser.Email, 
+                googleUser.Name, 
+                "google", 
+                googleUser.Id, 
+                googleUser.Picture, 
+                ct
+            );
+        }
+        else
+        {
+            // Update existing user with Google info if needed
+            if (string.IsNullOrEmpty(user.AvatarUrl))
+                user.AvatarUrl = googleUser.Picture;
+            
+            user.LastLoginUtc = DateTime.UtcNow;
+            await _users.UpdateAsync(user, ct);
+        }
+
+        var token = await _tokens.CreateTokensAsync(user);
+        SetRefreshTokenCookie(token.RefreshToken);
+
+        return Ok(token);
+    }
+
+    public class GoogleSsoRequest
+    {
+        public string Token { get; set; } = string.Empty;
     }
 }

@@ -17,6 +17,8 @@ public interface IUserRepository
     Task<bool> DeleteAsync(string id, CancellationToken ct = default);
     Task<bool> SetLastLoginAsync(string id, DateTime whenUtc, CancellationToken ct = default);
     Task<bool> SetStatusAsync(string id, UserStatus status, CancellationToken ct = default);
+    Task<User?> FindByExternalIdAsync(string provider, string externalId, CancellationToken ct = default);
+    Task<User> CreateFromSsoAsync(string email, string name, string provider, string externalId, string? avatarUrl = null, CancellationToken ct = default);
 }
 
 public sealed class UserRepository : IUserRepository
@@ -207,6 +209,56 @@ public sealed class UserRepository : IUserRepository
         {
             _logger.LogError(ex, "Error updating status for user {UserId}", id);
             return false;
+        }
+    }
+
+    public async Task<User?> FindByExternalIdAsync(string provider, string externalId, CancellationToken ct = default)
+    {
+        try
+        {
+            var filter = Builders<User>.Filter.ElemMatch(
+                u => u.ExternalProviders,
+                ep => ep.Provider == provider && ep.ExternalId == externalId
+            );
+            
+            return await _col.Find(filter).FirstOrDefaultAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error finding user by external ID {Provider}:{ExternalId}", provider, externalId);
+            return null;
+        }
+    }
+
+    public async Task<User> CreateFromSsoAsync(string email, string name, string provider, string externalId, string? avatarUrl = null, CancellationToken ct = default)
+    {
+        try
+        {
+            var user = new User
+            {
+                Id = ObjectId.GenerateNewId().ToString(),
+                Name = name,
+                Email = email,
+                AvatarUrl = avatarUrl,
+                Role = UserRole.User,
+                Status = UserStatus.Active,
+                CreatedAtUtc = DateTime.UtcNow,
+                LastLoginUtc = DateTime.UtcNow,
+                ExternalProviders = new List<ExternalProvider>
+                {
+                    new() { Provider = provider, ExternalId = externalId, Email = email, LinkedAt = DateTime.UtcNow }
+                }
+            };
+
+            await _col.InsertOneAsync(user, cancellationToken: ct);
+            
+            _logger.LogInformation("SSO user created successfully: {Email} via {Provider}", email, provider);
+            return user;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating SSO user {Email} via {Provider}", email, provider);
+            throw;
         }
     }
 }

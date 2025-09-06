@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using cutypai.Models;
+using cutypai.Services;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
@@ -75,6 +76,15 @@ public class Program
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddScoped<IPasswordValidationService, PasswordValidationService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IGoogleTokenVerificationService, GoogleTokenVerificationService>();
+            builder.Services.AddScoped<IDatabaseIndexService, DatabaseIndexService>();
+            
+            // Configure Google OAuth settings
+            builder.Services.Configure<GoogleOAuthSettings>(opts =>
+            {
+                opts.ClientId = Environment.GetEnvironmentVariable("Goolge_CLIENT_ID") 
+                    ?? throw new InvalidOperationException("Google_CLIENT_ID environment variable is required");
+            });
 
             // ----- Enhanced JWT options -----
             builder.Services.Configure<JwtSettings>(opts =>
@@ -241,19 +251,6 @@ public class Program
 
         try
         {
-            // Users collection indexes
-            var users = db.GetCollection<User>("users");
-            var emailKeys = Builders<User>.IndexKeys.Ascending(u => u.Email);
-            var emailIndex = new CreateIndexModel<User>(
-                emailKeys,
-                new CreateIndexOptions
-                {
-                    Name = "ux_email_ci",
-                    Unique = true,
-                    Collation = new Collation("en", strength: CollationStrength.Secondary)
-                });
-            await users.Indexes.CreateOneAsync(emailIndex);
-
             // Refresh tokens collection indexes
             var refreshTokens = db.GetCollection<RefreshToken>("refresh_tokens");
             var tokenKeys = Builders<RefreshToken>.IndexKeys.Ascending(rt => rt.Token);
@@ -276,6 +273,10 @@ public class Program
                     ExpireAfter = TimeSpan.FromDays(30) // Auto-delete after 30 days
                 });
             await refreshTokens.Indexes.CreateOneAsync(expiryIndex);
+
+            // Create user indexes
+            var indexService = scope.ServiceProvider.GetRequiredService<IDatabaseIndexService>();
+            await indexService.CreateIndexesAsync();
 
             Log.Information("✅ MongoDB indexes created successfully.");
         }

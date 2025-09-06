@@ -45,4 +45,23 @@ public sealed class User
     [BsonElement("status")]
     [BsonRepresentation(BsonType.String)]
     public UserStatus Status { get; set; } = UserStatus.Active;
+
+    [BsonElement("external_providers")]
+    public List<ExternalProvider>? ExternalProviders { get; set; }
+}
+
+public class ExternalProvider
+{
+    [BsonElement("provider")]
+    public string Provider { get; set; } = string.Empty; // "google", "microsoft", "github"
+
+    [BsonElement("external_id")]
+    public string ExternalId { get; set; } = string.Empty;
+
+    [BsonElement("email")]
+    public string Email { get; set; } = string.Empty;
+
+    [BsonElement("linked_at")]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    public DateTime LinkedAt { get; set; } = DateTime.UtcNow;
 }

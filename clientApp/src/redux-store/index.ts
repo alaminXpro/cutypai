@@ -202,6 +202,27 @@ export const cutypai = createSlice({
                 state.user = null;
             })
 
+        // revoke all tokens
+            .addCase(revokeAllTokens.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(revokeAllTokens.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                state.accessToken = null;
+                state.expiresAt = null;
+                state.user = null;
+            })
+
+            .addCase(revokeAllTokens.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message || "An error occurred";
+                state.accessToken = null;
+                state.expiresAt = null;
+                state.user = null;
+            })
+
         // me
             .addCase(me.pending, (state) => {
                 state.loading = true;
@@ -215,6 +236,22 @@ export const cutypai = createSlice({
             .addCase(me.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message || "An error occurred";
+            })
+
+        // google login
+            .addCase(googleLogin.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(googleLogin.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                state.accessToken = action.payload.accessToken;
+                state.expiresAt = action.payload.expiresAtUtc;
+            })
+            .addCase(googleLogin.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message || "Google login failed";
             });
     },
 });
@@ -257,6 +294,14 @@ export const revokeAllTokens = createAsyncThunk("data/revokeAllTokens", async ()
 
 export const me = createAsyncThunk("data/me", async () => {
     const response = await api.get("/auth/me");
+    return response.data;
+});
+
+// SSO Actions
+export const googleLogin = createAsyncThunk("auth/googleLogin", async (googleToken: string) => {
+    const response = await axios.post(`${API_BASE}/auth/sso/google`, {
+        token: googleToken
+    }, { withCredentials: true });
     return response.data;
 });
 

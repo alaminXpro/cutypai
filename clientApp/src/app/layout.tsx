@@ -1,3 +1,4 @@
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { RouteProvider } from "@/providers/router-provider";
@@ -26,12 +27,20 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
+    if (!googleClientId) {
+        throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
+    }
+
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={cx(inter.variable, "bg-primary antialiased")}>
-                <RouteProvider>
-                    <Theme>{children}</Theme>
-                </RouteProvider>
+                <GoogleOAuthProvider clientId={googleClientId}>
+                    <RouteProvider>
+                        <Theme>{children}</Theme>
+                    </RouteProvider>
+                </GoogleOAuthProvider>
             </body>
         </html>
     );
