@@ -89,17 +89,17 @@ const navItemsDualTier: (NavItemType & { icon: FC<{ className?: string }> })[] =
 export const SidebarNavigation = () => (
     <SidebarNavigationSlim
         items={navItemsDualTier}
-        footerItems={[
-            {
-                label: "Support",
-                href: "/support",
-                icon: LifeBuoy01,
-            },
-            {
-                label: "Settings",
-                href: "/settings",
-                icon: Settings01,
-            },
-        ]}
+        // footerItems={[
+        //     {
+        //         label: "Support",
+        //         href: "/support",
+        //         icon: LifeBuoy01,
+        //     },
+        //     {
+        //         label: "Settings",
+        //         href: "/settings",
+        //         icon: Settings01,
+        //     },
+        // ]}
     />
 );

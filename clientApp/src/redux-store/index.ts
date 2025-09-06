@@ -204,6 +204,7 @@ export const cutypai = createSlice({
                 state.accessToken = null;
                 state.expiresAt = null;
                 state.user = null;
+                state.modal = true;
             })
 
         // revoke current token
@@ -258,10 +259,13 @@ export const cutypai = createSlice({
                 state.loading = false;
                 state.error = null;
                 state.user = action.payload;
+                state.modal = false;
             })
             .addCase(me.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message || "An error occurred";
+                state.user = null;
+                state.modal = true;
             })
 
         // google login

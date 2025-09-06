@@ -2,7 +2,7 @@
 
 import type { FC } from "react";
 import { useState } from "react";
-import { LifeBuoy01, LogOut01, Settings01 } from "@untitledui/icons";
+import { LifeBuoy01, LogIn01, LogOut01, Settings01 } from "@untitledui/icons";
 import { AnimatePresence, motion } from "motion/react";
 import { Button as AriaButton, DialogTrigger as AriaDialogTrigger, Popover as AriaPopover } from "react-aria-components";
 import { Avatar } from "@/components/base/avatar/avatar";
@@ -11,6 +11,8 @@ import { Button } from "@/components/base/buttons/button";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
 import { UntitledLogo } from "@/components/foundations/logo/untitledui-logo";
 import { UntitledLogoMinimal } from "@/components/foundations/logo/untitledui-logo-minimal";
+import { useAppDispatch, useAppSelector } from "@/hooks/use-redux";
+import { revokeCurrentToken, setModal } from "@/redux-store";
 import { cx } from "@/utils/cx";
 import { MobileNavigationHeader } from "../base-components/mobile-header";
 import { NavAccountMenu } from "../base-components/nav-account-card";
@@ -36,9 +38,9 @@ export const SidebarNavigationSlim = ({ activeUrl, items, footerItems = [], hide
     const activeItem = [...items, ...footerItems].find((item) => item.href === activeUrl || item.items?.some((subItem) => subItem.href === activeUrl));
     const [currentItem, setCurrentItem] = useState(activeItem || items[1]);
     const [isHovering, setIsHovering] = useState(false);
-
+    const { user } = useAppSelector((state) => state.cutypai);
     const isSecondarySidebarVisible = isHovering && Boolean(currentItem.items?.length);
-
+    const dispatch = useAppDispatch();
     const MAIN_SIDEBAR_WIDTH = 68;
     const SECONDARY_SIDEBAR_WIDTH = 268;
 
@@ -97,7 +99,7 @@ export const SidebarNavigationSlim = ({ activeUrl, items, footerItems = [], hide
                                 cx("group relative inline-flex rounded-full", (isPressed || isFocused) && "outline-2 outline-offset-2 outline-focus-ring")
                             }
                         >
-                            <Avatar status="online" src="https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80" size="md" alt="Olivia Rhye" />
+                            <Avatar status={user ? "online" : "offline"} src={user?.avatar_url} size="md" alt={user?.name} />
                         </AriaButton>
                         <AriaPopover
                             placement="right bottom"
@@ -147,11 +149,23 @@ export const SidebarNavigationSlim = ({ activeUrl, items, footerItems = [], hide
                         </ul>
                         <div className="sticky bottom-0 mt-auto flex justify-between border-t border-secondary bg-primary px-2 py-5">
                             <div>
-                                <p className="text-sm font-semibold text-primary">Olivia Rhye</p>
-                                <p className="text-sm text-tertiary">olivia@untitledui.com</p>
+                                <p className="text-sm font-semibold text-primary">{user?.name || "Hello Cuty"}</p>
+                                <p className="text-sm text-tertiary">{user?.email.slice(0, 10) + "..." || "Login to continue"}</p>
                             </div>
                             <div className="absolute top-2.5 right-0">
-                                <ButtonUtility size="sm" color="tertiary" tooltip="Log out" icon={LogOut01} />
+                                <ButtonUtility
+                                    size="sm"
+                                    color="tertiary"
+                                    tooltip={user ? "Log out" : "Log in"}
+                                    icon={user ? LogOut01 : LogIn01}
+                                    onClick={() => {
+                                        if (user) {
+                                            dispatch(revokeCurrentToken());
+                                        } else {
+                                            dispatch(setModal(true));
+                                        }
+                                    }}
+                                />
                             </div>
                         </div>
                     </div>
@@ -201,11 +215,11 @@ export const SidebarNavigationSlim = ({ activeUrl, items, footerItems = [], hide
 
                         <div className="relative flex items-center gap-3 border-t border-secondary pt-6 pr-8 pl-2">
                             <AvatarLabelGroup
-                                status="online"
+                                status={user ? "online" : "offline"}
                                 size="md"
-                                src="https://www.untitledui.com/images/avatars/olivia-rhye?fm=webp&q=80"
-                                title="Olivia Rhye"
-                                subtitle="olivia@untitledui.com"
+                                src={user?.avatar_url}
+                                title={user?.name || "Hello Cuty"}
+                                subtitle={user?.email.slice(0, 10) + "..." || "Login to continue"}
                             />
 
                             <div className="absolute top-1/2 right-0 -translate-y-1/2">
@@ -214,6 +228,13 @@ export const SidebarNavigationSlim = ({ activeUrl, items, footerItems = [], hide
                                     color="tertiary"
                                     iconLeading={<LogOut01 className="size-5 text-fg-quaternary transition-inherit-all group-hover:text-fg-quaternary_hover" />}
                                     className="p-1.5!"
+                                    onClick={() => {
+                                        if (user) {
+                                            dispatch(revokeCurrentToken());
+                                        } else {
+                                            dispatch(setModal(true));
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>

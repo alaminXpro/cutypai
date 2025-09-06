@@ -9,7 +9,7 @@ import { me, refreshToken } from "@/redux-store";
 function MainLayoutContent({ children }: PropsWithChildren) {
     const [isLoading, setIsLoading] = useState(true);
     const dispatch = useAppDispatch();
-    const { accessToken, user, loading } = useAppSelector((state) => state.cutypai);
+    const { loading } = useAppSelector((state) => state.cutypai);
 
     useEffect(() => {
         const initializeApp = async () => {

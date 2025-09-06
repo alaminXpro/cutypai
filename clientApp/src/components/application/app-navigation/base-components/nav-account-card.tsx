@@ -3,7 +3,7 @@
 import type { FC, HTMLAttributes } from "react";
 import { useCallback, useEffect, useRef } from "react";
 import type { Placement } from "@react-types/overlays";
-import { BookOpen01, ChevronSelectorVertical, LogOut01, Plus, Settings01, User01 } from "@untitledui/icons";
+import { BookOpen01, ChevronSelectorVertical, LogIn01, LogOut01, Plus, Settings01, User01 } from "@untitledui/icons";
 import { useFocusManager } from "react-aria";
 import type { DialogProps as AriaDialogProps } from "react-aria-components";
 import { Button as AriaButton, Dialog as AriaDialog, DialogTrigger as AriaDialogTrigger, Popover as AriaPopover } from "react-aria-components";
@@ -11,6 +11,8 @@ import { AvatarLabelGroup } from "@/components/base/avatar/avatar-label-group";
 import { Button } from "@/components/base/buttons/button";
 import { RadioButtonBase } from "@/components/base/radio-buttons/radio-buttons";
 import { useBreakpoint } from "@/hooks/use-breakpoint";
+import { useAppDispatch, useAppSelector } from "@/hooks/use-redux";
+import { revokeCurrentToken, setModal } from "@/redux-store";
 import { cx } from "@/utils/cx";
 
 type NavAccountType = {
@@ -78,6 +80,9 @@ export const NavAccountMenu = ({
         };
     }, [onKeyDown]);
 
+    const dispatch = useAppDispatch();
+    const { user } = useAppSelector((state) => state.cutypai);
+
     return (
         <AriaDialog
             {...dialogProps}
@@ -90,7 +95,7 @@ export const NavAccountMenu = ({
                     <NavAccountCardMenuItem label="Account settings" icon={Settings01} shortcut="⌘S" />
                     <NavAccountCardMenuItem label="Documentation" icon={BookOpen01} />
                 </div>
-                <div className="flex flex-col gap-0.5 border-t border-secondary py-1.5">
+                {/* <div className="flex flex-col gap-0.5 border-t border-secondary py-1.5">
                     <div className="px-3 pt-1.5 pb-1 text-xs font-semibold text-tertiary">Switch account</div>
 
                     <div className="flex flex-col gap-0.5 px-1.5">
@@ -113,11 +118,22 @@ export const NavAccountMenu = ({
                     <Button iconLeading={Plus} color="secondary" size="sm">
                         Add account
                     </Button>
-                </div>
+                </div> */}
             </div>
 
             <div className="pt-1 pb-1.5">
-                <NavAccountCardMenuItem label="Sign out" icon={LogOut01} shortcut="⌥⇧Q" />
+                <NavAccountCardMenuItem
+                    label={user ? "Sign out" : "Sign in"}
+                    icon={user ? LogOut01 : LogIn01}
+                    shortcut="⌥⇧Q"
+                    onClick={() => {
+                        if (user) {
+                            dispatch(revokeCurrentToken());
+                        } else {
+                            dispatch(setModal(true));
+                        }
+                    }}
+                />
             </div>
         </AriaDialog>
     );
@@ -165,7 +181,7 @@ export const NavAccountCard = ({
 }) => {
     const triggerRef = useRef<HTMLDivElement>(null);
     const isDesktop = useBreakpoint("lg");
-
+    const { user } = useAppSelector((state) => state.cutypai);
     const selectedAccount = placeholderAccounts.find((account) => account.id === selectedAccountId);
 
     if (!selectedAccount) {
