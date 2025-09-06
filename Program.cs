@@ -178,7 +178,7 @@ public class Program
                     {
                         // Restrict origins in production - update with your actual domains
                         var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()
-                                             ?? new[] { "https://yourdomain.com" };
+                                             ?? new[] { "https://cutypai.vercel.app" };
 
                         p.WithOrigins(allowedOrigins)
                             .AllowAnyHeader()
