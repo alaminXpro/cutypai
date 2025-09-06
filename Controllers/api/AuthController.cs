@@ -44,7 +44,9 @@ public sealed class AuthApiController : ControllerBase
 
         if (!validationResult.IsValid)
         {
-            foreach (var error in validationResult.Errors) ModelState.AddModelError("Password", error);
+            foreach (var error in validationResult.PasswordErrors) ModelState.AddModelError("Password", error);
+            foreach (var error in validationResult.EmailErrors) ModelState.AddModelError("Email", error);
+            foreach (var error in validationResult.GeneralErrors) ModelState.AddModelError("", error);
             return ValidationProblem(ModelState);
         }
 

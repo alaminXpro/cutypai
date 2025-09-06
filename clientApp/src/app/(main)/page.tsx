@@ -6,7 +6,7 @@ import { login, me, revokeAllTokens, revokeCurrentToken } from "@/redux-store";
 
 export default function MainPage() {
     const dispatch = useAppDispatch();
-    const { accessToken, user, loading, error } = useAppSelector((state) => state.cutypai);
+    const { accessToken, user, loading, error, modal } = useAppSelector((state) => state.cutypai);
 
     return (
         <div className="flex h-screen flex-col items-center justify-center">
@@ -17,7 +17,7 @@ export default function MainPage() {
                     <button
                         className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-white disabled:bg-gray-500"
                         onClick={() => {
-                            dispatch(login());
+                            dispatch(login({ email: "test@test.com", password: "testtest" }));
                         }}
                         disabled={loading}
                     >

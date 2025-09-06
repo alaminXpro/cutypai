@@ -125,9 +125,17 @@ public class AuthController : Controller
 
             if (!validationResult.IsValid)
             {
-                foreach (var error in validationResult.Errors)
+                foreach (var error in validationResult.PasswordErrors)
                 {
                     ModelState.AddModelError("Password", error);
+                }
+                foreach (var error in validationResult.EmailErrors)
+                {
+                    ModelState.AddModelError("Email", error);
+                }
+                foreach (var error in validationResult.GeneralErrors)
+                {
+                    ModelState.AddModelError("", error);
                 }
                 return View(model);
             }

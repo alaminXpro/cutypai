@@ -82,7 +82,7 @@ public class Program
             // Configure Google OAuth settings
             builder.Services.Configure<GoogleOAuthSettings>(opts =>
             {
-                opts.ClientId = Environment.GetEnvironmentVariable("Goolge_CLIENT_ID") 
+                opts.ClientId = Environment.GetEnvironmentVariable("Google_CLIENT_ID") 
                     ?? throw new InvalidOperationException("Google_CLIENT_ID environment variable is required");
             });
 

@@ -120,6 +120,7 @@ interface User {
 interface CutypaiState {
     loading: boolean;
     error: string | null;
+    modal: boolean | true;
     accessToken: string | null;
     expiresAt: string | null;
     user: User | null;
@@ -128,6 +129,7 @@ interface CutypaiState {
 const initialState: CutypaiState = {
     loading: false,
     error: null,
+    modal: true,
     accessToken: null,
     expiresAt: null,
     user: null,
@@ -137,6 +139,9 @@ export const cutypai = createSlice({
     name: "cutypai",
     initialState,
     reducers: {
+        setModal: (state, action) => {
+            state.modal = action.payload;
+        },
         setAccessToken: (state, action) => {
             state.accessToken = action.payload;
         },
@@ -149,6 +154,23 @@ export const cutypai = createSlice({
     },
     extraReducers: (builder) => {
         builder
+        // register
+            .addCase(register.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                state.accessToken = action.payload.accessToken;
+                state.expiresAt = action.payload.expiresAtUtc;
+                state.modal = false;
+            })
+            .addCase(register.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message || "An error occurred";
+            })
+
         // login
             .addCase(login.pending, (state) => {
                 state.loading = true;
@@ -158,6 +180,7 @@ export const cutypai = createSlice({
                 state.loading = false;
                 state.accessToken = action.payload.accessToken;
                 state.expiresAt = action.payload.expiresAtUtc;
+                state.modal = false;
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
@@ -173,6 +196,7 @@ export const cutypai = createSlice({
                 state.loading = false;
                 state.accessToken = action.payload.accessToken;
                 state.expiresAt = action.payload.expiresAtUtc;
+                state.modal = false;
             })
             .addCase(refreshToken.rejected, (state, action) => {
                 state.loading = false;
@@ -193,6 +217,7 @@ export const cutypai = createSlice({
                 state.accessToken = null;
                 state.expiresAt = null;
                 state.user = null;
+                state.modal = true;
             })
             .addCase(revokeCurrentToken.rejected, (state, action) => {
                 state.loading = false;
@@ -213,6 +238,7 @@ export const cutypai = createSlice({
                 state.accessToken = null;
                 state.expiresAt = null;
                 state.user = null;
+                state.modal = true;
             })
 
             .addCase(revokeAllTokens.rejected, (state, action) => {
@@ -248,6 +274,7 @@ export const cutypai = createSlice({
                 state.error = null;
                 state.accessToken = action.payload.accessToken;
                 state.expiresAt = action.payload.expiresAtUtc;
+                state.modal = false;
             })
             .addCase(googleLogin.rejected, (state, action) => {
                 state.loading = false;
@@ -256,20 +283,52 @@ export const cutypai = createSlice({
     },
 });
 
-export const { setAccessToken, setUser, clearError } = cutypai.actions;
+export const { setModal, setAccessToken, setUser, clearError } = cutypai.actions;
 
-export const login = createAsyncThunk("data/login", async () => {
+
+// Async Thunks
+
+// Register Thunk
+export const register = createAsyncThunk("data/register", async (userData: {
+    name: string;
+    email: string;
+    password: string;
+    avatarUrl?: string;
+}) => {
+    const response = await axios.post(`${API_BASE}/auth/register`, {
+        name: userData.name,
+        email: userData.email,
+        password: userData.password,
+        avatarUrl: userData.avatarUrl || "",
+    }, { withCredentials: true });
+    return response.data;
+});
+
+// Login Thunk
+export const login = createAsyncThunk("data/login", async (userData: {
+    email: string;
+    password: string;
+}) => {
     const response = await axios.post(
         `${API_BASE}/auth/login`,
         {
-            Email: "alamin.cse.20220104154@aust.edu",
-            Password: "LxYL7vlF2O3WRbsJ!",
+            Email: userData.email,
+            Password: userData.password,
         },
         { withCredentials: true },
     );
     return response.data;
 });
 
+// SSO Thunk
+export const googleLogin = createAsyncThunk("auth/googleLogin", async (googleToken: string) => {
+    const response = await axios.post(`${API_BASE}/auth/sso/google`, {
+        token: googleToken
+    }, { withCredentials: true });
+    return response.data;
+});
+
+// Refresh Token Thunk
 export const refreshToken = createAsyncThunk("data/refreshToken", async () => {
 
     const response = await axios.post(`${API_BASE}/auth/refresh`, {},
@@ -278,6 +337,7 @@ export const refreshToken = createAsyncThunk("data/refreshToken", async () => {
     return response.data;
 });
 
+// Revoke/Logout Current Token Thunk
 export const revokeCurrentToken = createAsyncThunk("data/revokeCurrentToken", async () => {
     const response = await api.post("/auth/revoke", {},
         { withCredentials: true },
@@ -285,6 +345,7 @@ export const revokeCurrentToken = createAsyncThunk("data/revokeCurrentToken", as
     return response.data;
 });
 
+// Revoke/Logout All Tokens Thunk
 export const revokeAllTokens = createAsyncThunk("data/revokeAllTokens", async () => {
     const response = await api.post("/auth/revoke-all", {},
         { withCredentials: true },
@@ -292,17 +353,11 @@ export const revokeAllTokens = createAsyncThunk("data/revokeAllTokens", async ()
     return response.data;
 });
 
+// Me Thunk
 export const me = createAsyncThunk("data/me", async () => {
     const response = await api.get("/auth/me");
     return response.data;
 });
 
-// SSO Actions
-export const googleLogin = createAsyncThunk("auth/googleLogin", async (googleToken: string) => {
-    const response = await axios.post(`${API_BASE}/auth/sso/google`, {
-        token: googleToken
-    }, { withCredentials: true });
-    return response.data;
-});
 
 export default cutypai.reducer;

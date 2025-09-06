@@ -51,3 +51,13 @@ public sealed class PasswordValidationResult
     public bool IsValid { get; set; }
     public List<string> Errors { get; set; } = new();
 }
+
+public sealed class RegistrationValidationResult
+{
+    public bool IsValid { get; set; }
+    public List<string> PasswordErrors { get; set; } = new();
+    public List<string> EmailErrors { get; set; } = new();
+    public List<string> GeneralErrors { get; set; } = new();
+    
+    public bool HasErrors => PasswordErrors.Count > 0 || EmailErrors.Count > 0 || GeneralErrors.Count > 0;
+}

@@ -35,7 +35,14 @@ export const GoogleLogin = ({ onSuccess, onError, className }: GoogleLoginProps)
     };
 
     return (
-        <div className={className}>
+        <div
+            className={className}
+            style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
             <GoogleLoginButton
                 onSuccess={handleSuccess}
                 onError={handleError}
@@ -43,8 +50,9 @@ export const GoogleLogin = ({ onSuccess, onError, className }: GoogleLoginProps)
                 theme="outline"
                 size="large"
                 text="continue_with"
-                shape="rectangular"
+                shape="pill"
                 logo_alignment="left"
+                width="100%"
             />
         </div>
     );

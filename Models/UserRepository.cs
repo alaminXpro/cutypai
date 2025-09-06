@@ -9,7 +9,7 @@ public interface IUserRepository
     Task<User?> GetByIdAsync(string id, CancellationToken ct = default);
     Task<User?> GetByEmailAsync(string email, CancellationToken ct = default);
 
-    Task<(User? User, PasswordValidationResult ValidationResult)> RegisterAsync(User user,
+    Task<(User? User, RegistrationValidationResult ValidationResult)> RegisterAsync(User user,
         CancellationToken ct = default);
 
     Task<User?> AuthenticateAsync(string email, string password, CancellationToken ct = default);
@@ -53,26 +53,34 @@ public sealed class UserRepository : IUserRepository
     }
 
     // Enhanced registration with password validation
-    public async Task<(User? User, PasswordValidationResult ValidationResult)> RegisterAsync(User user,
+    public async Task<(User? User, RegistrationValidationResult ValidationResult)> RegisterAsync(User user,
         CancellationToken ct = default)
     {
         try
         {
+            var validationResult = new RegistrationValidationResult { IsValid = true };
+
             // Validate password first
-            var validationResult = _passwordValidation.ValidatePassword(user.Password);
-            if (!validationResult.IsValid)
+            var passwordValidation = _passwordValidation.ValidatePassword(user.Password);
+            if (!passwordValidation.IsValid)
             {
+                validationResult.PasswordErrors.AddRange(passwordValidation.Errors);
+                validationResult.IsValid = false;
                 _logger.LogWarning("Password validation failed for user {Email}: {Errors}",
-                    user.Email, string.Join(", ", validationResult.Errors));
-                return (null, validationResult);
+                    user.Email, string.Join(", ", passwordValidation.Errors));
             }
 
             // Check if user already exists
             var existingUser = await GetByEmailAsync(user.Email, ct);
             if (existingUser != null)
             {
+                validationResult.EmailErrors.Add("A user with this email already exists");
                 validationResult.IsValid = false;
-                validationResult.Errors.Add("A user with this email already exists");
+                _logger.LogWarning("Registration failed for user {Email}: Email already exists", user.Email);
+            }
+
+            if (!validationResult.IsValid)
+            {
                 return (null, validationResult);
             }
 
