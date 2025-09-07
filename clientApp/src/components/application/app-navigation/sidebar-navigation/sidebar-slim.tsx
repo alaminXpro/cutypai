@@ -150,7 +150,7 @@ export const SidebarNavigationSlim = ({ activeUrl, items, footerItems = [], hide
                         <div className="sticky bottom-0 mt-auto flex justify-between border-t border-secondary bg-primary px-2 py-5">
                             <div>
                                 <p className="text-sm font-semibold text-primary">{user?.name || "Hello Cuty"}</p>
-                                <p className="text-sm text-tertiary">{user?.email.slice(0, 10) + "..." || "Login to continue"}</p>
+                                <p className="text-sm text-tertiary">{user ? user.email.slice(0, 10) + "..." : "Login to continue"}</p>
                             </div>
                             <div className="absolute top-2.5 right-0">
                                 <ButtonUtility
@@ -219,7 +219,7 @@ export const SidebarNavigationSlim = ({ activeUrl, items, footerItems = [], hide
                                 size="md"
                                 src={user?.avatar_url}
                                 title={user?.name || "Hello Cuty"}
-                                subtitle={user?.email.slice(0, 10) + "..." || "Login to continue"}
+                                subtitle={user ? user.email.slice(0, 10) + "..." : "Login to continue"}
                             />
 
                             <div className="absolute top-1/2 right-0 -translate-y-1/2">

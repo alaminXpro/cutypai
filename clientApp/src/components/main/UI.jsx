@@ -36,7 +36,7 @@ export const UI = ({ hidden, ...props }) => {
             size="md"
             color="secondary"
             tooltip={cameraZoomed ? "Zoom out" : "Zoom in"}
-            className="pointer-events-auto"
+            className="pointer-events-auto hidden lg:flex"
           />
           {/* <ButtonUtility
             onClick={() => {

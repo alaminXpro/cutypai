@@ -5,6 +5,7 @@ import { Leva } from "leva";
 import { Experience } from "@/components/main/Experience";
 import { UI } from "@/components/main/UI";
 import { ChatProvider } from "@/hooks/useChat";
+import { LoginForm } from "@/components/auth/LoginForm";
 
 function MainPage() {
   return (
@@ -22,6 +23,7 @@ function MainPage() {
           <Experience />
         </Canvas>
       </ChatProvider>
+      <LoginForm />
     </>
   );
 }
