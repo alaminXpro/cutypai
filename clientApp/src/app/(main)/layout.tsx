@@ -2,7 +2,7 @@
 
 import { PropsWithChildren, useEffect, useState } from "react";
 import MainProvider from "@/components/main/Provider";
-import { SidebarNavigation } from "@/components/main/sidebar-navigation/sidebar";
+import { SidebarNavigation } from "@/components/main/sidebar";
 import { useAppDispatch, useAppSelector } from "@/hooks/use-redux";
 import { me, refreshToken } from "@/redux-store";
 
@@ -54,7 +54,7 @@ function MainLayoutContent({ children }: PropsWithChildren) {
     return (
         <>
             <SidebarNavigation />
-            {children}
+            <div className="fixed inset-0 z-0">{children}</div>
         </>
     );
 }
