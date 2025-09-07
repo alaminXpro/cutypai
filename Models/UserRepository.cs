@@ -42,14 +42,14 @@ public sealed class UserRepository : IUserRepository
             .ToListAsync(ct);
     }
 
-    public Task<User?> GetByIdAsync(string id, CancellationToken ct = default)
+    public async Task<User?> GetByIdAsync(string id, CancellationToken ct = default)
     {
-        return _col.Find(u => u.Id == id).FirstOrDefaultAsync(ct);
+        return await _col.Find(u => u.Id == id).FirstOrDefaultAsync(ct);
     }
 
-    public Task<User?> GetByEmailAsync(string email, CancellationToken ct = default)
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken ct = default)
     {
-        return _col.Find(u => u.Email == email).FirstOrDefaultAsync(ct);
+        return await _col.Find(u => u.Email == email).FirstOrDefaultAsync(ct);
     }
 
     // Enhanced registration with password validation
