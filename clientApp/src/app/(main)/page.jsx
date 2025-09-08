@@ -17,8 +17,7 @@ function MainPage() {
       <Canvas 
         shadows 
         camera={{ position: [0, 0, 1], fov: 30 }}
-        className="fixed inset-0 w-full h-full"
-        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh' }}
+        style={{ top: 0, left: 0, width: '100vw', height: '100vh' }}
       >
           <Experience />
         </Canvas>

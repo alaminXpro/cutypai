@@ -54,7 +54,7 @@ function MainLayoutContent({ children }: PropsWithChildren) {
     return (
         <>
             <SidebarNavigation />
-            <div className="fixed inset-0 z-0">{children}</div>
+            {children}
         </>
     );
 }
