@@ -2,7 +2,7 @@
 
 import type { FC } from "react";
 import { useState } from "react";
-import { LifeBuoy01, LogIn01, LogOut01, Settings01 } from "@untitledui/icons";
+import { Hearts, LifeBuoy01, LogIn01, LogOut01, Settings01 } from "@untitledui/icons";
 import { AnimatePresence, motion } from "motion/react";
 import { Button as AriaButton, DialogTrigger as AriaDialogTrigger, Popover as AriaPopover } from "react-aria-components";
 import { Avatar } from "@/components/base/avatar/avatar";
@@ -58,7 +58,7 @@ export const SidebarNavigationSlim = ({ activeUrl, items, footerItems = [], hide
                 )}
             >
                 <div className="flex justify-center px-3">
-                    <UntitledLogoMinimal className="size-8" />
+                    <Hearts className="size-8 text-pink-500" />
                 </div>
 
                 <ul className="mt-4 flex flex-col gap-0.5 px-3">
