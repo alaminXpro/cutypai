@@ -1,5 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
+using Amazon;
+using Amazon.Polly;
 using cutypai.Models;
 using cutypai.Repositories;
 using cutypai.Services;
@@ -79,10 +81,6 @@ public class Program
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IGoogleTokenVerificationService, GoogleTokenVerificationService>();
             builder.Services.AddScoped<IDatabaseIndexService, DatabaseIndexService>();
-
-            // AI Services
-            builder.Services.AddScoped<IAiRepository, AiRepository>();
-            builder.Services.AddScoped<IAiService, AiService>();
 
             // Configure Google OAuth settings
             builder.Services.Configure<GoogleOAuthSettings>(opts =>
@@ -193,6 +191,18 @@ public class Program
                     }
                 });
             });
+
+            // AI Services
+            builder.Services.AddScoped<IAiRepository, AiRepository>();
+            builder.Services.AddScoped<IAiService, AiService>();
+
+            // Configure AWS Polly client (region from env or default)
+            var regionName = Environment.GetEnvironmentVariable("AWS_REGION") ?? "us-east-1";
+            builder.Services.AddSingleton<IAmazonPolly>(_ =>
+                new AmazonPollyClient(RegionEndpoint.GetBySystemName(regionName)));
+
+            // TTS Services
+            builder.Services.AddScoped<ITtsService, PollyTtsService>();
 
             var app = builder.Build();
 

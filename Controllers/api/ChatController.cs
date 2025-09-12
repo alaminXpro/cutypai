@@ -49,20 +49,25 @@ public sealed class ChatApiController : ControllerBase
 
             _logger.LogInformation("Processing chat request from user {UserId} ({UserName})", user.Id, user.Name);
 
-            // Process the chat message through AI service
-            var aiResponse = await _aiService.ProcessChatMessageAsync(request.Message, user.Id!, ct);
+            // Process the chat message through AI service with TTS
+            var (aiResponse, audioBase64) = await _aiService.ProcessChatMessageWithAudioAsync(
+                request.Message, user.Id!, request.IncludeAudio, ct);
 
-            // Return structured response
+            // Return structured response with audio
             var response = new ChatResponse
             {
                 Message = aiResponse,
                 UserId = user.Id!,
                 UserName = user.Name,
                 Timestamp = DateTime.UtcNow,
-                Success = true
+                Success = true,
+                AudioBase64 = audioBase64,
+                AudioMimeType = "audio/mpeg",
+                HasAudio = !string.IsNullOrEmpty(audioBase64)
             };
 
-            _logger.LogInformation("Successfully processed chat request for user {UserId}", user.Id);
+            _logger.LogInformation("Successfully processed chat request for user {UserId}, hasAudio: {HasAudio}",
+                user.Id, response.HasAudio);
             return Ok(response);
         }
         catch (Exception ex)
@@ -71,7 +76,8 @@ public sealed class ChatApiController : ControllerBase
             return StatusCode(500, new ChatResponse
             {
                 Message = "An error occurred while processing your request. Please try again.",
-                Success = false
+                Success = false,
+                HasAudio = false
             });
         }
     }
