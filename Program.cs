@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using cutypai.Models;
+using cutypai.Repositories;
 using cutypai.Services;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -78,12 +79,17 @@ public class Program
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IGoogleTokenVerificationService, GoogleTokenVerificationService>();
             builder.Services.AddScoped<IDatabaseIndexService, DatabaseIndexService>();
-            
+
+            // AI Services
+            builder.Services.AddScoped<IAiRepository, AiRepository>();
+            builder.Services.AddScoped<IAiService, AiService>();
+
             // Configure Google OAuth settings
             builder.Services.Configure<GoogleOAuthSettings>(opts =>
             {
-                opts.ClientId = Environment.GetEnvironmentVariable("Google_CLIENT_ID") 
-                    ?? throw new InvalidOperationException("Google_CLIENT_ID environment variable is required");
+                opts.ClientId = Environment.GetEnvironmentVariable("Google_CLIENT_ID")
+                                ?? throw new InvalidOperationException(
+                                    "Google_CLIENT_ID environment variable is required");
             });
 
             // ----- Enhanced JWT options -----
