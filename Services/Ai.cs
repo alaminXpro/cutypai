@@ -42,7 +42,7 @@ public class AiService : IAiService
     }
 
     public async Task<(string response, string? audioBase64)> ProcessChatMessageWithAudioAsync(string message,
-        string userId, bool includeAudio = true, CancellationToken ct = default)
+        string userId, bool includeAudio = false, CancellationToken ct = default)
     {
         try
         {
@@ -51,7 +51,6 @@ public class AiService : IAiService
 
             // Get AI response
             var response = await _aiRepository.GenerateResponseAsync(message, userId, ct);
-
             string? audioBase64 = null;
             if (includeAudio && !string.IsNullOrWhiteSpace(response))
                 try

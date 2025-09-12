@@ -1,3 +1,4 @@
+using System.ClientModel;
 using System.Security.Cryptography;
 using System.Text;
 using Amazon;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using OpenAI.Chat;
 using Serilog;
 
 namespace cutypai;
@@ -203,6 +205,16 @@ public class Program
 
             // TTS Services
             builder.Services.AddScoped<ITtsService, PollyTtsService>();
+
+            // Register OpenAI client
+            var openAiApiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+            if (string.IsNullOrWhiteSpace(openAiApiKey))
+                Log.Warning("OPENAI_API_KEY not found in environment variables. AI responses will use test mode.");
+            else
+                builder.Services.AddSingleton<ChatClient>(serviceProvider => new ChatClient(
+                    "gpt-4o-mini",
+                    new ApiKeyCredential(openAiApiKey)
+                ));
 
             var app = builder.Build();
 

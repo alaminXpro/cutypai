@@ -10,7 +10,7 @@ public sealed class ChatRequest
     public string Message { get; set; } = string.Empty;
 
     // Optional: whether to include audio in response
-    public bool IncludeAudio { get; set; } = true;
+    public bool IncludeAudio { get; set; } = false;
 }
 
 public sealed class ChatResponse
