@@ -206,6 +206,9 @@ public class Program
             // TTS Services
             builder.Services.AddScoped<ITtsService, PollyTtsService>();
 
+            // Lipsync Services
+            builder.Services.AddScoped<ILipsyncService, RhubarbLipsyncService>();
+
             // Register OpenAI client
             var openAiApiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
             if (string.IsNullOrWhiteSpace(openAiApiKey))
