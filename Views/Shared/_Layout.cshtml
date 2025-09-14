@@ -10,9 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - Cutypai</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="~/css/tailwind.css">
-    <link rel="stylesheet" href="~/css/site.css">
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -143,6 +142,142 @@
             .sidebar.open {
                 transform: translateX(0);
             }
+        /* Animations */
+        @@keyframes fadeInUp {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+       @@keyframes float {
+            0%
+
+        {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+
+        100% {
+            transform: translateY(0px);
+        }
+
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d97706;
+            border-radius: 4px;
+        }
+
+        .dark ::-webkit-scrollbar-track {
+            background: #1c1917;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+        }
+
+        /* Twinkling multi-color border */
+        .twinkle-border {
+            position: relative;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+        }
+
+            .twinkle-border::before {
+                content: "";
+                position: absolute;
+                inset: -3px;
+                border-radius: 1rem;
+                background: linear-gradient(270deg, #f59e0b, #ec4899, #8b5cf6, #10b981);
+                background-size: 400% 400%;
+                animation: twinkle 6s linear infinite;
+                z-index: -1;
+            }
+        @@keyframes twinkle {
+            0%
+
+        {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+
+        }
+
+        /* Scroll reveal animations */
+        .animate-slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 1s ease-out;
+        }
+
+        .animate-slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 1s ease-out;
+        }
+
+        .show {
+            opacity: 1 !important;
+            transform: translateX(0) !important;
+        }
+
+        /* Gradient animation for quotes */
+        .animate-gradient-move {
+            background-size: 200% 200%;
+            animation: gradientMove 6s ease infinite;
+        }
+        @@keyframes gradientMove {
+            0%
+
+        {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+
+        }
     </style>
 </head>
 <body class="bg-white dark:bg-matte-black text-gray-800 dark:text-gray-200 font-sans">
@@ -214,13 +349,7 @@
             }
             else
             {
-                <a asp-controller="Auth" asp-action="Profile" class="block py-3 px-2 text-white hover:text-matte-green border-b border-gray-700"><i class="fas fa-user mr-2"></i>Profile</a>
-                <form asp-controller="Auth" asp-action="Logout" method="post" class="block">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="w-full text-left py-3 px-2 text-red-400 hover:text-red-300 border-b border-gray-700">
-                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                    </button>
-                </form>
+                <a asp-controller="Profile" asp-action="Index" class="block py-3 px-2 text-white hover:text-matte-green"><i class="fas fa-user mr-2"></i>Profile</a>
             }
         </div>
     </nav>
