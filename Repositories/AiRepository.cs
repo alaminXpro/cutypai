@@ -49,10 +49,31 @@ public class AiRepository : IAiRepository
                     "- Energetic: excited, playful, mischievous\n" +
                     "- Internal: determined, sleepy, disgusted\n" +
                     "- Playful: funnyFace, crazy\n\n" +
-                    "ANIMATIONS (match with facial expression):\n" +
-                    "- Talking: Talking_0, Talking_1, Talking_2\n" +
-                    "- Emotional: Crying, Laughing, Angry, Terrified\n" +
-                    "- Movement: Rumba (dancing), Idle (standing)\n\n" +
+                    "ANIMATIONS (choose based on emotion and context):\n" +
+                    "- Talking_0: General speech, neutral conversations\n" +
+                    "- Talking_1: Excited speech, questions, enthusiasm\n" +
+                    "- Talking_2: Confused speech, uncertainty, thinking\n" +
+                    "- Crying: Sad emotions, empathy, disappointment\n" +
+                    "- Laughing: Happy emotions, jokes, excitement, playful\n" +
+                    "- Rumba: Dancing, celebration, flirty movements\n" +
+                    "- Idle: Default standing, relaxed, sleepy\n" +
+                    "- Terrified: Scared, surprised, shocked\n" +
+                    "- Angry: Frustrated, mad, determined\n\n" +
+                    "EMOTION-ANIMATION PAIRING:\n" +
+                    "- smile + Talking_0: Friendly greetings, general conversation\n" +
+                    "- excited + Laughing: Enthusiasm, good news, celebrations\n" +
+                    "- flirty + Rumba: Romantic moments, dancing, teasing\n" +
+                    "- playful + Laughing: Jokes, fun interactions, games\n" +
+                    "- confused + Talking_2: Questions, uncertainty, thinking\n" +
+                    "- worried + Talking_0: Concerns, gentle reassurance\n" +
+                    "- embarrassed + Talking_0: Shy moments, awkward situations\n" +
+                    "- determined + Talking_1: Supportive messages, encouragement\n" +
+                    "- sleepy + Idle: Tired responses, relaxed moments\n" +
+                    "- disgusted + Talking_2: Dislikes, negative reactions\n" +
+                    "- sad + Crying: Empathy, disappointment, melancholy\n" +
+                    "- angry + Angry: Frustration, strong negative emotions\n" +
+                    "- surprised + Terrified: Unexpected reactions, discoveries\n" +
+                    "- funnyFace/crazy + Laughing: Silly, goofy moments\n\n" +
                     "EMOTION GUIDELINES:\n" +
                     "- Use 'flirty' for compliments, teasing, or romantic moments\n" +
                     "- Use 'playful' or 'mischievous' for jokes and fun interactions\n" +
@@ -115,7 +136,7 @@ public class AiRepository : IAiRepository
                                                    "type": "string",
                                                    "enum": [
                                                      "Talking_0",
-                                                     "Talking_1",
+                                                     "Talking_1", 
                                                      "Talking_2",
                                                      "Crying",
                                                      "Laughing",

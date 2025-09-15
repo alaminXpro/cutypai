@@ -284,7 +284,10 @@ export function Avatar(props) {
       setAnimation("Idle");
       return;
     }
-    setAnimation(message.animation);
+    
+    // Use animation directly from AI response, fallback to emotion mapping if not provided
+    const selectedAnimation = message.animation || emotionToAnimation[message.facialExpression] || "Idle";
+    setAnimation(selectedAnimation);
     setFacialExpression(message.facialExpression);
     setLipsync(message.lipsync);
     const audio = new Audio("data:audio/mp3;base64," + message.audioBase64);
@@ -300,19 +303,108 @@ export function Avatar(props) {
   const [animation, setAnimation] = useState(
     animations.find((a) => a.name === "Idle") ? "Idle" : animations[0].name // Check if Idle animation exists otherwise use first animation
   );
+
+  // State variables - declared before useEffects that use them
+  const [blink, setBlink] = useState(false);
+  const [winkLeft, setWinkLeft] = useState(false);
+  const [winkRight, setWinkRight] = useState(false);
+  const [winkIntensity, setWinkIntensity] = useState(1.0);
+  const [autoWink, setAutoWink] = useState(true);
+  const [winkFrequency, setWinkFrequency] = useState(3000); // milliseconds
+  const [facialExpression, setFacialExpression] = useState("");
+  const [emotionIntensity, setEmotionIntensity] = useState(1.0);
+  const [blendEmotion, setBlendEmotion] = useState(null);
+  const [blendFactor, setBlendFactor] = useState(0.5);
+  const [animationSpeed, setAnimationSpeed] = useState(1.0);
+  const [animationIntensity, setAnimationIntensity] = useState(1.0);
+  const [audio, setAudio] = useState();
+
+  // Fallback animation mapping for when no animation is specified
+  const emotionToAnimation = {
+    default: "Idle",
+    smile: "Talking_0",
+    sad: "Crying",
+    angry: "Angry",
+    surprised: "Talking_1",
+    excited: "Laughing",
+    confused: "Talking_2",
+    worried: "Talking_0",
+    flirty: "Talking_1",
+    mischievous: "Talking_2",
+    playful: "Laughing",
+    embarrassed: "Talking_0",
+    determined: "Talking_1",
+    sleepy: "Idle",
+    disgusted: "Talking_2",
+    funnyFace: "Laughing",
+    crazy: "Laughing",
+  };
+
+  // Enhanced animation settings with emotion-based intensity
+  const animationSettings = {
+    "Idle": { loop: true, intensity: 1.0, duration: 4000 },
+    "Talking_0": { loop: false, intensity: 1.0, duration: 2000 },
+    "Talking_1": { loop: false, intensity: 1.0, duration: 2000 },
+    "Talking_2": { loop: false, intensity: 1.0, duration: 2000 },
+    "Crying": { loop: true, intensity: 0.8, duration: 3000 },
+    "Laughing": { loop: true, intensity: 1.2, duration: 2500 },
+    "Rumba": { loop: true, intensity: 1.0, duration: 5000 },
+    "Terrified": { loop: true, intensity: 0.9, duration: 2000 },
+    "Angry": { loop: true, intensity: 1.1, duration: 3000 },
+  };
+
+  // Dynamic animation intensity based on emotion
+  const getEmotionBasedIntensity = (emotion) => {
+    const intensityMap = {
+      excited: 1.3,
+      playful: 1.2,
+      flirty: 1.1,
+      mischievous: 1.1,
+      crazy: 1.4,
+      funnyFace: 1.3,
+      angry: 1.2,
+      terrified: 1.1,
+      laughing: 1.3,
+      crying: 0.7,
+      sleepy: 0.6,
+      embarrassed: 0.8,
+      worried: 0.9,
+      confused: 0.9,
+      disgusted: 0.8,
+      determined: 1.1,
+      surprised: 1.2,
+      sad: 0.7,
+      smile: 1.0,
+      default: 1.0
+    };
+    return intensityMap[emotion] || 1.0;
+  };
   useEffect(() => {
     if (actions[animation]) {
+      const settings = animationSettings[animation] || { loop: true, intensity: 1.0 };
+      const emotionIntensity = getEmotionBasedIntensity(facialExpression);
+      const finalIntensity = settings.intensity * emotionIntensity * animationIntensity;
+      
       actions[animation]
         .reset()
+        .setEffectiveWeight(1.0)
+        .setEffectiveTimeScale(finalIntensity)
         .fadeIn(mixer.stats.actions.inUse === 0 ? 0 : 0.5)
         .play();
+        
+      // Set looping based on animation type
+      if (settings.loop) {
+        actions[animation].setLoop(THREE.LoopRepeat, Infinity);
+      } else {
+        actions[animation].setLoop(THREE.LoopOnce, 1);
+      }
     }
     return () => {
       if (actions[animation]) {
         actions[animation].fadeOut(0.5);
       }
     };
-  }, [animation]);
+  }, [animation, facialExpression, animationIntensity]);
 
   const lerpMorphTarget = (target, value, speed = 0.1) => {
     scene.traverse((child) => {
@@ -340,18 +432,6 @@ export function Avatar(props) {
       }
     });
   };
-
-  const [blink, setBlink] = useState(false);
-  const [winkLeft, setWinkLeft] = useState(false);
-  const [winkRight, setWinkRight] = useState(false);
-  const [winkIntensity, setWinkIntensity] = useState(1.0);
-  const [autoWink, setAutoWink] = useState(false);
-  const [winkFrequency, setWinkFrequency] = useState(3000); // milliseconds
-  const [facialExpression, setFacialExpression] = useState("");
-  const [emotionIntensity, setEmotionIntensity] = useState(1.0);
-  const [blendEmotion, setBlendEmotion] = useState(null);
-  const [blendFactor, setBlendFactor] = useState(0.5);
-  const [audio, setAudio] = useState();
 
   useFrame(() => {
     !setupMode &&
@@ -458,6 +538,30 @@ export function Avatar(props) {
       value: animation,
       options: animations.map((a) => a.name),
       onChange: (value) => setAnimation(value),
+    },
+    animationSpeed: {
+      value: animationSpeed,
+      min: 0.1,
+      max: 3.0,
+      step: 0.1,
+      onChange: (value) => {
+        setAnimationSpeed(value);
+        if (actions[animation]) {
+          actions[animation].setEffectiveTimeScale(value);
+        }
+      },
+    },
+    animationIntensity: {
+      value: animationIntensity,
+      min: 0.1,
+      max: 2.0,
+      step: 0.1,
+      onChange: (value) => {
+        setAnimationIntensity(value);
+        if (actions[animation]) {
+          actions[animation].setEffectiveWeight(value);
+        }
+      },
     },
     facialExpression: {
       options: Object.keys(facialExpressions),
