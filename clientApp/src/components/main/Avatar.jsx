@@ -13,8 +13,11 @@ import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { useChat } from "@/hooks/useChat";
 
+// Base facial expressions with more comprehensive morph target usage
 const facialExpressions = {
   default: {},
+  
+  // Basic emotions
   smile: {
     browInnerUp: 0.17,
     eyeSquintLeft: 0.4,
@@ -23,21 +26,9 @@ const facialExpressions = {
     noseSneerRight: 0.14000002836874015,
     mouthPressLeft: 0.61,
     mouthPressRight: 0.41000000000000003,
+
   },
-  funnyFace: {
-    jawLeft: 0.63,
-    mouthPucker: 0.53,
-    noseSneerLeft: 1,
-    noseSneerRight: 0.39,
-    mouthLeft: 1,
-    eyeLookUpLeft: 1,
-    eyeLookUpRight: 1,
-    cheekPuff: 0.9999924982764238,
-    mouthDimpleLeft: 0.414743888682652,
-    mouthRollLower: 0.32,
-    mouthSmileLeft: 0.35499733688813034,
-    mouthSmileRight: 0.35499733688813034,
-  },
+  
   sad: {
     mouthFrownLeft: 1,
     mouthFrownRight: 1,
@@ -49,6 +40,7 @@ const facialExpressions = {
     eyeLookDownRight: 0.5,
     jawForward: 1,
   },
+  
   surprised: {
     eyeWideLeft: 0.5,
     eyeWideRight: 0.5,
@@ -56,6 +48,7 @@ const facialExpressions = {
     mouthFunnel: 1,
     browInnerUp: 1,
   },
+  
   angry: {
     browDownLeft: 1,
     browDownRight: 1,
@@ -74,6 +67,146 @@ const facialExpressions = {
     mouthFunnel: 0.63,
     mouthDimpleRight: 1,
   },
+  
+  // Enhanced emotions
+  excited: {
+    eyeWideLeft: 0.7,
+    eyeWideRight: 0.7,
+    browInnerUp: 0.8,
+    mouthSmileLeft: 1,
+    mouthSmileRight: 1,
+    jawOpen: 0.3,
+    mouthDimpleLeft: 0.6,
+    mouthDimpleRight: 0.6,
+  },
+  
+  confused: {
+    browDownLeft: 0.1,
+    browDownRight: 0.1,
+    browInnerUp: 0.7,
+    eyeSquintLeft: 0.05,
+    eyeSquintRight: 0.05,
+    mouthFrownLeft: 0.1,
+    mouthFrownRight: 0.1,
+    mouthShrugLower: 0.4,
+    jawLeft: 0.15,
+    eyeLookDownLeft: 0.3,
+    eyeLookDownRight: 0.3,
+    mouthPressLeft: 0.2,
+    mouthPressRight: 0.2,
+  },
+  
+  worried: {
+    browDownLeft: 0.5,
+    browDownRight: 0.5,
+    browInnerUp: 0.4,
+    eyeSquintLeft: 0.4,
+    eyeSquintRight: 0.4,
+    mouthFrownLeft: 0.5,
+    mouthFrownRight: 0.5,
+    mouthShrugLower: 0.2,
+    eyeLookDownLeft: 0.1,
+    eyeLookDownRight: 0.1,
+    jawForward: 0.2,
+  },
+  
+  flirty: {
+    eyeSquintLeft: 0.8,
+    eyeSquintRight: 0.1,
+    mouthSmileLeft: 0.6,
+    mouthSmileRight: 0.4,
+    mouthDimpleLeft: 0.6,
+    mouthDimpleRight: 0.3,
+    browInnerUp: 0.5,
+    mouthPressLeft: 0.3,
+    mouthPressRight: 0.1,
+    noseSneerLeft: 0.2,
+    jawLeft: 0.1,
+    eyeLookDownLeft: 0.2,
+    eyeLookDownRight: 0.1,
+  },
+  
+  // Wink-enhanced emotions
+  mischievous: {
+    eyeSquintLeft: 0.4,
+    eyeSquintRight: 0.1,
+    mouthSmileLeft: 0.6,
+    mouthSmileRight: 0.4,
+    browInnerUp: 0.3,
+    noseSneerLeft: 0.2,
+  },
+  
+  playful: {
+    eyeSquintLeft: 0.2,
+    eyeSquintRight: 0.2,
+    mouthSmileLeft: 0.9,
+    mouthSmileRight: 0.9,
+    mouthDimpleLeft: 0.7,
+    mouthDimpleRight: 0.7,
+    browInnerUp: 0.6,
+    jawOpen: 0.2,
+    mouthPressLeft: 0.1,
+    mouthPressRight: 0.1,
+    eyeWideLeft: 0.1,
+    eyeWideRight: 0.1,
+  },
+  
+  embarrassed: {
+    browInnerUp: 0.8,
+    eyeLookDownLeft: 0.6,
+    eyeLookDownRight: 0.6,
+    mouthSmileLeft: 0.3,
+    mouthSmileRight: 0.3,
+    mouthPressLeft: 0.4,
+    mouthPressRight: 0.4,
+  },
+  
+  determined: {
+    browDownLeft: 0.5,
+    browDownRight: 0.5,
+    jawForward: 0.6,
+    mouthClose: 0.7,
+    eyeSquintLeft: 0.3,
+    eyeSquintRight: 0.3,
+  },
+  
+  sleepy: {
+    eyeSquintLeft: 0.8,
+    eyeSquintRight: 0.8,
+    browDownLeft: 0.2,
+    browDownRight: 0.2,
+    mouthSmileLeft: 0.2,
+    mouthSmileRight: 0.2,
+    jawOpen: 0.1,
+  },
+  
+  disgusted: {
+    noseSneerLeft: 0.8,
+    noseSneerRight: 0.8,
+    mouthFrownLeft: 0.6,
+    mouthFrownRight: 0.6,
+    browDownLeft: 0.3,
+    browDownRight: 0.3,
+    eyeSquintLeft: 0.4,
+    eyeSquintRight: 0.4,
+  },
+  
+  // Playful expressions
+  funnyFace: {
+    jawLeft: 0.63,
+    mouthPucker: 0.53,
+    noseSneerLeft: 1,
+    noseSneerRight: 0.39,
+    mouthLeft: 1,
+    eyeLookUpLeft: 1,
+    eyeLookUpRight: 1,
+    cheekPuff: 0.9999924982764238,
+    mouthDimpleLeft: 0.414743888682652,
+    mouthRollLower: 0.32,
+    mouthSmileLeft: 0.35499733688813034,
+    mouthSmileRight: 0.35499733688813034,
+  },
+  
   crazy: {
     browInnerUp: 0.9,
     jawForward: 1,
@@ -92,6 +225,34 @@ const facialExpressions = {
     mouthSmileRight: 0.38473918302092225,
     tongueOut: 0.9618479575523053,
   },
+};
+
+// Custom emotion builder function
+const createCustomEmotion = (name, morphTargets) => {
+  facialExpressions[name] = morphTargets;
+  return facialExpressions[name];
+};
+
+// Emotion intensity modifier
+const applyIntensity = (emotion, intensity = 1.0) => {
+  const modifiedEmotion = {};
+  Object.keys(emotion).forEach(key => {
+    modifiedEmotion[key] = emotion[key] * Math.max(0, Math.min(1, intensity));
+  });
+  return modifiedEmotion;
+};
+
+// Emotion blending function
+const blendEmotions = (emotion1, emotion2, blendFactor = 0.5) => {
+  const blended = { ...emotion1 };
+  Object.keys(emotion2).forEach(key => {
+    if (blended[key] !== undefined) {
+      blended[key] = THREE.MathUtils.lerp(blended[key], emotion2[key], blendFactor);
+    } else {
+      blended[key] = emotion2[key] * blendFactor;
+    }
+  });
+  return blended;
 };
 
 const corresponding = {
@@ -183,25 +344,50 @@ export function Avatar(props) {
   const [blink, setBlink] = useState(false);
   const [winkLeft, setWinkLeft] = useState(false);
   const [winkRight, setWinkRight] = useState(false);
+  const [winkIntensity, setWinkIntensity] = useState(1.0);
+  const [autoWink, setAutoWink] = useState(false);
+  const [winkFrequency, setWinkFrequency] = useState(3000); // milliseconds
   const [facialExpression, setFacialExpression] = useState("");
+  const [emotionIntensity, setEmotionIntensity] = useState(1.0);
+  const [blendEmotion, setBlendEmotion] = useState(null);
+  const [blendFactor, setBlendFactor] = useState(0.5);
   const [audio, setAudio] = useState();
 
   useFrame(() => {
     !setupMode &&
       Object.keys(nodes.EyeLeft.morphTargetDictionary).forEach((key) => {
-        const mapping = facialExpressions[facialExpression];
         if (key === "eyeBlinkLeft" || key === "eyeBlinkRight") {
           return; // eyes wink/blink are handled separately
         }
-        if (mapping && mapping[key]) {
-          lerpMorphTarget(key, mapping[key], 0.1);
-        } else {
-          lerpMorphTarget(key, 0, 0.1);
+        
+        let finalValue = 0;
+        const baseMapping = facialExpressions[facialExpression];
+        
+        if (baseMapping && baseMapping[key]) {
+          // Apply intensity to base emotion
+          let emotionValue = baseMapping[key] * emotionIntensity;
+          
+          // Apply emotion blending if active
+          if (blendEmotion && facialExpressions[blendEmotion] && facialExpressions[blendEmotion][key]) {
+            const blendValue = facialExpressions[blendEmotion][key] * emotionIntensity;
+            emotionValue = THREE.MathUtils.lerp(emotionValue, blendValue, blendFactor);
+          }
+          
+          finalValue = emotionValue;
+        } else if (blendEmotion && facialExpressions[blendEmotion] && facialExpressions[blendEmotion][key]) {
+          // Only blend emotion if base emotion doesn't have this morph target
+          finalValue = facialExpressions[blendEmotion][key] * emotionIntensity * blendFactor;
         }
+        
+        lerpMorphTarget(key, finalValue, 0.1);
       });
 
-    lerpMorphTarget("eyeBlinkLeft", blink || winkLeft ? 1 : 0, 0.5);
-    lerpMorphTarget("eyeBlinkRight", blink || winkRight ? 1 : 0, 0.5);
+    // Enhanced wink system with intensity control
+    const leftWinkValue = (blink || winkLeft) ? 1 * winkIntensity : 0;
+    const rightWinkValue = (blink || winkRight) ? 1 * winkIntensity : 0;
+    
+    lerpMorphTarget("eyeBlinkLeft", leftWinkValue, 0.5);
+    lerpMorphTarget("eyeBlinkRight", rightWinkValue, 0.5);
 
     // LIPSYNC
     if (setupMode) {
@@ -242,6 +428,32 @@ export function Avatar(props) {
       setWinkRight(true);
       setTimeout(() => setWinkRight(false), 300);
     }),
+    winkBoth: button(() => {
+      setWinkLeft(true);
+      setWinkRight(true);
+      setTimeout(() => {
+        setWinkLeft(false);
+        setWinkRight(false);
+      }, 300);
+    }),
+    winkIntensity: {
+      value: winkIntensity,
+      min: 0.1,
+      max: 2.0,
+      step: 0.1,
+      onChange: (value) => setWinkIntensity(value),
+    },
+    autoWink: {
+      value: autoWink,
+      onChange: (value) => setAutoWink(value),
+    },
+    winkFrequency: {
+      value: winkFrequency,
+      min: 1000,
+      max: 10000,
+      step: 500,
+      onChange: (value) => setWinkFrequency(value),
+    },
     animation: {
       value: animation,
       options: animations.map((a) => a.name),
@@ -251,6 +463,37 @@ export function Avatar(props) {
       options: Object.keys(facialExpressions),
       onChange: (value) => setFacialExpression(value),
     },
+    emotionIntensity: {
+      value: emotionIntensity,
+      min: 0,
+      max: 2,
+      step: 0.1,
+      onChange: (value) => setEmotionIntensity(value),
+    },
+    blendEmotion: {
+      options: [null, ...Object.keys(facialExpressions)],
+      onChange: (value) => setBlendEmotion(value),
+    },
+    blendFactor: {
+      value: blendFactor,
+      min: 0,
+      max: 1,
+      step: 0.1,
+      onChange: (value) => setBlendFactor(value),
+    },
+    createCustomEmotion: button(() => {
+      const name = prompt("Enter emotion name:");
+      if (name) {
+        const emotion = prompt("Enter morph target values as JSON (e.g., {\"mouthSmileLeft\": 0.8, \"eyeSquintLeft\": 0.5}):");
+        try {
+          const parsed = JSON.parse(emotion);
+          createCustomEmotion(name, parsed);
+          console.log(`Created custom emotion: ${name}`, parsed);
+        } catch (e) {
+          console.error("Invalid JSON format");
+        }
+      }
+    }),
     enableSetupMode: button(() => {
       setupMode = true;
     }),
@@ -298,6 +541,7 @@ export function Avatar(props) {
     )
   );
 
+  // Auto-blink system
   useEffect(() => {
     let blinkTimeout;
     const nextBlink = () => {
@@ -312,6 +556,68 @@ export function Avatar(props) {
     nextBlink();
     return () => clearTimeout(blinkTimeout);
   }, []);
+
+  // Auto-wink system with contextual behavior
+  useEffect(() => {
+    if (!autoWink) return;
+    
+    let winkTimeout;
+    const nextWink = () => {
+      // Get wink behavior for current emotion
+      const winkBehavior = getWinkBehavior(facialExpression);
+      
+      winkTimeout = setTimeout(() => {
+        if (winkBehavior.type === 'none') {
+          nextWink();
+          return;
+        }
+        
+        if (winkBehavior.type === 'left') {
+          setWinkLeft(true);
+          setTimeout(() => setWinkLeft(false), winkBehavior.duration);
+        } else if (winkBehavior.type === 'right') {
+          setWinkRight(true);
+          setTimeout(() => setWinkRight(false), winkBehavior.duration);
+        } else if (winkBehavior.type === 'both') {
+          setWinkLeft(true);
+          setWinkRight(true);
+          setTimeout(() => {
+            setWinkLeft(false);
+            setWinkRight(false);
+          }, winkBehavior.duration);
+        }
+        
+        nextWink();
+      }, winkBehavior.frequency + THREE.MathUtils.randInt(-1000, 1000));
+    };
+    nextWink();
+    return () => clearTimeout(winkTimeout);
+  }, [autoWink, winkFrequency, facialExpression]);
+
+  // Contextual wink behavior function
+  const getWinkBehavior = (emotion) => {
+    const behaviors = {
+      flirty: { type: 'left', duration: 400, frequency: 2000 },
+      mischievous: { type: 'left', duration: 300, frequency: 3000 },
+      playful: { type: 'right', duration: 250, frequency: 2500 },
+      excited: { type: 'both', duration: 200, frequency: 1500 },
+      smile: { type: 'right', duration: 300, frequency: 4000 },
+      default: { type: 'none', duration: 0, frequency: 0 },
+      sad: { type: 'none', duration: 0, frequency: 0 },
+      angry: { type: 'none', duration: 0, frequency: 0 },
+      confused: { type: 'none', duration: 0, frequency: 0 },
+      worried: { type: 'none', duration: 0, frequency: 0 },
+      embarrassed: { type: 'none', duration: 0, frequency: 0 },
+      determined: { type: 'none', duration: 0, frequency: 0 },
+      sleepy: { type: 'none', duration: 0, frequency: 0 },
+      disgusted: { type: 'none', duration: 0, frequency: 0 },
+      surprised: { type: 'none', duration: 0, frequency: 0 },
+      funnyFace: { type: 'both', duration: 200, frequency: 2000 },
+      crazy: { type: 'both', duration: 150, frequency: 1000 },
+    };
+    
+    return behaviors[emotion] || behaviors.default;
+  };
 
   return (
     <group {...props} dispose={null} ref={group}>
