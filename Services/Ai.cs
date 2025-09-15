@@ -283,6 +283,8 @@ public class AiService : IAiService
     private async Task<(JsonElement originalMessage, string audioBase64, List<MouthCue>? mouthCues)> GenerateLipsyncForMessageAsync(JsonElement originalMessage, string audioBase64, string userId, string userTempDir, CancellationToken ct)
     {
         List<MouthCue>? mouthCues = null;
+        string tempMp3File = string.Empty;
+        string finalAudioFile = string.Empty;
 
         if (!string.IsNullOrEmpty(audioBase64))
         {
@@ -297,31 +299,22 @@ public class AiService : IAiService
                 // Convert base64 audio to file (AWS Polly generates MP3, but Rhubarb needs WAV)
                 var audioBytes = Convert.FromBase64String(audioBase64);
 
-                // Save as MP3 first
-                var tempMp3File = Path.Combine(userTempDir, $"{Guid.NewGuid()}.mp3");
+                // Save as MP3 first with unique filename to avoid conflicts
+                tempMp3File = Path.Combine(userTempDir, $"{Guid.NewGuid()}.mp3");
                 await File.WriteAllBytesAsync(tempMp3File, audioBytes, ct);
 
                 // Convert MP3 to WAV using ffmpeg (if available) or use MP3 directly
-                var finalAudioFile = await ConvertMp3ToWavAsync(tempMp3File, userTempDir, ct);
+                finalAudioFile = await ConvertMp3ToWavAsync(tempMp3File, userTempDir, ct);
 
                 // Generate lipsync data
                 var lipsyncData = await _lipsyncService.GenerateLipsyncDataAsync(finalAudioFile, ct);
-
-                // Clean up temporary file
-                try
-                {
-                    File.Delete(finalAudioFile);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogWarning(ex, "Failed to delete temporary audio file: {TempFile}", finalAudioFile);
-                }
 
                 if (lipsyncData != null)
                 {
                     mouthCues = lipsyncData.MouthCues;
                     var text = originalMessage.GetProperty("text").GetString() ?? "";
-                    _logger.LogInformation("Successfully generated lipsync data for message: {MessageText}", text.Substring(0, Math.Min(50, text.Length)));
+                    _logger.LogInformation("Successfully generated lipsync data for message: {MessageText} with {CueCount} cues",
+                        text.Substring(0, Math.Min(50, text.Length)), mouthCues.Count);
                 }
             }
             catch (Exception ex)
@@ -329,6 +322,35 @@ public class AiService : IAiService
                 var text = originalMessage.GetProperty("text").GetString() ?? "";
                 _logger.LogWarning(ex, "Failed to generate lipsync for message: {MessageText}", text.Substring(0, Math.Min(50, text.Length)));
                 mouthCues = null;
+            }
+            finally
+            {
+                // Clean up ALL temporary files
+                try
+                {
+                    if (!string.IsNullOrEmpty(tempMp3File) && File.Exists(tempMp3File))
+                    {
+                        File.Delete(tempMp3File);
+                        _logger.LogDebug("Cleaned up temp MP3 file: {TempFile}", tempMp3File);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Failed to delete temporary MP3 file: {TempFile}", tempMp3File);
+                }
+
+                try
+                {
+                    if (!string.IsNullOrEmpty(finalAudioFile) && File.Exists(finalAudioFile) && finalAudioFile != tempMp3File)
+                    {
+                        File.Delete(finalAudioFile);
+                        _logger.LogDebug("Cleaned up final audio file: {TempFile}", finalAudioFile);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Failed to delete final audio file: {TempFile}", finalAudioFile);
+                }
             }
         }
 
@@ -354,7 +376,7 @@ public class AiService : IAiService
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = ffmpegPath,
-                Arguments = $"-y -i \"{mp3FilePath}\" \"{wavFilePath}\"",
+                Arguments = $"-y -i \"{mp3FilePath}\" -ar 22050 -ac 1 -sample_fmt s16 \"{wavFilePath}\"",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,

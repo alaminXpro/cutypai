@@ -363,5 +363,12 @@ export const me = createAsyncThunk("data/me", async () => {
     return response.data;
 });
 
+// Chat Thunk
+export const chat = createAsyncThunk("data/chat", async (message: string) => {
+    const response = await api.post("/ai/chat", { message });
+    return response.data;
+});
+
+
 
 export default cutypai.reducer;
