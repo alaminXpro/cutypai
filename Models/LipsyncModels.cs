@@ -2,7 +2,13 @@ namespace cutypai.Models;
 
 public class LipsyncData
 {
+    public LipsyncMetadata Metadata { get; set; } = new();
     public List<MouthCue> MouthCues { get; set; } = new();
+}
+
+public class LipsyncMetadata
+{
+    public double Duration { get; set; }
 }
 
 public class MouthCue

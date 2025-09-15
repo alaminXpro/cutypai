@@ -211,7 +211,22 @@ public class AiService : IAiService
 
                     // Add new properties - ensure they're always present
                     messageObj["audioBase64"] = result.audioBase64 ?? "";
-                    messageObj["lipsync"] = result.mouthCues ?? new List<MouthCue>();
+
+                    // Create lipsync object with metadata and mouthCues
+                    var lipsyncObj = new Dictionary<string, object>();
+                    if (result.mouthCues != null)
+                    {
+                        // Calculate duration from mouth cues
+                        var duration = result.mouthCues.Count > 0 ? result.mouthCues.Max(c => c.End) : 0.0;
+                        lipsyncObj["metadata"] = new { duration = Math.Round(duration, 2) };
+                        lipsyncObj["mouthCues"] = result.mouthCues;
+                    }
+                    else
+                    {
+                        lipsyncObj["metadata"] = new { duration = 0.0 };
+                        lipsyncObj["mouthCues"] = new List<MouthCue>();
+                    }
+                    messageObj["lipsync"] = lipsyncObj;
 
                     modifiedMessages.Add(messageObj);
                 }

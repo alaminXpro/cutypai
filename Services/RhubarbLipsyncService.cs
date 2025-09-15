@@ -62,7 +62,7 @@ public class RhubarbLipsyncService : ILipsyncService
             var processStartInfo = new ProcessStartInfo
             {
                 FileName = _rhubarbPath,
-                Arguments = $"-f json -o \"{audioFilePath}.json\" \"{audioFilePath}\" -r phonetic",
+                Arguments = $"-f json -o \"{audioFilePath}.json\" \"{audioFilePath}\" -r phonetic --machineReadable",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -78,16 +78,20 @@ public class RhubarbLipsyncService : ILipsyncService
 
             if (process.ExitCode != 0)
             {
-                _logger.LogError("Rhubarb process failed with exit code {ExitCode}. Error: {Error}",
-                    process.ExitCode, error);
+                _logger.LogError("Rhubarb process failed with exit code {ExitCode}. Error: {Error}. Output: {Output}",
+                    process.ExitCode, error, output);
                 return null;
             }
+
+            _logger.LogInformation("Rhubarb process completed successfully. Output: {Output}", output);
 
             // Read the JSON file that was generated
             var jsonFilePath = $"{audioFilePath}.json";
             if (File.Exists(jsonFilePath))
             {
                 var jsonContent = await File.ReadAllTextAsync(jsonFilePath, ct);
+                _logger.LogDebug("Rhubarb JSON content for {AudioFilePath}: {JsonContent}", audioFilePath, jsonContent);
+
                 var lipsyncData = await ParseRhubarbJsonAsync(jsonContent, ct);
 
                 // Clean up the JSON file
@@ -100,7 +104,16 @@ public class RhubarbLipsyncService : ILipsyncService
                     _logger.LogWarning(ex, "Failed to delete temporary JSON file: {JsonFile}", jsonFilePath);
                 }
 
-                _logger.LogInformation("Successfully generated lipsync data for {AudioFilePath}", audioFilePath);
+                if (lipsyncData != null)
+                {
+                    _logger.LogInformation("Successfully generated lipsync data for {AudioFilePath} with {CueCount} mouth cues",
+                        audioFilePath, lipsyncData.MouthCues.Count);
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to parse lipsync data for {AudioFilePath}", audioFilePath);
+                }
+
                 return lipsyncData;
             }
             else
@@ -144,9 +157,19 @@ public class RhubarbLipsyncService : ILipsyncService
                 }
             }
 
+            // Post-process the mouth cues for better accuracy
+            var processedCues = PostProcessMouthCues(mouthCues);
+
+            // Calculate duration from the last mouth cue's end time
+            var duration = processedCues.Count > 0 ? processedCues.Max(c => c.End) : 0.0;
+
             return Task.FromResult<LipsyncData?>(new LipsyncData
             {
-                MouthCues = mouthCues
+                Metadata = new LipsyncMetadata
+                {
+                    Duration = Math.Round(duration, 2) // Round to 2 decimal places
+                },
+                MouthCues = processedCues
             });
         }
         catch (Exception ex)
@@ -154,6 +177,60 @@ public class RhubarbLipsyncService : ILipsyncService
             _logger.LogError(ex, "Error parsing Rhubarb JSON output");
             return Task.FromResult<LipsyncData?>(null);
         }
+    }
+
+    /// <summary>
+    /// Post-process mouth cues to improve accuracy and smoothness
+    /// </summary>
+    private List<MouthCue> PostProcessMouthCues(List<MouthCue> originalCues)
+    {
+        if (originalCues.Count == 0) return originalCues;
+
+        var processedCues = new List<MouthCue>();
+        const double minDuration = 0.05; // Minimum 50ms duration for any cue
+        const double maxGap = 0.1; // Maximum 100ms gap between cues
+
+        // Sort cues by start time
+        var sortedCues = originalCues.OrderBy(c => c.Start).ToList();
+
+        for (int i = 0; i < sortedCues.Count; i++)
+        {
+            var currentCue = sortedCues[i];
+
+            // Ensure minimum duration
+            if (currentCue.End - currentCue.Start < minDuration)
+            {
+                currentCue.End = currentCue.Start + minDuration;
+            }
+
+            // Fill gaps with neutral mouth shape (X)
+            if (i > 0)
+            {
+                var previousCue = processedCues.Last();
+                var gap = currentCue.Start - previousCue.End;
+
+                if (gap > maxGap)
+                {
+                    // Add a neutral mouth shape to fill the gap
+                    processedCues.Add(new MouthCue
+                    {
+                        Start = previousCue.End,
+                        End = currentCue.Start,
+                        Value = "X"
+                    });
+                }
+            }
+
+            processedCues.Add(currentCue);
+        }
+
+        // Remove very short cues that might cause jitter
+        processedCues = processedCues.Where(c => c.End - c.Start >= minDuration).ToList();
+
+        _logger.LogDebug("Post-processed {OriginalCount} cues to {ProcessedCount} cues",
+            originalCues.Count, processedCues.Count);
+
+        return processedCues;
     }
 
 
