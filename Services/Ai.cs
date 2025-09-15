@@ -9,9 +9,7 @@ namespace cutypai.Services;
 
 public interface IAiService
 {
-    Task<string> ProcessChatMessageAsync(string message, string userId, CancellationToken ct = default);
-    Task<string> ProcessChatMessageWithAudioAsync(string message, string userId, CancellationToken ct = default);
-    Task<string> ProcessChatMessageWithIndividualAudioAsync(string message, string userId, bool includeAudio = true, CancellationToken ct = default);
+    Task<string> ProcessChatMessageWithIndividualAudioAsync(string message, string userId, CancellationToken ct = default);
 }
 
 public class AiService : IAiService
@@ -129,89 +127,12 @@ public class AiService : IAiService
         }
     }
 
-    public async Task<string> ProcessChatMessageAsync(string message, string userId, CancellationToken ct = default)
+
+    public async Task<string> ProcessChatMessageWithIndividualAudioAsync(string message, string userId, CancellationToken ct = default)
     {
         try
         {
-            _logger.LogInformation("Processing chat message for user {UserId}", userId);
-            var response = await _aiRepository.GenerateResponseAsync(message, userId, ct);
-            _logger.LogInformation("Successfully processed chat message for user {UserId}", userId);
-            return response;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error processing chat message for user {UserId}", userId);
-            throw;
-        }
-    }
-
-    public async Task<string> ProcessChatMessageWithAudioAsync(string message, string userId, CancellationToken ct = default)
-    {
-        try
-        {
-            _logger.LogInformation("Processing chat message with audio for user {UserId}", userId);
-            var response = await _aiRepository.GenerateResponseAsync(message, userId, ct);
-            Console.WriteLine(response);
-
-            // Parse the JSON response
-            var jsonDoc = JsonDocument.Parse(response);
-            var messagesArray = jsonDoc.RootElement.GetProperty("messages");
-
-            // Generate audio for the first message only
-            if (messagesArray.GetArrayLength() > 0)
-            {
-                var firstMessage = messagesArray[0];
-                var text = firstMessage.GetProperty("text").GetString() ?? "";
-
-                if (!string.IsNullOrWhiteSpace(text))
-                {
-                    try
-                    {
-                        var audioBase64 = await _ttsService.ConvertTextToSpeechBase64Async(text, ct);
-                        _logger.LogInformation("Successfully generated audio for message: {MessageText}", text.Substring(0, Math.Min(50, text.Length)));
-
-                        // Create a new response with audio
-                        var responseWithAudio = new
-                        {
-                            messages = new[]
-                            {
-                                new
-                                {
-                                    text = text,
-                                    facialExpression = firstMessage.GetProperty("facialExpression").GetString() ?? "",
-                                    animation = firstMessage.GetProperty("animation").GetString() ?? "",
-                                    audioBase64 = audioBase64
-                                }
-                            }
-                        };
-
-                        return JsonSerializer.Serialize(responseWithAudio, new JsonSerializerOptions
-                        {
-                            WriteIndented = true,
-                            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogWarning(ex, "Failed to generate audio for message: {MessageText}", text.Substring(0, Math.Min(50, text.Length)));
-                    }
-                }
-            }
-
-            return response;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error processing chat message with audio for user {UserId}", userId);
-            throw;
-        }
-    }
-
-    public async Task<string> ProcessChatMessageWithIndividualAudioAsync(string message, string userId, bool includeAudio = true, CancellationToken ct = default)
-    {
-        try
-        {
-            _logger.LogInformation("Processing chat message with individual audio for user {UserId}, includeAudio: {IncludeAudio}", userId, includeAudio);
+            _logger.LogInformation("Processing chat message with individual audio for user {UserId}", userId);
 
             // Generate AI response
             var response = await _aiRepository.GenerateResponseAsync(message, userId, ct);
@@ -234,7 +155,7 @@ public class AiService : IAiService
                 foreach (var messageElement in messageElements)
                 {
                     var text = messageElement.GetProperty("text").GetString() ?? "";
-                    var audioTask = GenerateAudioForMessageAsync(messageElement, text, includeAudio, ct);
+                    var audioTask = GenerateAudioForMessageAsync(messageElement, text, ct);
                     audioTasks.Add(audioTask);
                 }
 
@@ -326,11 +247,11 @@ public class AiService : IAiService
         }
     }
 
-    private async Task<(JsonElement originalMessage, string audioBase64)> GenerateAudioForMessageAsync(JsonElement originalMessage, string text, bool includeAudio, CancellationToken ct)
+    private async Task<(JsonElement originalMessage, string audioBase64)> GenerateAudioForMessageAsync(JsonElement originalMessage, string text, CancellationToken ct)
     {
         string audioBase64 = string.Empty;
 
-        if (includeAudio && !string.IsNullOrWhiteSpace(text))
+        if (!string.IsNullOrWhiteSpace(text))
         {
             try
             {
@@ -414,58 +335,6 @@ public class AiService : IAiService
         return (originalMessage, audioBase64, mouthCues);
     }
 
-    private async Task<(string text, string facialExpression, string animation, string audioBase64, List<MouthCue>? mouthCues)> GenerateLipsyncAsync(string text, string facialExpression, string animation, string audioBase64, string userId, string userTempDir, CancellationToken ct)
-    {
-        List<MouthCue>? mouthCues = null;
-
-        if (!string.IsNullOrEmpty(audioBase64))
-        {
-            try
-            {
-                // Ensure user-specific directory exists (only if needed)
-                if (!Directory.Exists(userTempDir))
-                {
-                    Directory.CreateDirectory(userTempDir);
-                }
-
-                // Convert base64 audio to file (AWS Polly generates MP3, but Rhubarb needs WAV)
-                var audioBytes = Convert.FromBase64String(audioBase64);
-
-                // Save as MP3 first
-                var tempMp3File = Path.Combine(userTempDir, $"{Guid.NewGuid()}.mp3");
-                await File.WriteAllBytesAsync(tempMp3File, audioBytes, ct);
-
-                // Convert MP3 to WAV using ffmpeg (if available) or use MP3 directly
-                var finalAudioFile = await ConvertMp3ToWavAsync(tempMp3File, userTempDir, ct);
-
-                // Generate lipsync data
-                var lipsyncData = await _lipsyncService.GenerateLipsyncDataAsync(finalAudioFile, ct);
-
-                // Clean up temporary file
-                try
-                {
-                    File.Delete(finalAudioFile);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogWarning(ex, "Failed to delete temporary audio file: {TempFile}", finalAudioFile);
-                }
-
-                if (lipsyncData != null)
-                {
-                    mouthCues = lipsyncData.MouthCues;
-                    _logger.LogInformation("Successfully generated lipsync data for message: {MessageText}", text.Substring(0, Math.Min(50, text.Length)));
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Failed to generate lipsync for message: {MessageText}", text.Substring(0, Math.Min(50, text.Length)));
-                mouthCues = null;
-            }
-        }
-
-        return (text, facialExpression, animation, audioBase64, mouthCues);
-    }
 
 
     private async Task<string> ConvertMp3ToWavAsync(string mp3FilePath, string outputDir, CancellationToken ct)

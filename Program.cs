@@ -37,8 +37,13 @@ public class Program
             // Use Serilog
             builder.Host.UseSerilog();
 
-            // MVC + API
-            builder.Services.AddControllersWithViews();
+            // MVC + API with strict JSON deserialization
+            builder.Services.AddControllersWithViews()
+                .AddJsonOptions(options =>
+                {
+                    // Reject unknown properties to prevent includeAudio from being accepted
+                    options.JsonSerializerOptions.UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow;
+                });
 
             // ----- Mongo options with enhanced configuration -----
             builder.Services.Configure<MongoDbSettings>(opts =>
