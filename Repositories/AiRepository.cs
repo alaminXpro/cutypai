@@ -44,13 +44,16 @@ public class AiRepository : IAiRepository
                     "Always reply with a JSON array of messages (maximum 3 messages).\n" +
                     "Each message must have: text, facialExpression, and animation properties.\n\n" +
                     "FACIAL EXPRESSIONS (choose based on context and emotion):\n" +
-                    "- Basic: smile, sad, angry, surprised, default\n" +
-                    "- Social: flirty, embarrassed, worried, confused\n" +
-                    "- Energetic: mischievous\n" +
-                    "- Internal: determined, sleepy, disgusted\n" +
+                    "- smile: General happiness, warmth, friendly greetings\n" +
+                    "- sad: Empathy, disappointment, melancholy\n" +
+                    "- angry: Frustration, strong negative emotions\n" +
+                    "- surprised: Unexpected reactions, discoveries, shock\n" +
+                    "- funnyFace: Silly, goofy, playful moments\n" +
+                    "- crazy: Wild, energetic, over-the-top reactions\n" +
+                    "- default: Neutral, calm, baseline expression\n\n" +
                     "ANIMATIONS (choose based on emotion and context):\n" +
                     "- Talking_0: General speech, neutral conversations\n" +
-                    "- Talking_1: Questions, enthusiasm\n" +
+                    "- Talking_1: Questions, enthusiasm, excitement\n" +
                     "- Talking_2: Confused speech, uncertainty, thinking\n" +
                     "- Crying: Sad emotions, empathy, disappointment\n" +
                     "- Laughing: Happy emotions, jokes, excitement, playful\n" +
@@ -60,33 +63,25 @@ public class AiRepository : IAiRepository
                     "- Angry: Frustrated, mad, determined\n\n" +
                     "EMOTION-ANIMATION PAIRING:\n" +
                     "- smile + Talking_0: Friendly greetings, general conversation\n" +
-                    "- flirty + Rumba: Romantic moments, dancing, teasing\n" +
-                    "- mischievous + Laughing: Jokes, fun interactions, games\n" +
-                    "- confused + Talking_2: Questions, uncertainty, thinking\n" +
-                    "- worried + Talking_0: Concerns, gentle reassurance\n" +
-                    "- embarrassed + Talking_0: Shy moments, awkward situations\n" +
-                    "- determined + Talking_1: Supportive messages, encouragement\n" +
-                    "- sleepy + Idle: Tired responses, relaxed moments\n" +
-                    "- disgusted + Talking_2: Dislikes, negative reactions\n" +
+                    "- smile + Talking_1: Enthusiastic responses, questions\n" +
                     "- sad + Crying: Empathy, disappointment, melancholy\n" +
                     "- angry + Angry: Frustration, strong negative emotions\n" +
                     "- surprised + Terrified: Unexpected reactions, discoveries\n" +
-                    "- funnyFace/crazy + Laughing: Silly, goofy moments\n" +
-                    "- mischievous + Laughing: Jokes, fun interactions, games\n\n" +
+                    "- funnyFace + Laughing: Silly, goofy moments, jokes\n" +
+                    "- crazy + Rumba: Wild dancing, over-the-top excitement\n" +
+                    "- default + Idle: Relaxed moments, calm responses\n" +
+                    "- sad + Talking_2: Confused or uncertain responses\n" +
+                    "- angry + Talking_2: Frustrated thinking, processing\n" +
+                    "- surprised + Talking_1: Excited discoveries, enthusiasm\n\n" +
                     "EMOTION GUIDELINES:\n" +
-                    "- Use 'flirty' for compliments, teasing, or romantic moments\n" +
-                    "- Use 'mischievous' for jokes and fun interactions\n" +
-                    "- Use 'worried' or 'confused' for concerns or questions\n" +
-                    "- Use 'embarrassed' for shy or awkward moments\n" +
-                    "- Use 'determined' for supportive or encouraging messages\n" +
-                    "- Use 'sleepy' for tired or relaxed responses\n" +
-                    "- Use 'disgusted' for dislikes or negative reactions\n" +
                     "- Use 'smile' for general happiness and warmth\n" +
                     "- Use 'sad' for empathy, disappointment, or melancholy\n" +
                     "- Use 'angry' for frustration or strong negative emotions\n" +
                     "- Use 'surprised' for unexpected reactions or discoveries\n" +
-                    "- Use 'funnyFace' or 'crazy' for silly, goofy moments\n\n" +
-                    "Keep responses natural, engaging, and emotionally appropriate. Be expressive and use the full range of emotions to create a rich, interactive experience."),
+                    "- Use 'funnyFace' for silly, playful moments\n" +
+                    "- Use 'crazy' for wild, energetic reactions\n" +
+                    "- Use 'default' for neutral, calm responses\n\n" +
+                    "Keep responses natural, engaging, and emotionally appropriate. Be expressive and use the full range of available emotions to create a rich, interactive experience."),
                 ChatMessage.CreateUserMessage(message)
             };
       ChatCompletionOptions options = new()
@@ -117,14 +112,6 @@ public class AiRepository : IAiRepository
                                                      "surprised",
                                                      "funnyFace",
                                                      "crazy",
-                                                     "confused",
-                                                     "worried",
-                                                     "flirty",
-                                                     "embarrassed",
-                                                     "determined",
-                                                     "sleepy",
-                                                     "disgusted",
-                                                     "mischievous",
                                                      "default"
                                                    ]
                                                  },
