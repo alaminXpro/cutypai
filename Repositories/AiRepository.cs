@@ -46,12 +46,11 @@ public class AiRepository : IAiRepository
                     "FACIAL EXPRESSIONS (choose based on context and emotion):\n" +
                     "- Basic: smile, sad, angry, surprised, default\n" +
                     "- Social: flirty, embarrassed, worried, confused\n" +
-                    "- Energetic: excited, playful, mischievous\n" +
+                    "- Energetic: mischievous\n" +
                     "- Internal: determined, sleepy, disgusted\n" +
-                    "- Playful: funnyFace, crazy\n\n" +
                     "ANIMATIONS (choose based on emotion and context):\n" +
                     "- Talking_0: General speech, neutral conversations\n" +
-                    "- Talking_1: Excited speech, questions, enthusiasm\n" +
+                    "- Talking_1: Questions, enthusiasm\n" +
                     "- Talking_2: Confused speech, uncertainty, thinking\n" +
                     "- Crying: Sad emotions, empathy, disappointment\n" +
                     "- Laughing: Happy emotions, jokes, excitement, playful\n" +
@@ -61,9 +60,8 @@ public class AiRepository : IAiRepository
                     "- Angry: Frustrated, mad, determined\n\n" +
                     "EMOTION-ANIMATION PAIRING:\n" +
                     "- smile + Talking_0: Friendly greetings, general conversation\n" +
-                    "- excited + Laughing: Enthusiasm, good news, celebrations\n" +
                     "- flirty + Rumba: Romantic moments, dancing, teasing\n" +
-                    "- playful + Laughing: Jokes, fun interactions, games\n" +
+                    "- mischievous + Laughing: Jokes, fun interactions, games\n" +
                     "- confused + Talking_2: Questions, uncertainty, thinking\n" +
                     "- worried + Talking_0: Concerns, gentle reassurance\n" +
                     "- embarrassed + Talking_0: Shy moments, awkward situations\n" +
@@ -73,11 +71,11 @@ public class AiRepository : IAiRepository
                     "- sad + Crying: Empathy, disappointment, melancholy\n" +
                     "- angry + Angry: Frustration, strong negative emotions\n" +
                     "- surprised + Terrified: Unexpected reactions, discoveries\n" +
-                    "- funnyFace/crazy + Laughing: Silly, goofy moments\n\n" +
+                    "- funnyFace/crazy + Laughing: Silly, goofy moments\n" +
+                    "- mischievous + Laughing: Jokes, fun interactions, games\n\n" +
                     "EMOTION GUIDELINES:\n" +
                     "- Use 'flirty' for compliments, teasing, or romantic moments\n" +
-                    "- Use 'playful' or 'mischievous' for jokes and fun interactions\n" +
-                    "- Use 'excited' for enthusiasm, good news, or surprises\n" +
+                    "- Use 'mischievous' for jokes and fun interactions\n" +
                     "- Use 'worried' or 'confused' for concerns or questions\n" +
                     "- Use 'embarrassed' for shy or awkward moments\n" +
                     "- Use 'determined' for supportive or encouraging messages\n" +
@@ -119,7 +117,6 @@ public class AiRepository : IAiRepository
                                                      "surprised",
                                                      "funnyFace",
                                                      "crazy",
-                                                     "excited",
                                                      "confused",
                                                      "worried",
                                                      "flirty",
@@ -128,7 +125,6 @@ public class AiRepository : IAiRepository
                                                      "sleepy",
                                                      "disgusted",
                                                      "mischievous",
-                                                     "playful",
                                                      "default"
                                                    ]
                                                  },

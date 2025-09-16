@@ -68,18 +68,6 @@ const facialExpressions = {
     mouthDimpleRight: 1,
   },
   
-  // Enhanced emotions
-  excited: {
-    eyeWideLeft: 0.7,
-    eyeWideRight: 0.7,
-    browInnerUp: 0.8,
-    mouthSmileLeft: 1,
-    mouthSmileRight: 1,
-    jawOpen: 0.3,
-    mouthDimpleLeft: 0.6,
-    mouthDimpleRight: 0.6,
-  },
-  
   confused: {
     browDownLeft: 0.1,
     browDownRight: 0.1,
@@ -136,21 +124,6 @@ const facialExpressions = {
     noseSneerLeft: 0.2,
   },
   
-  playful: {
-    eyeSquintLeft: 0.2,
-    eyeSquintRight: 0.2,
-    mouthSmileLeft: 0.9,
-    mouthSmileRight: 0.9,
-    mouthDimpleLeft: 0.7,
-    mouthDimpleRight: 0.7,
-    browInnerUp: 0.6,
-    jawOpen: 0.2,
-    mouthPressLeft: 0.1,
-    mouthPressRight: 0.1,
-    eyeWideLeft: 0.1,
-    eyeWideRight: 0.1,
-  },
-  
   embarrassed: {
     browInnerUp: 0.8,
     eyeLookDownLeft: 0.6,
@@ -190,8 +163,7 @@ const facialExpressions = {
     eyeSquintLeft: 0.4,
     eyeSquintRight: 0.4,
   },
-  
-  // Playful expressions
+
   funnyFace: {
     jawLeft: 0.63,
     mouthPucker: 0.53,
@@ -229,8 +201,12 @@ const facialExpressions = {
 
 // Custom emotion builder function
 const createCustomEmotion = (name, morphTargets) => {
-  facialExpressions[name] = morphTargets;
-  return facialExpressions[name];
+  if (typeof name === 'string' && typeof morphTargets === 'object' && morphTargets !== null) {
+    facialExpressions[name] = morphTargets;
+    return facialExpressions[name];
+  }
+  console.warn('Invalid emotion data provided to createCustomEmotion');
+  return null;
 };
 
 // Emotion intensity modifier
@@ -273,10 +249,58 @@ export function Avatar(props) {
   const { nodes, materials, scene } = useGLTF(
     "/models/64f1a714fe61576b46f27ca2.glb"
   );
-
+  const { animations } = useGLTF("/models/animations.glb");
   const { message, onMessagePlayed, chat } = useChat();
 
+  // Refs
+  const group = useRef();
+
+  // Animation system
+  const { actions, mixer } = useAnimations(animations, group);
+  const [animation, setAnimation] = useState(
+    animations.find((a) => a.name === "Idle") ? "Idle" : animations[0].name
+  );
+
+  // Facial expression system
+  const [facialExpression, setFacialExpression] = useState("");
+  const [emotionIntensity, setEmotionIntensity] = useState(1.0);
+  const [blendEmotion, setBlendEmotion] = useState(null);
+  const [blendFactor, setBlendFactor] = useState(0.5);
+
+  // Eye and wink system
+  const [blink, setBlink] = useState(false);
+  const [winkLeft, setWinkLeft] = useState(false);
+  const [winkRight, setWinkRight] = useState(false);
+  const [winkIntensity, setWinkIntensity] = useState(1.0);
+  const [autoWink, setAutoWink] = useState(true);
+  const [winkFrequency, setWinkFrequency] = useState(3000);
+
+  // Animation controls
+  const [animationSpeed, setAnimationSpeed] = useState(1.0);
+  const [animationIntensity, setAnimationIntensity] = useState(1.0);
+
+  // Audio and lipsync
+  const [audio, setAudio] = useState();
   const [lipsync, setLipsync] = useState();
+
+  // Fallback animation mapping for when no animation is specified
+  const emotionToAnimation = {
+    default: "Idle",
+    smile: "Talking_0",
+    sad: "Crying",
+    angry: "Angry",
+    surprised: "Talking_1",
+    confused: "Talking_2",
+    worried: "Talking_0",
+    flirty: "Talking_1",
+    mischievous: "Talking_2",
+    embarrassed: "Talking_0",
+    determined: "Talking_1",
+    sleepy: "Idle",
+    disgusted: "Talking_2",
+    funnyFace: "Laughing",
+    crazy: "Laughing",
+  };
 
   useEffect(() => {
     console.log(message);
@@ -296,50 +320,6 @@ export function Avatar(props) {
     audio.onended = onMessagePlayed;
   }, [message]);
 
-  const { animations } = useGLTF("/models/animations.glb");
-
-  const group = useRef();
-  const { actions, mixer } = useAnimations(animations, group);
-  const [animation, setAnimation] = useState(
-    animations.find((a) => a.name === "Idle") ? "Idle" : animations[0].name // Check if Idle animation exists otherwise use first animation
-  );
-
-  // State variables - declared before useEffects that use them
-  const [blink, setBlink] = useState(false);
-  const [winkLeft, setWinkLeft] = useState(false);
-  const [winkRight, setWinkRight] = useState(false);
-  const [winkIntensity, setWinkIntensity] = useState(1.0);
-  const [autoWink, setAutoWink] = useState(true);
-  const [winkFrequency, setWinkFrequency] = useState(3000); // milliseconds
-  const [facialExpression, setFacialExpression] = useState("");
-  const [emotionIntensity, setEmotionIntensity] = useState(1.0);
-  const [blendEmotion, setBlendEmotion] = useState(null);
-  const [blendFactor, setBlendFactor] = useState(0.5);
-  const [animationSpeed, setAnimationSpeed] = useState(1.0);
-  const [animationIntensity, setAnimationIntensity] = useState(1.0);
-  const [audio, setAudio] = useState();
-
-  // Fallback animation mapping for when no animation is specified
-  const emotionToAnimation = {
-    default: "Idle",
-    smile: "Talking_0",
-    sad: "Crying",
-    angry: "Angry",
-    surprised: "Talking_1",
-    excited: "Laughing",
-    confused: "Talking_2",
-    worried: "Talking_0",
-    flirty: "Talking_1",
-    mischievous: "Talking_2",
-    playful: "Laughing",
-    embarrassed: "Talking_0",
-    determined: "Talking_1",
-    sleepy: "Idle",
-    disgusted: "Talking_2",
-    funnyFace: "Laughing",
-    crazy: "Laughing",
-  };
-
   // Enhanced animation settings with emotion-based intensity
   const animationSettings = {
     "Idle": { loop: true, intensity: 1.0, duration: 4000 },
@@ -356,8 +336,6 @@ export function Avatar(props) {
   // Dynamic animation intensity based on emotion
   const getEmotionBasedIntensity = (emotion) => {
     const intensityMap = {
-      excited: 1.3,
-      playful: 1.2,
       flirty: 1.1,
       mischievous: 1.1,
       crazy: 1.4,
@@ -380,87 +358,146 @@ export function Avatar(props) {
     return intensityMap[emotion] || 1.0;
   };
   useEffect(() => {
-    if (actions[animation]) {
-      const settings = animationSettings[animation] || { loop: true, intensity: 1.0 };
-      const emotionIntensity = getEmotionBasedIntensity(facialExpression);
-      const finalIntensity = settings.intensity * emotionIntensity * animationIntensity;
-      
-      actions[animation]
-        .reset()
-        .setEffectiveWeight(1.0)
-        .setEffectiveTimeScale(finalIntensity)
-        .fadeIn(mixer.stats.actions.inUse === 0 ? 0 : 0.5)
-        .play();
-        
-      // Set looping based on animation type
-      if (settings.loop) {
-        actions[animation].setLoop(THREE.LoopRepeat, Infinity);
-      } else {
-        actions[animation].setLoop(THREE.LoopOnce, 1);
+    if (!actions[animation]) return;
+
+    const settings = animationSettings[animation] || { loop: true, intensity: 1.0 };
+    const emotionIntensity = getEmotionBasedIntensity(facialExpression);
+    const finalIntensity = settings.intensity * emotionIntensity * animationIntensity;
+    
+    // Stop all other animations first
+    Object.keys(actions).forEach(key => {
+      if (key !== animation && actions[key].isRunning()) {
+        actions[key].fadeOut(0.3);
       }
+    });
+    
+    // Start the new animation
+    actions[animation]
+      .reset()
+      .setEffectiveWeight(1.0)
+      .setEffectiveTimeScale(finalIntensity)
+      .fadeIn(mixer.stats.actions.inUse === 0 ? 0 : 0.5)
+      .play();
+      
+    // Set looping based on animation type
+    if (settings.loop) {
+      actions[animation].setLoop(THREE.LoopRepeat, Infinity);
+    } else {
+      actions[animation].setLoop(THREE.LoopOnce, 1);
     }
+
     return () => {
       if (actions[animation]) {
         actions[animation].fadeOut(0.5);
       }
     };
-  }, [animation, facialExpression, animationIntensity]);
+  }, [animation, facialExpression, animationIntensity, actions, mixer]);
 
   const lerpMorphTarget = (target, value, speed = 0.1) => {
-    scene.traverse((child) => {
-      if (child.isSkinnedMesh && child.morphTargetDictionary) {
-        const index = child.morphTargetDictionary[target];
-        if (
-          index === undefined ||
-          child.morphTargetInfluences[index] === undefined
-        ) {
-          return;
+    // Cache morph target indices for better performance
+    if (!scene.morphTargetCache) {
+      scene.morphTargetCache = new Map();
+    }
+    
+    let morphTargetData = scene.morphTargetCache.get(target);
+    if (!morphTargetData) {
+      morphTargetData = [];
+      scene.traverse((child) => {
+        if (child.isSkinnedMesh && child.morphTargetDictionary) {
+          const index = child.morphTargetDictionary[target];
+          if (index !== undefined && child.morphTargetInfluences[index] !== undefined) {
+            morphTargetData.push({ child, index });
+          }
         }
-        child.morphTargetInfluences[index] = THREE.MathUtils.lerp(
-          child.morphTargetInfluences[index],
-          value,
-          speed
-        );
+      });
+      scene.morphTargetCache.set(target, morphTargetData);
+    }
 
-        if (!setupMode) {
-          try {
-            set({
-              [target]: value,
-            });
-          } catch (e) {}
-        }
-      }
+    // Apply morph target changes
+    morphTargetData.forEach(({ child, index }) => {
+      child.morphTargetInfluences[index] = THREE.MathUtils.lerp(
+        child.morphTargetInfluences[index],
+        value,
+        speed
+      );
     });
+
+    // Update Leva controls if not in setup mode
+    if (!setupMode) {
+      try {
+        set({ [target]: value });
+      } catch (e) {
+        // Silently ignore Leva update errors
+      }
+    }
   };
 
   useFrame(() => {
-    !setupMode &&
-      Object.keys(nodes.EyeLeft.morphTargetDictionary).forEach((key) => {
-        if (key === "eyeBlinkLeft" || key === "eyeBlinkRight") {
-          return; // eyes wink/blink are handled separately
-        }
-        
-        let finalValue = 0;
-        const baseMapping = facialExpressions[facialExpression];
-        
-        if (baseMapping && baseMapping[key]) {
-          // Apply intensity to base emotion
-          let emotionValue = baseMapping[key] * emotionIntensity;
-          
-          // Apply emotion blending if active
-          if (blendEmotion && facialExpressions[blendEmotion] && facialExpressions[blendEmotion][key]) {
-            const blendValue = facialExpressions[blendEmotion][key] * emotionIntensity;
-            emotionValue = THREE.MathUtils.lerp(emotionValue, blendValue, blendFactor);
+    if (setupMode) return;
+
+    // Define mouth-related morph targets that should be controlled by lipsync
+    const mouthMorphTargets = new Set(Object.values(corresponding));
+    
+    // Check if lipsync is active
+    const isLipsyncActive = message && lipsync && audio && !audio.paused;
+    const appliedMorphTargets = new Set();
+    
+    // Handle lipsync first (highest priority)
+    if (isLipsyncActive) {
+      const currentAudioTime = audio.currentTime;
+      for (let i = 0; i < lipsync.mouthCues.length; i++) {
+        const mouthCue = lipsync.mouthCues[i];
+        if (currentAudioTime >= mouthCue.start && currentAudioTime <= mouthCue.end) {
+          const morphTarget = corresponding[mouthCue.value];
+          if (morphTarget) {
+            appliedMorphTargets.add(morphTarget);
+            lerpMorphTarget(morphTarget, 1, 0.2);
+            break;
           }
-          
-          finalValue = emotionValue;
-        } else if (blendEmotion && facialExpressions[blendEmotion] && facialExpressions[blendEmotion][key]) {
-          // Only blend emotion if base emotion doesn't have this morph target
-          finalValue = facialExpressions[blendEmotion][key] * emotionIntensity * blendFactor;
+        }
+      }
+    }
+
+    // Reset unused mouth morph targets
+    Object.values(corresponding).forEach((value) => {
+      if (!appliedMorphTargets.has(value)) {
+        lerpMorphTarget(value, 0, 0.1);
+      }
+    });
+
+    // Apply facial expressions (excluding mouth morph targets during lipsync)
+    Object.keys(nodes.EyeLeft.morphTargetDictionary).forEach((key) => {
+      // Skip eye blink/wink - handled separately
+      if (key === "eyeBlinkLeft" || key === "eyeBlinkRight") {
+        return;
+      }
+      
+      // Skip mouth morph targets during active lipsync
+      if (isLipsyncActive && mouthMorphTargets.has(key)) {
+        return;
+      }
+      
+      let finalValue = 0;
+      const baseMapping = facialExpressions[facialExpression];
+      
+      if (baseMapping && baseMapping[key]) {
+        // Apply intensity to base emotion
+        let emotionValue = baseMapping[key] * emotionIntensity;
+        
+        // Apply emotion blending if active
+        if (blendEmotion && facialExpressions[blendEmotion] && facialExpressions[blendEmotion][key]) {
+          const blendValue = facialExpressions[blendEmotion][key] * emotionIntensity;
+          emotionValue = THREE.MathUtils.lerp(emotionValue, blendValue, blendFactor);
         }
         
-        lerpMorphTarget(key, finalValue, 0.1);
-      });
+        finalValue = emotionValue;
+      } else if (blendEmotion && facialExpressions[blendEmotion] && facialExpressions[blendEmotion][key]) {
+        // Only blend emotion if base emotion doesn't have this morph target
+        finalValue = facialExpressions[blendEmotion][key] * emotionIntensity * blendFactor;
+      }
+      
+      lerpMorphTarget(key, finalValue, 0.1);
+    });
 
     // Enhanced wink system with intensity control
     const leftWinkValue = (blink || winkLeft) ? 1 * winkIntensity : 0;
@@ -468,34 +505,6 @@ export function Avatar(props) {
     
     lerpMorphTarget("eyeBlinkLeft", leftWinkValue, 0.5);
     lerpMorphTarget("eyeBlinkRight", rightWinkValue, 0.5);
-
-    // LIPSYNC
-    if (setupMode) {
-      return;
-    }
-
-    const appliedMorphTargets = [];
-    if (message && lipsync) {
-      const currentAudioTime = audio.currentTime;
-      for (let i = 0; i < lipsync.mouthCues.length; i++) {
-        const mouthCue = lipsync.mouthCues[i];
-        if (
-          currentAudioTime >= mouthCue.start &&
-          currentAudioTime <= mouthCue.end
-        ) {
-          appliedMorphTargets.push(corresponding[mouthCue.value]);
-          lerpMorphTarget(corresponding[mouthCue.value], 1, 0.2);
-          break;
-        }
-      }
-    }
-
-    Object.values(corresponding).forEach((value) => {
-      if (appliedMorphTargets.includes(value)) {
-        return;
-      }
-      lerpMorphTarget(value, 0, 0.1);
-    });
   });
 
   useControls("FacialExpressions", {
@@ -587,15 +596,27 @@ export function Avatar(props) {
     },
     createCustomEmotion: button(() => {
       const name = prompt("Enter emotion name:");
-      if (name) {
-        const emotion = prompt("Enter morph target values as JSON (e.g., {\"mouthSmileLeft\": 0.8, \"eyeSquintLeft\": 0.5}):");
-        try {
-          const parsed = JSON.parse(emotion);
-          createCustomEmotion(name, parsed);
+      if (!name || name.trim() === '') {
+        console.warn("Emotion name cannot be empty");
+        return;
+      }
+      
+      const emotion = prompt("Enter morph target values as JSON (e.g., {\"mouthSmileLeft\": 0.8, \"eyeSquintLeft\": 0.5}):");
+      if (!emotion || emotion.trim() === '') {
+        console.warn("Emotion data cannot be empty");
+        return;
+      }
+      
+      try {
+        const parsed = JSON.parse(emotion);
+        const result = createCustomEmotion(name.trim(), parsed);
+        if (result) {
           console.log(`Created custom emotion: ${name}`, parsed);
-        } catch (e) {
-          console.error("Invalid JSON format");
+          // Force re-render of controls
+          window.dispatchEvent(new Event('resize'));
         }
+      } catch (e) {
+        console.error("Invalid JSON format:", e.message);
       }
     }),
     enableSetupMode: button(() => {
@@ -703,21 +724,11 @@ export function Avatar(props) {
     const behaviors = {
       flirty: { type: 'left', duration: 400, frequency: 2000 },
       mischievous: { type: 'left', duration: 300, frequency: 3000 },
-      playful: { type: 'right', duration: 250, frequency: 2500 },
-      excited: { type: 'both', duration: 200, frequency: 1500 },
       smile: { type: 'right', duration: 300, frequency: 4000 },
-      default: { type: 'none', duration: 0, frequency: 0 },
-      sad: { type: 'none', duration: 0, frequency: 0 },
-      angry: { type: 'none', duration: 0, frequency: 0 },
-      confused: { type: 'none', duration: 0, frequency: 0 },
-      worried: { type: 'none', duration: 0, frequency: 0 },
-      embarrassed: { type: 'none', duration: 0, frequency: 0 },
-      determined: { type: 'none', duration: 0, frequency: 0 },
-      sleepy: { type: 'none', duration: 0, frequency: 0 },
-      disgusted: { type: 'none', duration: 0, frequency: 0 },
-      surprised: { type: 'none', duration: 0, frequency: 0 },
       funnyFace: { type: 'both', duration: 200, frequency: 2000 },
       crazy: { type: 'both', duration: 150, frequency: 1000 },
+      // All other emotions have no winking
+      default: { type: 'none', duration: 0, frequency: 0 }
     };
     
     return behaviors[emotion] || behaviors.default;
