@@ -168,15 +168,18 @@ public sealed class AuthApiController : ControllerBase
 
     private void SetRefreshTokenCookie(string refreshToken)
     {
+        var isDevelopment = HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment();
+        var isHttps = Request.IsHttps;
+
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = Request.IsHttps ||
-                     !HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
-            SameSite = SameSiteMode.Lax, // Better compatibility than Strict
+            Secure = isHttps || !isDevelopment, // Always secure in production
+            SameSite = isDevelopment ? SameSiteMode.Lax : SameSiteMode.None, // None for production cross-origin
             Expires = DateTime.UtcNow.AddDays(7), // Match your refresh token expiry
             Path = "/",
-            Domain = null // Let browser determine domain automatically
+            Domain = null, // Let browser determine domain automatically
+            IsEssential = true // Mark as essential cookie
         };
 
         Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
@@ -184,15 +187,18 @@ public sealed class AuthApiController : ControllerBase
 
     private void ClearRefreshTokenCookie()
     {
+        var isDevelopment = HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment();
+        var isHttps = Request.IsHttps;
+
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = Request.IsHttps ||
-                     !HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
-            SameSite = SameSiteMode.Lax,
+            Secure = isHttps || !isDevelopment, // Always secure in production
+            SameSite = isDevelopment ? SameSiteMode.Lax : SameSiteMode.None, // None for production cross-origin
             Expires = DateTime.UtcNow.AddDays(-1), // Expire the cookie
             Path = "/",
-            Domain = null
+            Domain = null,
+            IsEssential = true // Mark as essential cookie
         };
 
         Response.Cookies.Append("refreshToken", "", cookieOptions);
@@ -211,18 +217,18 @@ public sealed class AuthApiController : ControllerBase
             return Unauthorized(new { message = "Invalid Google token" });
 
         // Find existing user by email or external ID
-        var user = await _users.GetByEmailAsync(googleUser.Email) ?? 
+        var user = await _users.GetByEmailAsync(googleUser.Email) ??
                    await _users.FindByExternalIdAsync("google", googleUser.Id);
 
         if (user == null)
         {
             // Create new user from Google data
             user = await _users.CreateFromSsoAsync(
-                googleUser.Email, 
-                googleUser.Name, 
-                "google", 
-                googleUser.Id, 
-                googleUser.Picture, 
+                googleUser.Email,
+                googleUser.Name,
+                "google",
+                googleUser.Id,
+                googleUser.Picture,
                 ct
             );
         }
@@ -231,7 +237,7 @@ public sealed class AuthApiController : ControllerBase
             // Update existing user with Google info if needed
             if (string.IsNullOrEmpty(user.AvatarUrl))
                 user.AvatarUrl = googleUser.Picture;
-            
+
             user.LastLoginUtc = DateTime.UtcNow;
             await _users.UpdateAsync(user, ct);
         }

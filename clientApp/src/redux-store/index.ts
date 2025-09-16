@@ -82,7 +82,9 @@ export const withTokenRefresh = <T>(
                 const newState = getState();
                 return makeApiCall(newState.cutypai.accessToken!);
             } else {
-                throw new Error("Failed to refresh token");
+                // If refresh fails, clear the state and redirect to login
+                dispatch({ type: 'cutypai/clearAuth' });
+                throw new Error("Failed to refresh token - please login again");
             }
         }
 
@@ -97,7 +99,9 @@ export const withTokenRefresh = <T>(
                     const newState = getState();
                     return await makeApiCall(newState.cutypai.accessToken!);
                 } else {
-                    throw new Error("Failed to refresh token after unauthorized response");
+                    // If refresh fails, clear the state and redirect to login
+                    dispatch({ type: 'cutypai/clearAuth' });
+                    throw new Error("Failed to refresh token after unauthorized response - please login again");
                 }
             }
             throw error;
@@ -150,6 +154,13 @@ export const cutypai = createSlice({
         },
         clearError: (state) => {
             state.error = null;
+        },
+        clearAuth: (state) => {
+            state.accessToken = null;
+            state.expiresAt = null;
+            state.user = null;
+            state.error = null;
+            state.modal = true;
         },
     },
     extraReducers: (builder) => {
@@ -333,12 +344,30 @@ export const googleLogin = createAsyncThunk("auth/googleLogin", async (googleTok
 });
 
 // Refresh Token Thunk
-export const refreshToken = createAsyncThunk("data/refreshToken", async () => {
-
-    const response = await axios.post(`${API_BASE}/auth/refresh`, {},
-        { withCredentials: true },
-    );
-    return response.data;
+export const refreshToken = createAsyncThunk("data/refreshToken", async (_, { rejectWithValue }) => {
+    try {
+        const response = await axios.post(`${API_BASE}/auth/refresh`, {},
+            { 
+                withCredentials: true,
+                timeout: 10000 // 10 second timeout
+            }
+        );
+        return response.data;
+    } catch (error: any) {
+        // Log the error for debugging
+        console.error("Refresh token failed:", error.response?.data || error.message);
+        
+        // Return specific error information
+        if (error.response?.status === 401) {
+            return rejectWithValue("Refresh token expired or invalid");
+        } else if (error.response?.status === 400) {
+            return rejectWithValue("No refresh token available");
+        } else if (error.code === 'ECONNABORTED') {
+            return rejectWithValue("Request timeout - please check your connection");
+        } else {
+            return rejectWithValue(error.response?.data?.message || "Failed to refresh token");
+        }
+    }
 });
 
 // Revoke/Logout Current Token Thunk
