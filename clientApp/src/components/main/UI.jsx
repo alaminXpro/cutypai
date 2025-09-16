@@ -1,15 +1,23 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useChat } from "@/hooks/useChat";
 import { Input } from "@/components/base/input/input";
 import { Button } from "@/components/base/buttons/button";
 import { ButtonUtility } from "@/components/base/buttons/button-utility";
+import { BadgeGroup } from "@/components/base/badges/badge-groups";
 import { VideoRecorder, ZoomIn, ZoomOut } from "@untitledui/icons";
 
 
 export const UI = ({ hidden, ...props }) => {
   const input = useRef();
   const { chat, loading, cameraZoomed, setCameraZoomed, message } = useChat();
+
+  // Debug: Log message structure
+  useEffect(() => {
+    if (message) {
+      console.log("Current message:", message);
+    }
+  }, [message]);
 
   const sendMessage = () => {
     const text = input.current.value;
@@ -25,10 +33,40 @@ export const UI = ({ hidden, ...props }) => {
   return (
     <>
       <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex justify-between p-4 flex-col pointer-events-none">
-        {/* <div className="self-start backdrop-blur-md bg-white bg-opacity-50 p-4 rounded-lg">
-          <h1 className="font-black text-xl">My Virtual GF</h1>
-          <p>I will always love you ❤️</p>
-        </div> */}
+        {/* Message display positioned below mobile menu */}
+        <div className="self-center mt-15 max-w-md mx-auto">
+          {message ? (
+            <div className="animate-in slide-in-from-top-2 duration-300">
+              <BadgeGroup 
+                addonText="Cutypai" 
+                color="brand" 
+                theme="light" 
+                align="leading" 
+                size="md"
+                className="w-full"
+                iconTrailing={null}
+              >
+                {message.text}
+              </BadgeGroup>
+            </div>
+          ) : loading ? (
+            <div className="animate-in slide-in-from-top-2 duration-300">
+              <BadgeGroup 
+                addonText="Thinking" 
+                color="gray" 
+                theme="light" 
+                align="leading" 
+                size="md"
+                className="w-full"
+                iconTrailing={null}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-primary text-sm">Cutypai is processing your request...</span>
+                </div>
+              </BadgeGroup>
+            </div>
+          ) : null}
+        </div>
         <div className="w-full flex flex-col items-end justify-center gap-4">
           <ButtonUtility
             onClick={() => setCameraZoomed(!cameraZoomed)}
