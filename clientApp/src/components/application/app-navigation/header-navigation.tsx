@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC, ReactNode } from "react";
-import { Bell01, LifeBuoy01, SearchLg, Settings01 } from "@untitledui/icons";
+import { Bell, Bot, HelpCircle, Search, Settings, Sparkles } from "lucide-react";
 import { Button as AriaButton, DialogTrigger, Popover } from "react-aria-components";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { BadgeWithDot } from "@/components/base/badges/badges";
@@ -62,30 +62,30 @@ export const HeaderNavigationBase = ({
                 <aside className="flex h-full max-w-full flex-col justify-between overflow-auto border-r border-secondary bg-primary pt-4 lg:pt-6">
                     <div className="flex flex-col gap-5 px-4 lg:px-5">
                         <UntitledLogo className="h-8" />
-                        <Input shortcut size="sm" aria-label="Search" placeholder="Search" icon={SearchLg} />
+                        <Input shortcut size="sm" aria-label="Search" placeholder="Search conversations..." icon={Search} />
                     </div>
 
                     <NavList items={items} />
 
                     <div className="mt-auto flex flex-col gap-4 px-2 py-4 lg:px-4 lg:py-6">
                         <div className="flex flex-col gap-1">
-                            <NavItemBase type="link" href="#" icon={LifeBuoy01}>
-                                Support
+                            <NavItemBase type="link" href="#" icon={HelpCircle}>
+                                Help & Support
                             </NavItemBase>
                             <NavItemBase
                                 type="link"
                                 href="#"
-                                icon={Settings01}
+                                icon={Bot}
                                 badge={
                                     <BadgeWithDot color="success" type="modern" size="sm">
-                                        Online
+                                        AI Online
                                     </BadgeWithDot>
                                 }
                             >
-                                Settings
+                                AI Status
                             </NavItemBase>
-                            <NavItemBase type="link" href="https://www.untitledui.com/" icon={Settings01}>
-                                Open in browser
+                            <NavItemBase type="link" href="#" icon={Settings}>
+                                Character Settings
                             </NavItemBase>
                         </div>
 
@@ -131,15 +131,23 @@ export const HeaderNavigationBase = ({
                                 <NavItemButton
                                     current={activeUrl === "/settings-01"}
                                     size="md"
-                                    icon={Settings01}
+                                    icon={Settings}
                                     label="Settings"
                                     href="/settings-01"
                                     tooltipPlacement="bottom"
                                 />
                                 <NavItemButton
+                                    current={activeUrl === "/ai-features"}
+                                    size="md"
+                                    icon={Sparkles}
+                                    label="AI Features"
+                                    href="/ai-features"
+                                    tooltipPlacement="bottom"
+                                />
+                                <NavItemButton
                                     current={activeUrl === "/notifications-01"}
                                     size="md"
-                                    icon={Bell01}
+                                    icon={Bell}
                                     label="Notifications"
                                     href="/notifications-01"
                                     tooltipPlacement="bottom"
@@ -194,7 +202,7 @@ export const HeaderNavigationBase = ({
                                 </ul>
                             </nav>
 
-                            <Input shortcut aria-label="Search" placeholder="Search" icon={SearchLg} size="sm" className="max-w-xs" />
+                            <Input shortcut aria-label="Search" placeholder="Search conversations..." icon={Search} size="sm" className="max-w-xs" />
                         </div>
                     </section>
                 )}

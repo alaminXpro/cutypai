@@ -133,7 +133,7 @@ export const ChatInput = ({ hidden, ...props }) => {
 
     return (
         <>
-            <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex justify-between p-4 flex-col pointer-events-none">
+            <div className="fixed top-0 left-0 right-0 bottom-0 z-20 flex justify-between p-4 flex-col pointer-events-none">
                 {/* Message display positioned below mobile menu */}
                 <div className="self-center mt-15 max-w-md mx-auto">
                     {message ? (
