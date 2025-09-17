@@ -393,8 +393,16 @@ export const me = createAsyncThunk("data/me", async () => {
 });
 
 // Chat Thunk
-export const chat = createAsyncThunk("data/chat", async (message: string) => {
-    const response = await api.post("/ai/chat", { message });
+export const chat = createAsyncThunk("data/chat", async (data: { message: string; userMood?: string | null }) => {
+    const { message, userMood } = data;
+    const requestBody: any = { message };
+    
+    // Only include userMood if it's not null or empty
+    if (userMood && userMood.trim() !== "") {
+        requestBody.userMood = userMood;
+    }
+    
+    const response = await api.post("/ai/chat", requestBody);
     return response.data;
 });
 
