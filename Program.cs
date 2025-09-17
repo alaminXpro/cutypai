@@ -194,7 +194,9 @@ public class Program
                         p.WithOrigins(allowedOrigins)
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .AllowCredentials();
+                            .AllowCredentials()
+                            .SetPreflightMaxAge(TimeSpan.FromSeconds(86400)) // Cache preflight for 24 hours
+                            .SetIsOriginAllowedToAllowWildcardSubdomains(); // Allow subdomains
                     }
                 });
             });

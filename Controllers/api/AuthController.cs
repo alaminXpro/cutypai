@@ -85,6 +85,11 @@ public sealed class AuthApiController : ControllerBase
     {
         // Try to get refresh token from cookies first, then from request body
         var refreshToken = Request.Cookies["refreshToken"] ?? req?.RefreshToken;
+        var origin = Request.Headers.Origin.FirstOrDefault();
+        var cookieCount = Request.Cookies.Count;
+
+        // Log debugging information
+        Console.WriteLine($"Refresh token request - Origin: {origin}, Cookie count: {cookieCount}, Has refresh token in cookie: {!string.IsNullOrWhiteSpace(Request.Cookies["refreshToken"])}, Has refresh token in body: {!string.IsNullOrWhiteSpace(req?.RefreshToken)}");
 
         if (string.IsNullOrWhiteSpace(refreshToken))
             return BadRequest(new { message = "Refresh token is required either in cookies or request body" });
@@ -170,11 +175,12 @@ public sealed class AuthApiController : ControllerBase
     {
         var isDevelopment = HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment();
         var isHttps = Request.IsHttps;
+        var origin = Request.Headers.Origin.FirstOrDefault();
 
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = isHttps || !isDevelopment, // Always secure in production
+            Secure = true, // Always secure for production cross-origin
             SameSite = isDevelopment ? SameSiteMode.Lax : SameSiteMode.None, // None for production cross-origin
             Expires = DateTime.UtcNow.AddDays(7), // Match your refresh token expiry
             Path = "/",
@@ -182,18 +188,20 @@ public sealed class AuthApiController : ControllerBase
             IsEssential = true // Mark as essential cookie
         };
 
+        // Log cookie settings for debugging
+        Console.WriteLine($"Setting refresh token cookie - Development: {isDevelopment}, HTTPS: {isHttps}, Origin: {origin}, SameSite: {cookieOptions.SameSite}, Secure: {cookieOptions.Secure}");
+
         Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
     }
 
     private void ClearRefreshTokenCookie()
     {
         var isDevelopment = HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment();
-        var isHttps = Request.IsHttps;
 
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = isHttps || !isDevelopment, // Always secure in production
+            Secure = true, // Always secure for production cross-origin
             SameSite = isDevelopment ? SameSiteMode.Lax : SameSiteMode.None, // None for production cross-origin
             Expires = DateTime.UtcNow.AddDays(-1), // Expire the cookie
             Path = "/",
