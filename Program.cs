@@ -194,7 +194,9 @@ public class Program
                         p.WithOrigins(allowedOrigins)
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .AllowCredentials();
+                            .AllowCredentials()
+                            .SetPreflightMaxAge(TimeSpan.FromSeconds(86400)) // Cache preflight for 24 hours
+                            .SetIsOriginAllowedToAllowWildcardSubdomains(); // Allow subdomains
                     }
                 });
             });
@@ -202,6 +204,15 @@ public class Program
             // AI Services
             builder.Services.AddScoped<IAiRepository, AiRepository>();
             builder.Services.AddScoped<IAiService, AiService>();
+
+            // Settings Services
+            builder.Services.AddScoped<ISettingsRepository, SettingsRepository>();
+            builder.Services.AddScoped<IContextBuilderService, ContextBuilderService>();
+            builder.Services.AddScoped<IConversationHistoryService, ConversationHistoryService>();
+
+            // Settings Audit Services
+            builder.Services.AddScoped<ISettingsAuditRepository, SettingsAuditRepository>();
+            builder.Services.AddScoped<ISettingsAuditService, SettingsAuditService>();
 
             // Configure AWS Polly client (region from env or default)
             var regionName = Environment.GetEnvironmentVariable("AWS_REGION") ?? "us-east-1";
@@ -251,6 +262,7 @@ public class Program
             // Health & indexes with proper logging
             await PingMongoAsync(app.Services);
             await EnsureMongoIndexesAsync(app.Services);
+            await EnsureDefaultSettingsAsync(app.Services);
 
             Log.Information("Application starting...");
             app.Run();
@@ -319,6 +331,30 @@ public class Program
         catch (Exception ex)
         {
             Log.Error(ex, "❌ Failed to create MongoDB indexes: {Message}", ex.Message);
+        }
+    }
+
+    private static async Task EnsureDefaultSettingsAsync(IServiceProvider services)
+    {
+        using var scope = services.CreateScope();
+        var settingsRepository = scope.ServiceProvider.GetRequiredService<ISettingsRepository>();
+
+        try
+        {
+            var existingSettings = await settingsRepository.GetActiveSettingsAsync();
+            if (existingSettings == null)
+            {
+                await settingsRepository.CreateDefaultSettingsAsync();
+                Log.Information("✅ Default settings created successfully.");
+            }
+            else
+            {
+                Log.Information("✅ Settings already exist in database.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "❌ Failed to ensure default settings: {Message}", ex.Message);
         }
     }
 

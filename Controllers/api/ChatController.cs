@@ -51,7 +51,7 @@ public sealed class ChatApiController : ControllerBase
 
             // Process the chat message through AI service with individual message audio
             var aiResponse = await _aiService.ProcessChatMessageWithIndividualAudioAsync(
-                request.Message, user.Id!, ct);
+                request.Message, user.Id!, request.UserMood, ct);
 
             _logger.LogInformation("Successfully processed chat request for user {UserId}", user.Id);
             return Ok(aiResponse);

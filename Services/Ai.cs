@@ -9,7 +9,7 @@ namespace cutypai.Services;
 
 public interface IAiService
 {
-    Task<string> ProcessChatMessageWithIndividualAudioAsync(string message, string userId, CancellationToken ct = default);
+    Task<string> ProcessChatMessageWithIndividualAudioAsync(string message, string userId, string? userMood = null, CancellationToken ct = default);
 }
 
 public class AiService : IAiService
@@ -18,6 +18,7 @@ public class AiService : IAiService
     private readonly ITtsService _ttsService;
     private readonly ILipsyncService _lipsyncService;
     private readonly IConfiguration _configuration;
+    private readonly IConversationHistoryService? _conversationHistoryService;
     private readonly ILogger<AiService> _logger;
 
     // Static temp directory - created once and reused
@@ -25,12 +26,13 @@ public class AiService : IAiService
     private static readonly object _dirLock = new object();
     private static bool _dirCreated = false;
 
-    public AiService(IAiRepository aiRepository, ITtsService ttsService, ILipsyncService lipsyncService, IConfiguration configuration, ILogger<AiService> logger)
+    public AiService(IAiRepository aiRepository, ITtsService ttsService, ILipsyncService lipsyncService, IConfiguration configuration, ILogger<AiService> logger, IConversationHistoryService? conversationHistoryService = null)
     {
         _aiRepository = aiRepository;
         _ttsService = ttsService;
         _lipsyncService = lipsyncService;
         _configuration = configuration;
+        _conversationHistoryService = conversationHistoryService;
         _logger = logger;
 
         // Ensure temp directory exists (thread-safe)
@@ -128,14 +130,27 @@ public class AiService : IAiService
     }
 
 
-    public async Task<string> ProcessChatMessageWithIndividualAudioAsync(string message, string userId, CancellationToken ct = default)
+    public async Task<string> ProcessChatMessageWithIndividualAudioAsync(string message, string userId, string? userMood = null, CancellationToken ct = default)
     {
         try
         {
-            _logger.LogInformation("Processing chat message with individual audio for user {UserId}", userId);
+            _logger.LogInformation("Processing chat message with individual audio for user {UserId} with mood {UserMood}", userId, userMood);
+
+            // Save user message to conversation history
+            if (_conversationHistoryService != null)
+            {
+                try
+                {
+                    await _conversationHistoryService.SaveMessageAsync(userId, message, userMood, true);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Failed to save user message to conversation history for user {UserId}", userId);
+                }
+            }
 
             // Generate AI response
-            var response = await _aiRepository.GenerateResponseAsync(message, userId, ct);
+            var response = await _aiRepository.GenerateResponseAsync(message, userId, userMood, ct);
             _logger.LogInformation("Generated OpenAI response for user {UserId}", userId);
 
             try
@@ -247,6 +262,26 @@ public class AiService : IAiService
                 });
 
                 _logger.LogInformation("Successfully processed chat message with individual audio for user {UserId}", userId);
+
+                // Save AI response to conversation history
+                if (_conversationHistoryService != null)
+                {
+                    try
+                    {
+                        // Extract the first message text for history
+                        var firstMessage = modifiedMessages.FirstOrDefault();
+                        if (firstMessage is Dictionary<string, object> firstMsg && firstMsg.ContainsKey("text"))
+                        {
+                            var aiResponseText = firstMsg["text"]?.ToString() ?? "AI response";
+                            await _conversationHistoryService.SaveMessageAsync(userId, aiResponseText, null, false);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to save AI response to conversation history for user {UserId}", userId);
+                    }
+                }
+
                 return jsonResponse;
             }
             catch (JsonException ex)

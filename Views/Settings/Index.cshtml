@@ -1,0 +1,279 @@
+@model cutypai.Controllers.SettingsViewModel
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Settings</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-300">Manage your application settings and AI prompts.</p>
+        </div>
+
+        <!-- Success/Error Messages -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                <i class="fas fa-check-circle mr-2"></i>@TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                <i class="fas fa-exclamation-circle mr-2"></i>@TempData["ErrorMessage"]
+            </div>
+        }
+
+        <!-- Settings Tabs -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+            <!-- Tab Navigation -->
+            <div class="border-b border-gray-200 dark:border-gray-700">
+                <nav class="flex space-x-8 px-6" aria-label="Tabs">
+                    <button id="prompting-tab"
+                        class="tab-button active py-4 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600 dark:text-blue-400">
+                        <i class="fas fa-robot mr-2"></i>AI Prompting
+                    </button>
+                    <button id="preview-tab"
+                        class="tab-button py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                        <i class="fas fa-eye mr-2"></i>Preview
+                    </button>
+                    <button id="history-tab"
+                        class="tab-button py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                        <i class="fas fa-history mr-2"></i>History
+                    </button>
+                    <button id="general-tab"
+                        class="tab-button py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                        <i class="fas fa-cog mr-2"></i>General
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="p-6">
+                <!-- AI Prompting Tab -->
+                <div id="prompting-content" class="tab-content">
+                    <form asp-action="Update" method="post" class="space-y-6">
+                        @Html.AntiForgeryToken()
+
+                        <!-- System Prompt Section -->
+                        <div>
+                            <label for="SystemPrompt"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                System Prompt
+                            </label>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                                Define the core personality and behavior of Cutypai. Use variables like {userName},
+                                {currentTime}, and {userMood}.
+                            </p>
+                            <textarea asp-for="SystemPrompt" rows="12"
+                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                placeholder="Enter the system prompt for Cutypai..."></textarea>
+                            <span asp-validation-for="SystemPrompt" class="text-red-500 text-sm"></span>
+                        </div>
+
+                        <!-- Instructions Section -->
+                        <div>
+                            <label for="Instructions"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Instructions
+                            </label>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                                Additional context and guidelines for how Cutypai should respond. Include mood-specific
+                                instructions.
+                            </p>
+                            <textarea asp-for="Instructions" rows="8"
+                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                placeholder="Enter additional instructions..."></textarea>
+                            <span asp-validation-for="Instructions" class="text-red-500 text-sm"></span>
+                        </div>
+
+                        <!-- Template Variables Help -->
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                            <h4 class="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">Available Template
+                                Variables:</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-blue-700 dark:text-blue-300">
+                                <div><code>{userName}</code> - User's name</div>
+                                <div><code>{currentTime}</code> - Current time and date</div>
+                                <div><code>{userMood}</code> - User's current mood</div>
+                                <div><code>{moodContext}</code> - Mood-specific instructions</div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div
+                            class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Last updated: @Model.UpdatedAt.ToString("MMMM dd, yyyy 'at' HH:mm")
+                            </div>
+                            <div class="flex space-x-3">
+                                <button type="button" onclick="resetToDefault()"
+                                    class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    Reset to Default
+                                </button>
+                                <button type="submit"
+                                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- History Tab -->
+                <div id="history-content" class="tab-content hidden">
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Settings History</h3>
+                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                    View all changes made to AI prompts and settings over time.
+                                </p>
+                            </div>
+                            <a asp-action="History"
+                                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <i class="fas fa-external-link-alt mr-2"></i>View Full History
+                            </a>
+                        </div>
+
+                        <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                            <div class="flex">
+                                <i class="fas fa-info-circle text-blue-400 mr-3 mt-0.5"></i>
+                                <div>
+                                    <h4 class="text-sm font-medium text-blue-800 dark:text-blue-200">Audit Trail</h4>
+                                    <p class="mt-1 text-sm text-blue-700 dark:text-blue-300">
+                                        Every change to settings is automatically logged with user information,
+                                        timestamps, and detailed change summaries for future investigation and
+                                        debugging.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- General Tab -->
+                <div id="general-content" class="tab-content hidden">
+                    <div class="space-y-6">
+                        <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+                            <div class="flex">
+                                <i class="fas fa-info-circle text-yellow-400 mr-3 mt-0.5"></i>
+                                <div>
+                                    <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">General
+                                        Settings</h3>
+                                    <p class="mt-1 text-sm text-yellow-700 dark:text-yellow-300">
+                                        General application settings will be available here in future updates.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Tab -->
+                <div id="preview-content" class="tab-content hidden">
+                    <div class="space-y-6">
+                        <div>
+                            <label for="previewMood"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Preview with Mood
+                            </label>
+                            <div class="flex space-x-3">
+                                <select id="previewMood"
+                                    class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                    <option value="">No mood (neutral)</option>
+                                    <option value="happy">Happy</option>
+                                    <option value="sad">Sad</option>
+                                    <option value="excited">Excited</option>
+                                    <option value="calm">Calm</option>
+                                    <option value="romantic">Romantic</option>
+                                    <option value="angry">Angry</option>
+                                    <option value="tired">Tired</option>
+                                    <option value="stressed">Stressed</option>
+                                    <option value="lonely">Lonely</option>
+                                    <option value="confused">Confused</option>
+                                </select>
+                                <button type="button" onclick="generatePreview()"
+                                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    Generate Preview
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Preview Output
+                            </label>
+                            <div id="previewOutput"
+                                class="w-full h-96 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap overflow-y-auto">
+                                Click "Generate Preview" to see how your prompts will look with context variables.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    const targetId = this.id.replace('-tab', '-content');
+
+                    // Remove active class from all tabs
+                    tabs.forEach(t => {
+                        t.classList.remove('active', 'border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+                        t.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+                    });
+
+                    // Hide all content
+                    contents.forEach(c => c.classList.add('hidden'));
+
+                    // Show target content
+                    document.getElementById(targetId).classList.remove('hidden');
+
+                    // Add active class to clicked tab
+                    this.classList.add('active', 'border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+                    this.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+                });
+            });
+        });
+
+        // Reset to default function
+        function resetToDefault() {
+            if (confirm('Are you sure you want to reset all prompts to default values? This action cannot be undone.')) {
+                window.location.href = '@Url.Action("Reset", "Settings")';
+            }
+        }
+
+        // Generate preview function
+        async function generatePreview() {
+            const mood = document.getElementById('previewMood').value;
+            const output = document.getElementById('previewOutput');
+
+            output.textContent = 'Generating preview...';
+
+            try {
+                const response = await fetch(`@Url.Action("Preview", "Settings")?userMood=${encodeURIComponent(mood)}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    output.textContent = `Error: ${data.error}`;
+                } else {
+                    output.textContent = data.preview;
+                }
+            } catch (error) {
+                output.textContent = `Error generating preview: ${error.message}`;
+            }
+        }
+    </script>
+}

@@ -8,4 +8,8 @@ public sealed class ChatRequest
     [Required]
     [StringLength(200, MinimumLength = 1)]
     public string Message { get; set; } = string.Empty;
+
+    // Optional user mood for context-aware responses
+    [StringLength(50)]
+    public string? UserMood { get; set; }
 }

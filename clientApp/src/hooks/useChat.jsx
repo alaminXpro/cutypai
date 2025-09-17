@@ -9,10 +9,10 @@ const ChatContext = createContext();
 export const ChatProvider = ({ children }) => {
     const dispatch = useDispatch();
     
-    const chat = async (message) => {
+    const chat = async (message, userMood = null) => {
         setLoading(true);
         try {
-            const result = await dispatch(chatThunk(message));
+            const result = await dispatch(chatThunk({ message, userMood }));
             if (chatThunk.fulfilled.match(result)) {
                 const resp = result.payload.messages;
                 setMessages((messages) => [...messages, ...resp]);
