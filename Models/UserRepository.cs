@@ -19,6 +19,7 @@ public interface IUserRepository
     Task<bool> SetStatusAsync(string id, UserStatus status, CancellationToken ct = default);
     Task<User?> FindByExternalIdAsync(string provider, string externalId, CancellationToken ct = default);
     Task<User> CreateFromSsoAsync(string email, string name, string provider, string externalId, string? avatarUrl = null, CancellationToken ct = default);
+    Task<bool> ResetPasswordAsync(string userId, string newPassword, CancellationToken ct = default);
 }
 
 public sealed class UserRepository : IUserRepository
@@ -267,6 +268,36 @@ public sealed class UserRepository : IUserRepository
         {
             _logger.LogError(ex, "Error creating SSO user {Email} via {Provider}", email, provider);
             throw;
+        }
+    }
+
+    public async Task<bool> ResetPasswordAsync(string userId, string newPassword, CancellationToken ct = default)
+    {
+        try
+        {
+            var passwordValidation = _passwordValidation.ValidatePassword(newPassword);
+            if (!passwordValidation.IsValid)
+            {
+                _logger.LogWarning("Password validation failed for user {UserId}: {Errors}", userId, string.Join(", ", passwordValidation.Errors));
+                return false;
+            }
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword, 12);
+            var update = Builders<User>.Update.Set(u => u.Password, hashedPassword);
+            var res = await _col.UpdateOneAsync(u => u.Id == userId, update, cancellationToken: ct);
+            var success = res.IsAcknowledged && res.ModifiedCount == 1;
+
+            if (success)
+                _logger.LogInformation("Password reset successfully for user {UserId}", userId);
+            else
+                _logger.LogWarning("Failed to reset password for user {UserId}", userId);
+
+            return success;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error resetting password for user {UserId}", userId);
+            return false;
         }
     }
 }

@@ -84,10 +84,12 @@ public class Program
             builder.Services.AddScoped<MongoCollectionFactory>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
             builder.Services.AddScoped<IPasswordValidationService, PasswordValidationService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IGoogleTokenVerificationService, GoogleTokenVerificationService>();
             builder.Services.AddScoped<IDatabaseIndexService, DatabaseIndexService>();
+            builder.Services.AddScoped<IEmailService, MailgunEmailService>();
 
             // Configure Google OAuth settings
             builder.Services.Configure<GoogleOAuthSettings>(opts =>
