@@ -1,12 +1,18 @@
+using System.ClientModel;
 using System.Security.Cryptography;
 using System.Text;
+using Amazon;
+using Amazon.Polly;
 using cutypai.Models;
+using cutypai.Repositories;
+using cutypai.Services;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using OpenAI.Chat;
 using Serilog;
 
 namespace cutypai;
@@ -31,8 +37,13 @@ public class Program
             // Use Serilog
             builder.Host.UseSerilog();
 
-            // MVC + API
-            builder.Services.AddControllersWithViews();
+            // MVC + API with strict JSON deserialization
+            builder.Services.AddControllersWithViews()
+                .AddJsonOptions(options =>
+                {
+                    // Reject unknown properties to prevent includeAudio from being accepted
+                    options.JsonSerializerOptions.UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Disallow;
+                });
 
             // ----- Mongo options with enhanced configuration -----
             builder.Services.Configure<MongoDbSettings>(opts =>
@@ -73,8 +84,20 @@ public class Program
             builder.Services.AddScoped<MongoCollectionFactory>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
             builder.Services.AddScoped<IPasswordValidationService, PasswordValidationService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IGoogleTokenVerificationService, GoogleTokenVerificationService>();
+            builder.Services.AddScoped<IDatabaseIndexService, DatabaseIndexService>();
+            builder.Services.AddScoped<IEmailService, MailgunEmailService>();
+
+            // Configure Google OAuth settings
+            builder.Services.Configure<GoogleOAuthSettings>(opts =>
+            {
+                opts.ClientId = Environment.GetEnvironmentVariable("Google_CLIENT_ID")
+                                ?? throw new InvalidOperationException(
+                                    "Google_CLIENT_ID environment variable is required");
+            });
 
             // ----- Enhanced JWT options -----
             builder.Services.Configure<JwtSettings>(opts =>
@@ -168,15 +191,51 @@ public class Program
                     {
                         // Restrict origins in production - update with your actual domains
                         var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()
-                                             ?? new[] { "https://yourdomain.com" };
+                                             ?? new[] { "https://cutypai.vercel.app" };
 
                         p.WithOrigins(allowedOrigins)
                             .AllowAnyHeader()
                             .AllowAnyMethod()
-                            .AllowCredentials();
+                            .AllowCredentials()
+                            .SetPreflightMaxAge(TimeSpan.FromSeconds(86400)) // Cache preflight for 24 hours
+                            .SetIsOriginAllowedToAllowWildcardSubdomains(); // Allow subdomains
                     }
                 });
             });
+
+            // AI Services
+            builder.Services.AddScoped<IAiRepository, AiRepository>();
+            builder.Services.AddScoped<IAiService, AiService>();
+
+            // Settings Services
+            builder.Services.AddScoped<ISettingsRepository, SettingsRepository>();
+            builder.Services.AddScoped<IContextBuilderService, ContextBuilderService>();
+            builder.Services.AddScoped<IConversationHistoryService, ConversationHistoryService>();
+
+            // Settings Audit Services
+            builder.Services.AddScoped<ISettingsAuditRepository, SettingsAuditRepository>();
+            builder.Services.AddScoped<ISettingsAuditService, SettingsAuditService>();
+
+            // Configure AWS Polly client (region from env or default)
+            var regionName = Environment.GetEnvironmentVariable("AWS_REGION") ?? "us-east-1";
+            builder.Services.AddSingleton<IAmazonPolly>(_ =>
+                new AmazonPollyClient(RegionEndpoint.GetBySystemName(regionName)));
+
+            // TTS Services
+            builder.Services.AddScoped<ITtsService, PollyTtsService>();
+
+            // Lipsync Services
+            builder.Services.AddScoped<ILipsyncService, RhubarbLipsyncService>();
+
+            // Register OpenAI client
+            var openAiApiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+            if (string.IsNullOrWhiteSpace(openAiApiKey))
+                Log.Warning("OPENAI_API_KEY not found in environment variables. AI responses will use test mode.");
+            else
+                builder.Services.AddSingleton<ChatClient>(serviceProvider => new ChatClient(
+                    "gpt-4o-mini",
+                    new ApiKeyCredential(openAiApiKey)
+                ));
 
             var app = builder.Build();
 
@@ -205,6 +264,7 @@ public class Program
             // Health & indexes with proper logging
             await PingMongoAsync(app.Services);
             await EnsureMongoIndexesAsync(app.Services);
+            await EnsureDefaultSettingsAsync(app.Services);
 
             Log.Information("Application starting...");
             app.Run();
@@ -241,19 +301,6 @@ public class Program
 
         try
         {
-            // Users collection indexes
-            var users = db.GetCollection<User>("users");
-            var emailKeys = Builders<User>.IndexKeys.Ascending(u => u.Email);
-            var emailIndex = new CreateIndexModel<User>(
-                emailKeys,
-                new CreateIndexOptions
-                {
-                    Name = "ux_email_ci",
-                    Unique = true,
-                    Collation = new Collation("en", strength: CollationStrength.Secondary)
-                });
-            await users.Indexes.CreateOneAsync(emailIndex);
-
             // Refresh tokens collection indexes
             var refreshTokens = db.GetCollection<RefreshToken>("refresh_tokens");
             var tokenKeys = Builders<RefreshToken>.IndexKeys.Ascending(rt => rt.Token);
@@ -277,11 +324,39 @@ public class Program
                 });
             await refreshTokens.Indexes.CreateOneAsync(expiryIndex);
 
+            // Create user indexes
+            var indexService = scope.ServiceProvider.GetRequiredService<IDatabaseIndexService>();
+            await indexService.CreateIndexesAsync();
+
             Log.Information("✅ MongoDB indexes created successfully.");
         }
         catch (Exception ex)
         {
             Log.Error(ex, "❌ Failed to create MongoDB indexes: {Message}", ex.Message);
+        }
+    }
+
+    private static async Task EnsureDefaultSettingsAsync(IServiceProvider services)
+    {
+        using var scope = services.CreateScope();
+        var settingsRepository = scope.ServiceProvider.GetRequiredService<ISettingsRepository>();
+
+        try
+        {
+            var existingSettings = await settingsRepository.GetActiveSettingsAsync();
+            if (existingSettings == null)
+            {
+                await settingsRepository.CreateDefaultSettingsAsync();
+                Log.Information("✅ Default settings created successfully.");
+            }
+            else
+            {
+                Log.Information("✅ Settings already exist in database.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "❌ Failed to ensure default settings: {Message}", ex.Message);
         }
     }
 

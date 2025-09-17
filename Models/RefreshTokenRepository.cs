@@ -38,9 +38,9 @@ public sealed class RefreshTokenRepository : IRefreshTokenRepository
         return token;
     }
 
-    public Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken ct = default)
+    public async Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken ct = default)
     {
-        return _collection.Find(rt => rt.Token == token).FirstOrDefaultAsync(ct);
+        return await _collection.Find(rt => rt.Token == token).FirstOrDefaultAsync(ct);
     }
 
     public async Task<bool> RevokeTokenAsync(string token, string reason = "Revoked", CancellationToken ct = default)

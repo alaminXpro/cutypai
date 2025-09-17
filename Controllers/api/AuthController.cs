@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using cutypai.Models;
+using cutypai.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
@@ -12,11 +13,13 @@ public sealed class AuthApiController : ControllerBase
 {
     private readonly ITokenService _tokens;
     private readonly IUserRepository _users;
+    private readonly IGoogleTokenVerificationService _googleTokenService;
 
-    public AuthApiController(IUserRepository users, ITokenService tokens)
+    public AuthApiController(IUserRepository users, ITokenService tokens, IGoogleTokenVerificationService googleTokenService)
     {
         _users = users;
         _tokens = tokens;
+        _googleTokenService = googleTokenService;
     }
 
     // POST /api/auth/register
@@ -41,7 +44,9 @@ public sealed class AuthApiController : ControllerBase
 
         if (!validationResult.IsValid)
         {
-            foreach (var error in validationResult.Errors) ModelState.AddModelError("Password", error);
+            foreach (var error in validationResult.PasswordErrors) ModelState.AddModelError("Password", error);
+            foreach (var error in validationResult.EmailErrors) ModelState.AddModelError("Email", error);
+            foreach (var error in validationResult.GeneralErrors) ModelState.AddModelError("", error);
             return ValidationProblem(ModelState);
         }
 
@@ -80,6 +85,11 @@ public sealed class AuthApiController : ControllerBase
     {
         // Try to get refresh token from cookies first, then from request body
         var refreshToken = Request.Cookies["refreshToken"] ?? req?.RefreshToken;
+        var origin = Request.Headers.Origin.FirstOrDefault();
+        var cookieCount = Request.Cookies.Count;
+
+        // Log debugging information
+        Console.WriteLine($"Refresh token request - Origin: {origin}, Cookie count: {cookieCount}, Has refresh token in cookie: {!string.IsNullOrWhiteSpace(Request.Cookies["refreshToken"])}, Has refresh token in body: {!string.IsNullOrWhiteSpace(req?.RefreshToken)}");
 
         if (string.IsNullOrWhiteSpace(refreshToken))
             return BadRequest(new { message = "Refresh token is required either in cookies or request body" });
@@ -163,33 +173,91 @@ public sealed class AuthApiController : ControllerBase
 
     private void SetRefreshTokenCookie(string refreshToken)
     {
+        var isDevelopment = HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment();
+        var isHttps = Request.IsHttps;
+        var origin = Request.Headers.Origin.FirstOrDefault();
+
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = Request.IsHttps ||
-                     !HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
-            SameSite = SameSiteMode.Lax, // Better compatibility than Strict
+            Secure = true, // Always secure for production cross-origin
+            SameSite = isDevelopment ? SameSiteMode.Lax : SameSiteMode.None, // None for production cross-origin
             Expires = DateTime.UtcNow.AddDays(7), // Match your refresh token expiry
             Path = "/",
-            Domain = null // Let browser determine domain automatically
+            Domain = null, // Let browser determine domain automatically
+            IsEssential = true // Mark as essential cookie
         };
+
+        // Log cookie settings for debugging
+        Console.WriteLine($"Setting refresh token cookie - Development: {isDevelopment}, HTTPS: {isHttps}, Origin: {origin}, SameSite: {cookieOptions.SameSite}, Secure: {cookieOptions.Secure}");
 
         Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
     }
 
     private void ClearRefreshTokenCookie()
     {
+        var isDevelopment = HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment();
+
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = Request.IsHttps ||
-                     !HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment(),
-            SameSite = SameSiteMode.Lax,
+            Secure = true, // Always secure for production cross-origin
+            SameSite = isDevelopment ? SameSiteMode.Lax : SameSiteMode.None, // None for production cross-origin
             Expires = DateTime.UtcNow.AddDays(-1), // Expire the cookie
             Path = "/",
-            Domain = null
+            Domain = null,
+            IsEssential = true // Mark as essential cookie
         };
 
         Response.Cookies.Append("refreshToken", "", cookieOptions);
+    }
+
+    // POST /api/auth/sso/google
+    [HttpPost("sso/google")]
+    [AllowAnonymous]
+    public async Task<ActionResult<AuthResponse>> GoogleSso([FromBody] GoogleSsoRequest req, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(req.Token))
+            return BadRequest(new { message = "Google token is required" });
+
+        var googleUser = await _googleTokenService.VerifyTokenAsync(req.Token);
+        if (googleUser == null)
+            return Unauthorized(new { message = "Invalid Google token" });
+
+        // Find existing user by email or external ID
+        var user = await _users.GetByEmailAsync(googleUser.Email) ??
+                   await _users.FindByExternalIdAsync("google", googleUser.Id);
+
+        if (user == null)
+        {
+            // Create new user from Google data
+            user = await _users.CreateFromSsoAsync(
+                googleUser.Email,
+                googleUser.Name,
+                "google",
+                googleUser.Id,
+                googleUser.Picture,
+                ct
+            );
+        }
+        else
+        {
+            // Update existing user with Google info if needed
+            if (string.IsNullOrEmpty(user.AvatarUrl))
+                user.AvatarUrl = googleUser.Picture;
+
+            user.LastLoginUtc = DateTime.UtcNow;
+            await _users.UpdateAsync(user, ct);
+        }
+
+        var token = await _tokens.CreateTokensAsync(user);
+        SetRefreshTokenCookie(token.RefreshToken);
+
+        return Ok(token);
+    }
+
+    public class GoogleSsoRequest
+    {
+        public string Token { get; set; } = string.Empty;
     }
 }

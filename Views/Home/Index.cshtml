@@ -1,18 +1,18 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Cutypai - Your AI Companion";
 }
 
-<div class="w-full min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-500">
+<div class="w-full min-h-screen bg-gradient-to-br from-amber-50 to-stone-100 dark:from-stone-900 dark:to-stone-800 text-stone-800 dark:text-stone-200 transition-colors duration-500">
 
     <!-- Success/Error Messages -->
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="fixed top-20 right-4 z-50 max-w-md">
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg mb-4" role="alert">
+            <div class="bg-emerald-100 border border-emerald-400 text-emerald-700 px-4 py-3 rounded-lg shadow-lg mb-4" role="alert">
                 <div class="flex items-center">
                     <i class="fas fa-check-circle mr-2"></i>
                     <span>@TempData["SuccessMessage"]</span>
-                    <button type="button" class="ml-auto text-green-700 hover:text-green-900" onclick="this.parentElement.parentElement.remove()">
+                    <button type="button" class="ml-auto text-emerald-700 hover:text-emerald-900" onclick="this.parentElement.parentElement.remove()">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -23,11 +23,11 @@
     @if (TempData["InfoMessage"] != null)
     {
         <div class="fixed top-20 right-4 z-50 max-w-md">
-            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg shadow-lg mb-4" role="alert">
+            <div class="bg-sky-100 border border-sky-400 text-sky-700 px-4 py-3 rounded-lg shadow-lg mb-4" role="alert">
                 <div class="flex items-center">
                     <i class="fas fa-info-circle mr-2"></i>
                     <span>@TempData["InfoMessage"]</span>
-                    <button type="button" class="ml-auto text-blue-700 hover:text-blue-900" onclick="this.parentElement.parentElement.remove()">
+                    <button type="button" class="ml-auto text-sky-700 hover:text-sky-900" onclick="this.parentElement.parentElement.remove()">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -36,215 +36,617 @@
     }
 
     <!-- Hero Section -->
-    <div class="max-w-6xl mx-auto px-6 py-16 text-center">
+    <section class="max-w-6xl mx-auto px-6 py-16 text-center">
         @if (User.Identity?.IsAuthenticated == true)
         {
-            <h1 class="text-5xl md:text-7xl font-extrabold mb-6">
-                Welcome back, <span class="text-green-600 dark:text-green-400">@User.Identity.Name</span>!
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-10 italic">
-                "Ready to continue your AI journey? Let's build something amazing together."
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a asp-controller="Auth" asp-action="Profile" class="px-6 py-3 bg-green-600 dark:bg-green-500 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 dark:hover:bg-green-600 transition">
-                    View Profile
-                </a>
-                <button class="px-6 py-3 border border-green-600 dark:border-green-400 text-green-700 dark:text-green-300 font-semibold rounded-lg hover:bg-green-100 dark:hover:bg-green-600 hover:text-green-800 dark:hover:text-white transition">
-                    Explore AI Projects
-                </button>
+            <div class="animate-fade-in-up">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-400 dark:to-amber-300">
+                    Welcome back, <span class="text-amber-700 dark:text-amber-400">@User.Identity.Name</span>!
+                </h1>
+                <p class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-10 italic">
+                    "Ready to continue your conversation with Cutypai?"
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a asp-controller="Auth" asp-action="Profile" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-700 text-white font-semibold rounded-full shadow-lg hover:from-amber-600 hover:to-amber-800 transition-all transform hover:-translate-y-1">
+                        View Profile
+                    </a>
+                    <a href="https://cutypai.vercel.app" target="_blank">
+                        <button class="px-6 py-3 border-2 border-amber-500 text-amber-700 dark:text-amber-300
+                       font-semibold rounded-full
+                       hover:bg-amber-100 dark:hover:bg-amber-900
+                       hover:text-amber-800 dark:hover:text-white
+                       transition-all transform hover:-translate-y-1">
+                            Start Chatting
+                        </button>
+                    </a>
+
+                </div>
             </div>
         }
         else
         {
-            <h1 class="text-5xl md:text-7xl font-extrabold mb-6">
-                Welcome to <span class="text-green-600 dark:text-green-400">CutyPai AI Hub</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-10 italic">
-                "AI is not just intelligence; it's inspiration coded into algorithms."
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a asp-controller="Auth" asp-action="Signup" class="px-6 py-3 bg-green-600 dark:bg-green-500 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 dark:hover:bg-green-600 transition">
-                    Get Started
-                </a>
-                <a asp-controller="Auth" asp-action="Login" class="px-6 py-3 border border-green-600 dark:border-green-400 text-green-700 dark:text-green-300 font-semibold rounded-lg hover:bg-green-100 dark:hover:bg-green-600 hover:text-green-800 dark:hover:text-white transition">
-                    Sign In
-                </a>
+            <div class="animate-fade-in-up">
+                <div class="w-40 h-40 mx-auto mb-8 rounded-full bg-gradient-to-r from-amber-400 to-amber-600 p-1.5 shadow-xl">
+                    <div class="w-full h-full rounded-full bg-stone-100 dark:bg-stone-800 flex items-center justify-center">
+                        <i class="fas fa-robot text-6xl text-amber-600 dark:text-amber-400"></i>
+                    </div>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-amber-600 to-amber-800 dark:from-amber-400 dark:to-amber-300">
+                    Meet <span class="text-amber-700 dark:text-amber-400">Cutypai</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-10 italic">
+                    "Your empathetic AI companion that understands and responds with emotions."
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a asp-controller="Auth" asp-action="Signup" class="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-700 text-white font-semibold rounded-full shadow-lg hover:from-amber-600 hover:to-amber-800 transition-all transform hover:-translate-y-1">
+                        Get Started
+                    </a>
+                    <a asp-controller="Auth" asp-action="Login" class="px-6 py-3 border-2 border-amber-500 text-amber-700 dark:text-amber-300 font-semibold rounded-full hover:bg-amber-100 dark:hover:bg-amber-900 hover:text-amber-800 dark:hover:text-white transition-all transform hover:-translate-y-1">
+                        Sign In
+                    </a>
+                </div>
             </div>
         }
-    </div>
+    </section>
+ 
 
     <!-- Stats Container -->
-    <div class="max-w-6xl mx-auto px-6 mb-20">
-        <div class="grid md:grid-cols-4 gap-6 bg-gray-100 dark:bg-gray-800 rounded-2xl p-8 shadow-lg text-center">
-            <div>
-                <p class="text-3xl font-bold text-green-600 dark:text-green-400">42</p>
-                <p class="text-gray-700 dark:text-gray-300">Active Contests</p>
+    <section class="max-w-6xl mx-auto px-6 mb-20 animate-fade-in-up">
+        <div class="grid md:grid-cols-4 gap-6 bg-white/70 dark:bg-stone-800/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg text-center">
+            <div class="p-4">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                    <i class="fas fa-comments text-2xl text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <p class="text-3xl font-bold text-amber-600 dark:text-amber-400">42k+</p>
+                <p class="text-stone-600 dark:text-stone-300">Daily Conversations</p>
             </div>
-            <div>
-                <p class="text-3xl font-bold text-green-600 dark:text-green-400">3.2k</p>
-                <p class="text-gray-700 dark:text-gray-300">Registered Users</p>
+            <div class="p-4">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                    <i class="fas fa-users text-2xl text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <p class="text-3xl font-bold text-amber-600 dark:text-amber-400">3.2k</p>
+                <p class="text-stone-600 dark:text-stone-300">Active Users</p>
             </div>
-            <div>
-                <p class="text-3xl font-bold text-green-600 dark:text-green-400">128</p>
-                <p class="text-gray-700 dark:text-gray-300">Problems Online</p>
+            <div class="p-4">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                    <i class="fas fa-smile text-2xl text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <p class="text-3xl font-bold text-amber-600 dark:text-amber-400">98%</p>
+                <p class="text-stone-600 dark:text-stone-300">User Satisfaction</p>
             </div>
-            <div>
-                <p class="text-3xl font-bold text-green-600 dark:text-green-400">99.9%</p>
-                <p class="text-gray-700 dark:text-gray-300">Uptime</p>
+            <div class="p-4">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                    <i class="fas fa-brain text-2xl text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <p class="text-3xl font-bold text-amber-600 dark:text-amber-400">24/7</p>
+                <p class="text-stone-600 dark:text-stone-300">AI Availability</p>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Dynamic Informative Banner -->
-    <div class="w-full overflow-hidden bg-green-600 dark:bg-green-500 py-3 mb-20">
-        <div class="animate-marquee whitespace-nowrap text-white text-lg font-medium">
-            <span class="mx-8">🚀 AI is shaping industries — Be part of the revolution!</span>
-            <span class="mx-8">💡 Learn Deep Learning, Machine Learning, and AI Ethics.</span>
-            <span class="mx-8">🤖 Build innovative projects with Neural Networks.</span>
-            <span class="mx-8">🌍 Connecting AI communities across the globe!</span>
-        </div>
-    </div>
-
-    <!-- AI Showcase (Image Grid) -->
-    <div class="max-w-6xl mx-auto px-6 mb-20">
-        <h2 class="text-3xl font-bold mb-6 text-center">AI in Action</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <img src="https://www.industrial-production.de/imgproxy/c:5172:2492:nowe:0:212/rs:fill:1320:636/plain/https://www.industrial-production.de/upload_weka/nwo/004/142/TUM_WAF_4142093.jpg" class="rounded-xl shadow-lg hover:scale-105 transition" />
-            <img src="https://www.industrial-production.de/imgproxy/c:1620:1080:nowe:150:0/rs:fill:1080:720/plain/https://www.industrial-production.de/upload_weka/nwo/004/142/neura_WAF_4142578.jpg" class="rounded-xl shadow-lg hover:scale-105 transition" />
-            <img src="https://www.industrial-production.de/imgproxy/c:1688:1125:nowe:156:0/rs:fill:1080:720/plain/https://www.industrial-production.de/upload_weka/nwo/004/142/20250221bild_158_waf_4142100.jpg" class="rounded-xl shadow-lg hover:scale-105 transition" />
-            <img src="https://i.insider.com/5637a5f3dd0895b8608b45af?width=800&format=jpeg&auto=webp" class="rounded-xl shadow-lg hover:scale-105 transition" />
-            <img src="https://i.insider.com/56858d81dd08950b4a8b45fe?width=800&format=jpeg&auto=webp" class="rounded-xl shadow-lg hover:scale-105 transition" />
-            <img src="https://i.insider.com/56858d81dd08950b4a8b45ff?width=800&format=jpeg&auto=webp" class="rounded-xl shadow-lg hover:scale-105 transition" />
-        </div>
-    </div>
-
-    <!-- Modern Animated Section -->
-    <div class="max-w-7xl mx-auto px-6 py-16 grid gap-10 md:grid-cols-2">
-
-        <!-- Card 1 -->
-        <div class="group bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg p-6 transform transition duration-500 hover:scale-105">
-            <div class="overflow-hidden rounded-xl mb-4">
-                <img src="https://media.licdn.com/dms/image/v2/D5612AQHBu0nWqaAEmQ/article-cover_image-shrink_600_2000/B56ZXwcgFYHQAU-/0/1743495759327?e=2147483647&v=beta&t=7who0b3B7b-2gorRRcAXzpD3Sfxlm8eE1ye-TS8FvFQ"
-                     alt="AI Future"
-                     class="rounded-xl object-cover w-full h-56 transition duration-500 group-hover:scale-110">
+    <!-- Features Section -->
+    <section class="max-w-6xl mx-auto px-6 mb-20">
+        <h2 class="text-3xl font-bold mb-12 text-center">Why Choose Cutypai?</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="group bg-white/70 dark:bg-stone-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-heart text-3xl text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-center mb-4 text-amber-700 dark:text-amber-300">Emotional Intelligence</h3>
+                <p class="text-stone-600 dark:text-stone-300 text-center">Cutypai understands emotions and responds with empathy, making conversations feel natural and human-like.</p>
             </div>
-            <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-3 animate-slideIn">
-                The Future is Intelligent
-            </h2>
-            <p class="text-gray-700 dark:text-gray-300 animate-fadeIn">
-                AI is reshaping industries through NLP, computer vision, and autonomous systems.
-                The possibilities are expanding every day.
-            </p>
+
+            <!-- Feature 2 -->
+            <div class="group bg-white/70 dark:bg-stone-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-lightbulb text-3xl text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-center mb-4 text-amber-700 dark:text-amber-300">Always Learning</h3>
+                <p class="text-stone-600 dark:text-stone-300 text-center">Our AI continuously improves from interactions, ensuring more relevant and engaging conversations over time.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="group bg-white/70 dark:bg-stone-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-shield-alt text-3xl text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-center mb-4 text-amber-700 dark:text-amber-300">Privacy Focused</h3>
+                <p class="text-stone-600 dark:text-stone-300 text-center">Your conversations are secure and private. We prioritize your data protection above all else.</p>
+            </div>
+            <!-- Feature 3 -->
+            <div class="group bg-white/70 dark:bg-stone-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-heart text-3xl text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-center mb-4 text-amber-700 dark:text-amber-300">Empathetic Responses</h3>
+                <p class="text-stone-600 dark:text-stone-300 text-center">Cutypai understands emotions and responds with empathy, making conversations feel human and supportive.</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="group bg-white/70 dark:bg-stone-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-user-shield text-3xl text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-center mb-4 text-amber-700 dark:text-amber-300">Privacy First</h3>
+                <p class="text-stone-600 dark:text-stone-300 text-center">All interactions with Cutypai are secure and private, giving users peace of mind while chatting freely.</p>
+            </div>
+            <!-- Feature 5 -->
+            <div class="group bg-white/70 dark:bg-stone-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-rocket text-3xl text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-center mb-4 text-amber-700 dark:text-amber-300">Always Available</h3>
+                <p class="text-stone-600 dark:text-stone-300 text-center">Cutypai is ready to chat anytime, providing instant companionship and assistance whenever you need it.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="max-w-6xl mx-auto px-6 mb-20">
+        <h2 class="text-3xl font-bold mb-12 text-center">How Cutypai Works</h2>
+        <div class="flex flex-col md:flex-row items-center justify-between">
+            <div class="md:w-2/5 mb-8 md:mb-0">
+                <div class="relative">
+                    <div class="absolute -inset-4 bg-amber-100 dark:bg-amber-900/20 rounded-2xl rotate-3"></div>
+                    <div class="relative bg-white dark:bg-stone-800 rounded-2xl p-6 shadow-lg">
+                        <div class="flex items-start mb-4">
+                            <div class="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mr-4">
+                                <i class="fas fa-user text-amber-600 dark:text-amber-400"></i>
+                            </div>
+                            <div class="bg-stone-100 dark:bg-stone-700 rounded-2xl px-4 py-3">
+                                <p class="text-sm">Hello Cutypai, how are you today?</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mr-4">
+                                <i class="fas fa-robot text-amber-600 dark:text-amber-400"></i>
+                            </div>
+                            <div class="bg-amber-100 dark:bg-amber-900/30 rounded-2xl px-4 py-3">
+                                <p class="text-sm">I'm doing wonderful! 😊 The weather here in the digital world is perfect. How about you?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:w-1/2">
+                <div class="space-y-8">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                                <span class="text-amber-600 dark:text-amber-400 font-bold">1</span>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-amber-700 dark:text-amber-300">Start a Conversation</h3>
+                            <p class="text-stone-600 dark:text-stone-300">Initiate chat with Cutypai just like you would with a friend.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                                <span class="text-amber-600 dark:text-amber-400 font-bold">2</span>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-amber-700 dark:text-amber-300">Emotional Response</h3>
+                            <p class="text-stone-600 dark:text-stone-300">Cutypai analyzes your message and responds with appropriate emotions.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                                <span class="text-amber-600 dark:text-amber-400 font-bold">3</span>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-amber-700 dark:text-amber-300">Build Connection</h3>
+                            <p class="text-stone-600 dark:text-stone-300">Over time, Cutypai learns your preferences and tailors conversations to you.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Articles Section (glass carousel, horizontal one-by-one scroll) -->
+    <section id="insights" class="max-w-6xl mx-auto px-6 mb-20" aria-labelledby="insights-heading">
+        <div class="flex items-center justify-between mb-6">
+            <h2 id="insights-heading" class="text-3xl font-bold text-center md:text-left">Explore Insights</h2>
+
+            <!-- nav (desktop) -->
+            <div class="hidden md:flex gap-3">
+                <button id="prevBtn" aria-label="Previous article" class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/10 dark:bg-black/20 border border-white/5 shadow-sm hover:scale-105 transition">
+                    <svg xmlns="https://swisscognitive.ch/wp-content/uploads/2023/04/AI-Ethics-in-Focus-Balancing-Innovation-Security-and-Responsibility-SwissCognitive-AI-Radar.png" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <button id="nextBtn" aria-label="Next article" class="inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/10 dark:bg-black/20 border border-white/5 shadow-sm hover:scale-105 transition">
+                    <svg xmlns="https://swisscognitive.ch/wp-content/uploads/2023/04/AI-Ethics-in-Focus-Balancing-Innovation-Security-and-Responsibility-SwissCognitive-AI-Radar.png" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </button>
+            </div>
         </div>
 
-        <!-- Card 2 -->
-        <div class="group bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg p-6 transform transition duration-500 hover:scale-105">
-            <div class="overflow-hidden rounded-xl mb-4">
-                <img src="https://neurosys.com/wp-content/webp-express/webp-images/uploads/2023/11/what-is-deep-learning.jpg.webp"
-                     alt="Deep Learning"
-                     class="rounded-xl object-cover w-full h-56 transition duration-500 group-hover:scale-110">
+        <!-- carousel track -->
+        <div class="relative">
+            <div id="articlesTrack"
+                 class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth py-4 no-scrollbar"
+                 tabindex="0"
+                 aria-label="Article carousel"
+                 style="-webkit-overflow-scrolling: touch;">
+                <!-- Article card 1 -->
+                <article class="card snap-center flex-shrink-0 w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3 bg-white/30 dark:bg-gray-800/40 backdrop-blur-md border border-white/5 dark:border-gray-700 rounded-2xl p-5 shadow-xl">
+                    <div class="flex flex-col md:flex-row items-start gap-4">
+                        <img src="https://media.istockphoto.com/id/607497176/photo/team-building-the-word-trust.jpg?s=612x612&w=0&k=20&c=FQRUijJOTZeVqeuns36iKjlaI1ASqEuNAlkWdgoRzp0=" alt="Trust with Cutypai" class="rounded-xl object-cover h-44 md:h-40 w-full md:w-1/2" />
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-semibold mb-2 text-amber-700 dark:text-amber-300">Building Trust with Cutypai</h3>
+                            <p class="text-sm text-stone-600 dark:text-stone-300 mb-4">How <span class="font-bold">Cutypai</span> ensures privacy and secure conversations while keeping empathy at the core of AI companionship.</p>
+                            <div class="mt-auto flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400">
+                                <time datetime="2025-08-28">Aug 28, 2025</time>
+                                <span>•</span>
+                                <span>6 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article card 2 -->
+                <article class="card snap-center flex-shrink-0 w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3 bg-white/30 dark:bg-gray-800/40 backdrop-blur-md border border-white/5 dark:border-gray-700 rounded-2xl p-5 shadow-xl">
+                    <div class="flex flex-col md:flex-row items-start gap-4">
+                        <img src="https://www.eib.org/photos/banner.do?documentId=8d3e4412-cab0-49ba-b449-6b24ba91b2b4&binaryType=WB" alt="Digital Bond with Cutypai" class="rounded-xl object-cover h-44 md:h-40 w-full md:w-1/2" />
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-semibold mb-2 text-amber-700 dark:text-amber-300">Cutypai & Digital Bond</h3>
+                            <p class="text-sm text-stone-600 dark:text-stone-300 mb-4"><span class="font-bold">Cutypai</span> goes beyond being an assistant—it builds a real emotional bond, enhancing your digital journey.</p>
+                            <div class="mt-auto flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400">
+                                <time datetime="2025-08-20">Aug 20, 2025</time>
+                                <span>•</span>
+                                <span>7 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article card 3 -->
+                <article class="card snap-center flex-shrink-0 w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3 bg-white/30 dark:bg-gray-800/40 backdrop-blur-md border border-white/5 dark:border-gray-700 rounded-2xl p-5 shadow-xl">
+                    <div class="flex flex-col md:flex-row items-start gap-4">
+                        <img src="https://claned.com/wp-content/uploads/2024/04/AI-in-Personalized-Learning-.png" alt="Personalized Experiences" class="rounded-xl object-cover h-44 md:h-40 w-full md:w-1/2" />
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-semibold mb-2 text-amber-700 dark:text-amber-300">Personalized with Cutypai</h3>
+                            <p class="text-sm text-stone-600 dark:text-stone-300 mb-4">Discover how <span class="font-bold">Cutypai</span> learns and adapts to your moods, creating truly personal interactions every day.</p>
+                            <div class="mt-auto flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400">
+                                <time datetime="2025-07-30">Jul 30, 2025</time>
+                                <span>•</span>
+                                <span>5 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article card 4 -->
+                <article class="card snap-center flex-shrink-0 w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3 bg-white/30 dark:bg-gray-800/40 backdrop-blur-md border border-white/5 dark:border-gray-700 rounded-2xl p-5 shadow-xl">
+                    <div class="flex flex-col md:flex-row items-start gap-4">
+                        <img src="https://miro.medium.com/v2/resize:fit:1400/1*xWlFleo-5atKirpTQ0O0RA@2x.jpeg" alt="Empathy in Cutypai" class="rounded-xl object-cover h-44 md:h-40 w-full md:w-1/2" />
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-semibold mb-2 text-amber-700 dark:text-amber-300">Empathy in Every Chat</h3>
+                            <p class="text-sm text-stone-600 dark:text-stone-300 mb-4"><span class="font-bold">Cutypai</span> is not just intelligent—it listens, responds with care, and supports you emotionally like a real companion.</p>
+                            <div class="mt-auto flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400">
+                                <time datetime="2025-07-12">Jul 12, 2025</time>
+                                <span>•</span>
+                                <span>6 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article card 5 -->
+                <article class="card snap-center flex-shrink-0 w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3 bg-white/30 dark:bg-gray-800/40 backdrop-blur-md border border-white/5 dark:border-gray-700 rounded-2xl p-5 shadow-xl">
+                    <div class="flex flex-col md:flex-row items-start gap-4">
+                        <img src="https://miro.medium.com/v2/resize:fit:1400/1*xWlFleo-5atKirpTQ0O0RA@2x.jpeg" alt="Future of Cutypai" class="rounded-xl object-cover h-44 md:h-40 w-full md:w-1/2" />
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-semibold mb-2 text-amber-700 dark:text-amber-300">The Future of Cutypai</h3>
+                            <p class="text-sm text-stone-600 dark:text-stone-300 mb-4>From smarter conversations to deeper companionship, see where <span class="font-bold">Cutypai</span> is heading in the next decade.</p>
+                            <div class="mt-auto flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400">
+                                <time datetime="2025-06-25">Jun 25, 2025</time>
+                                <span>•</span>
+                                <span>8 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article card (repeatable) -->
+                <article class="card snap-center flex-shrink-0 w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3 bg-white/30 dark:bg-gray-800/40 backdrop-blur-md border border-white/5 dark:border-gray-700 rounded-2xl p-5 shadow-xl">
+                    <div class="flex flex-col md:flex-row items-start gap-4">
+                        <img src="https://newo.ai/wp-content/uploads/2024/11/1-Exploring-the-Future-of-AI-Companions-Emotional-Support-and-Human-Connection.jpg" alt="AI Conversations" class="rounded-xl object-cover h-44 md:h-40 w-full md:w-1/2" />
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-semibold mb-2 text-amber-700 dark:text-amber-300">The Future of AI Companionship</h3>
+                            <p class="text-sm text-stone-600 dark:text-stone-300 mb-4">Discover how AI like <span class="font-bold">Cutypai</span> is shaping the way we interact digitally, bringing emotional intelligence into everyday conversations.</p>
+                            <div class="mt-auto flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400">
+                                <time datetime="2025-09-12">Sep 12, 2025</time>
+                                <span>•</span>
+                                <span>5 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article card 2 -->
+                <article class="card snap-center flex-shrink-0 w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3 bg-white/30 dark:bg-gray-800/40 backdrop-blur-md border border-white/5 dark:border-gray-700 rounded-2xl p-5 shadow-xl">
+                    <div class="flex flex-col md:flex-row items-start gap-4">
+                        <img src="https://chatgen.ai/wp-content/uploads/2023/12/DALL%C2%B7E-2023-12-06-20.34.56-A-clean-and-simple-feature-image-for-a-blog-post-about-building-trust-in-AI-focusing-on-reliability-and-accuracy-in-AI-assistants.-The-image-should-i-1.png" alt="Human AI Bond" class="rounded-xl object-cover h-44 md:h-40 w-full md:w-1/2" />
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-semibold mb-2 text-amber-700 dark:text-amber-300">Building Trust with AI</h3>
+                            <p class="text-sm text-stone-600 dark:text-stone-300 mb-4">Privacy and empathy combined: learn how trust is nurtured through secure and thoughtful AI interactions.</p>
+                            <div class="mt-auto flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400">
+                                <time datetime="2025-09-10">Sep 10, 2025</time>
+                                <span>•</span>
+                                <span>4 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Example: add more cards as needed -->
+                <article class="card snap-center flex-shrink-0 w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3 bg-white/30 dark:bg-gray-800/40 backdrop-blur-md border border-white/5 dark:border-gray-700 rounded-2xl p-5 shadow-xl">
+                    <div class="flex flex-col md:flex-row items-start gap-4">
+                        <img src="https://swisscognitive.ch/wp-content/uploads/2023/04/AI-Ethics-in-Focus-Balancing-Innovation-Security-and-Responsibility-SwissCognitive-AI-Radar.png" alt="Designing Ethical AI" class="rounded-xl object-cover h-44 md:h-40 w-full md:w-1/2" />
+                        <div class="md:w-1/2">
+                            <h3 class="text-xl font-semibold mb-2 text-amber-700 dark:text-amber-300">Designing Ethical AI</h3>
+                            <p class="text-sm text-stone-600 dark:text-stone-300 mb-4">Practical approaches to keeping human values at the center of algorithmic design and product decisions.</p>
+                            <div class="mt-auto flex items-center gap-3 text-xs text-stone-500 dark:text-stone-400">
+                                <time datetime="2025-09-05">Sep 05, 2025</time>
+                                <span>•</span>
+                                <span>6 min read</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
             </div>
-            <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-3 animate-slideIn">
-                Innovation That Shines
-            </h2>
-            <p class="text-gray-700 dark:text-gray-300 animate-fadeIn">
-                From autonomous vehicles to generative AI, technology innovation is thriving and unstoppable.
-            </p>
+
+            <!-- nav (mobile) -->
+            <div class="absolute left-4 top-1/2 -translate-y-1/2 md:hidden">
+                <button id="prevBtnMobile" aria-label="Previous" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/10 dark:bg-black/20 border border-white/5 shadow-sm hover:scale-105 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+            </div>
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 md:hidden">
+                <button id="nextBtnMobile" aria-label="Next" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/10 dark:bg-black/20 border border-white/5 shadow-sm hover:scale-105 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </button>
+            </div>
         </div>
 
-        <!-- Card 3 -->
-        <div class="group bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg p-6 transform transition duration-500 hover:scale-105">
-            <div class="overflow-hidden rounded-xl mb-4">
-                <img src="https://i.insider.com/5637a5f3dd0895b8608b45af?width=800&format=jpeg&auto=webp"
-                     alt="Robotics"
-                     class="rounded-xl object-cover w-full h-56 transition duration-500 group-hover:scale-110">
-            </div>
-            <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-3 animate-slideIn">
-                Robotics & Automation
-            </h2>
-            <p class="text-gray-700 dark:text-gray-300 animate-fadeIn">
-                AI-driven robotics will revolutionize industries, improving efficiency and safety worldwide.
-            </p>
-        </div>
+        <!-- small scrollbar-hiding helper and carousel script -->
+        <style>
+            /* hide scrollbar but keep scrollable */
+            #articlesTrack {
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
 
-        <!-- Card 4 -->
-        <div class="group bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-lg p-6 transform transition duration-500 hover:scale-105">
-            <div class="overflow-hidden rounded-xl mb-4">
-                <img src="https://media.licdn.com/dms/image/v2/D4E12AQGTAN13FzzQ9w/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1695888362411?e=2147483647&v=beta&t=F2oLzRQTn2W4w98iUc1K4pO1-g8se8OrN_O7Eh5vRyA"
-                     alt="AI Analytics"
-                     class="rounded-xl object-cover w-full h-56 transition duration-500 group-hover:scale-110">
+                #articlesTrack::-webkit-scrollbar {
+                    display: none;
+                }
+        </style>
+
+        <script>
+            (function () {
+              const track = document.getElementById('articlesTrack');
+              const cards = track.querySelectorAll('.card');
+              const nextBtn = document.getElementById('nextBtn');
+              const prevBtn = document.getElementById('prevBtn');
+              const nextBtnMobile = document.getElementById('nextBtnMobile');
+              const prevBtnMobile = document.getElementById('prevBtnMobile');
+
+              // compute step = first card width + gap
+              function getStep() {
+                const first = cards[0];
+                const style = getComputedStyle(track);
+                const gap = parseFloat(style.gap || style.columnGap || '24');
+                return Math.round(first.getBoundingClientRect().width + gap);
+              }
+
+              function scrollByDir(dir = 1) {
+                const step = getStep();
+                track.scrollTo({ left: track.scrollLeft + step * dir, behavior: 'smooth' });
+              }
+
+              // bind buttons
+              [nextBtn, nextBtnMobile].forEach(btn => btn && btn.addEventListener('click', () => scrollByDir(1)));
+              [prevBtn, prevBtnMobile].forEach(btn => btn && btn.addEventListener('click', () => scrollByDir(-1)));
+
+              // keyboard arrow navigation when focused
+              track.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') { e.preventDefault(); scrollByDir(1); }
+                if (e.key === 'ArrowLeft')  { e.preventDefault(); scrollByDir(-1); }
+              });
+
+              // optional autoplay (one-by-one). pauses on hover / focus / tab hidden
+              let autoplayInterval = 3500;
+              let autoplayId = null;
+              function startAutoplay() {
+                if (autoplayId) return;
+                autoplayId = setInterval(() => {
+                  // stop autoplay if already at very end (keeps it moving cyclically)
+                  const maxScroll = track.scrollWidth - track.clientWidth;
+                  if (Math.abs(track.scrollLeft - maxScroll) < 5) {
+                    track.scrollTo({ left: 0, behavior: 'smooth' });
+                  } else {
+                    scrollByDir(1);
+                  }
+                }, autoplayInterval);
+              }
+              function stopAutoplay() {
+                if (!autoplayId) return;
+                clearInterval(autoplayId);
+                autoplayId = null;
+              }
+
+              track.addEventListener('mouseenter', stopAutoplay);
+              track.addEventListener('mouseleave', startAutoplay);
+              track.addEventListener('focusin', stopAutoplay);
+              track.addEventListener('focusout', startAutoplay);
+
+              document.addEventListener('visibilitychange', () => {
+                if (document.hidden) stopAutoplay(); else startAutoplay();
+              });
+
+              // kick off autoplay on load
+              startAutoplay();
+            })();
+        </script>
+    </section>
+
+
+
+
+
+    <!-- Testimonials Section -->
+    <section class="max-w-6xl mx-auto px-6 mb-20">
+        <h2 class="text-3xl font-bold mb-12 text-center">What Users Say</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white/70 dark:bg-stone-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center mb-4">
+                    <!-- User Image from link -->
+                    <div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center mr-4">
+                        <img src="https://assets-us-01.kc-usercontent.com/5cb25086-82d2-4c89-94f0-8450813a0fd3/9da25564-a085-4df4-853e-963ecc6051cd/Larry_Page.jpg?fm=jpg&auto=format" alt="Larry Page" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-semibold">Larry Page</h4>
+                        <div class="flex text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-stone-600 dark:text-stone-300 italic">
+                    "Cutypai feels like talking to a real friend. The emotional responses are surprisingly accurate!"
+                </p>
             </div>
-            <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-3 animate-slideIn">
-                AI & Data Analytics
-            </h2>
-            <p class="text-gray-700 dark:text-gray-300 animate-fadeIn">
-                Data-powered intelligence is leading us to smarter business decisions and innovations.
-            </p>
+
+
+            <!-- Elon Musk Review -->
+            <div class="bg-white/70 dark:bg-stone-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center mb-4">
+                    <!-- User Image -->
+                    <div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center mr-4">
+                        <img src="https://assets-us-01.kc-usercontent.com/5cb25086-82d2-4c89-94f0-8450813a0fd3/0c3fcefb-bc28-4af6-985e-0c3b499ae832/Elon_Musk_Royal_Society.jpg?fm=jpg&auto=format"
+                             alt="Elon Musk" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-semibold">Elon Musk</h4>
+                        <div class="flex text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-stone-600 dark:text-stone-300 italic">
+                    "I use Cutypai daily for both casual conversation and brainstorming ideas. It's incredibly versatile."
+                </p>
+            </div>
+
+            <!-- Bill Gates Review -->
+            <div class="bg-white/70 dark:bg-stone-800/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center mb-4">
+                    <!-- User Image -->
+                    <div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center mr-4">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAZVtiDW6ZhvvWgq5SYoD8X2c2LtS5nycvLA&s"
+                             alt="Bill Gates" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-semibold">Bill Gates</h4>
+                        <div class="flex text-amber-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-stone-600 dark:text-stone-300 italic">
+                    "The personality is so engaging! It remembers our previous conversations and builds on them naturally."
+                </p>
+            </div>
+
         </div>
-    </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="max-w-6xl mx-auto px-6 mb-20 text-center">
+        <div class="bg-gradient-to-r from-amber-500 to-amber-700 rounded-2xl p-10 shadow-xl">
+            <h2 class="text-3xl font-bold text-white mb-6">Ready to Meet Your New AI Companion?</h2>
+            <p class="text-amber-100 mb-8 text-xl">Join thousands of users experiencing meaningful conversations with Cutypai.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a href="https://cutypai.vercel.app" target="_blank"
+                       class="px-8 py-4 font-bold rounded-full shadow-lg transition-all transform
+              bg-white text-amber-700
+              hover:bg-amber-50 hover:-translate-y-1
+              dark:bg-black dark:text-yellow-500 dark:hover:bg-yellow-400">
+                        Start Chatting Now
+                    </a>
+
+                }
+                else
+                {
+                    <a asp-controller="Auth" asp-action="Signup" class="px-8 py-4 bg-white text-amber-700 font-bold rounded-full shadow-lg hover:bg-amber-50 transition-all transform hover:-translate-y-1">
+                        Create Free Account
+                    </a>
+                    <a asp-controller="Auth" asp-action="Login" class="px-8 py-4 border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition-all transform hover:-translate-y-1">
+                        Sign In
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
 
 </div>
 
 <style>
-    /* Marquee Animation */
-    @@keyframes marquee {
-        0%
-
-    {
-        transform: translateX(100%);
+    /* Background & Text Colors */
+    body {
+        background-color: #ffffff; /* default white */
+        color: #111111; /* dark text for white background */
+        transition: all 0.3s ease;
     }
 
-    100% {
-        transform: translateX(-100%);
+        body.dark {
+            background-color: #000000; /* pure black for dark mode */
+            color: #f5f5f5; /* light text for readability */
+        }
+
+    /* Button / Accent Color */
+    .btn-accent {
+        background-color: #000000; /* matte yellow */
+        color: #111111;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
     }
 
-    }
+        .btn-accent:hover {
+            background-color: #452287; /* darker yellow on hover */
+            color: #000000;
+        }
 
-    .animate-marquee {
-        display: inline-block;
-        animation: marquee 20s linear infinite;
-    }
-    @@keyframes slideInRight {
-        0%
-
-    {
-        opacity: 0;
-        transform: translateX(50px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-
-    }
-    @@keyframes slideInLeft {
-        0%
-
-    {
-        opacity: 0;
-        transform: translateX(-50px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-
-    }
-    @@keyframes slideIn {
+    /* Animations */
+    @@keyframes fadeInUp {
         from
 
     {
-        transform: translateX(-20px);
         opacity: 0;
-    }
-
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-
+        transform: translateY(20px);
     }
 
     to {
@@ -254,11 +656,126 @@
 
     }
 
-    .animate-slideIn {
-        animation: slideIn 1s ease forwards;
+    @@keyframes float {
+        0%
+
+    {
+        transform: translateY(0px);
     }
 
-    .animate-fadeIn {
-        animation: fadeIn 1.2s ease forwards;
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+
+    }
+
+    .animate-fade-in-up {
+        animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #facc15;
+        border-radius: 4px;
+    }
+
+    body.dark ::-webkit-scrollbar-track {
+        background: #111111;
+    }
+
+    body.dark ::-webkit-scrollbar-thumb {
+        background: #facc15;
+    }
+
+    /* Twinkling border (subtle matte yellow & gray for elegance) */
+    .twinkle-border {
+        position: relative;
+        border: 3px solid transparent;
+        background-clip: padding-box;
+    }
+
+        .twinkle-border::before {
+            content: "";
+            position: absolute;
+            inset: -3px;
+            border-radius: 1rem;
+            background: linear-gradient(270deg, #facc15, #d4d4d4, #facc15, #a3a3a3);
+            background-size: 400% 400%;
+            animation: twinkle 6s linear infinite;
+            z-index: -1;
+        }
+
+    @@keyframes twinkle {
+        0%
+
+    {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+
+    }
+
+    /* Scroll reveal animations */
+    .animate-slide-in-left {
+        opacity: 0;
+        transform: translateX(-50px);
+        transition: all 1s ease-out;
+    }
+
+    .animate-slide-in-right {
+        opacity: 0;
+        transform: translateX(50px);
+        transition: all 1s ease-out;
+    }
+
+    .show {
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+    }
+
+    /* Gradient animation for quotes or highlights */
+    .animate-gradient-move {
+        background-size: 200% 200%;
+        animation: gradientMove 6s ease infinite;
+    }
+
+    @@keyframes gradientMove {
+        0%
+
+    {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+
     }
 </style>

@@ -37,7 +37,7 @@ public sealed class TokenService : ITokenService
         return new AuthResponse
         {
             AccessToken = accessToken.Token,
-            RefreshToken = refreshToken.Token,
+            RefreshToken = refreshToken?.Token ?? string.Empty,
             ExpiresAtUtc = accessToken.ExpiresAt,
             UserId = user.Id ?? string.Empty,
             Email = user.Email,

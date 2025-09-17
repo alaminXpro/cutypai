@@ -9,7 +9,7 @@ public interface IUserRepository
     Task<User?> GetByIdAsync(string id, CancellationToken ct = default);
     Task<User?> GetByEmailAsync(string email, CancellationToken ct = default);
 
-    Task<(User? User, PasswordValidationResult ValidationResult)> RegisterAsync(User user,
+    Task<(User? User, RegistrationValidationResult ValidationResult)> RegisterAsync(User user,
         CancellationToken ct = default);
 
     Task<User?> AuthenticateAsync(string email, string password, CancellationToken ct = default);
@@ -17,6 +17,9 @@ public interface IUserRepository
     Task<bool> DeleteAsync(string id, CancellationToken ct = default);
     Task<bool> SetLastLoginAsync(string id, DateTime whenUtc, CancellationToken ct = default);
     Task<bool> SetStatusAsync(string id, UserStatus status, CancellationToken ct = default);
+    Task<User?> FindByExternalIdAsync(string provider, string externalId, CancellationToken ct = default);
+    Task<User> CreateFromSsoAsync(string email, string name, string provider, string externalId, string? avatarUrl = null, CancellationToken ct = default);
+    Task<bool> ResetPasswordAsync(string userId, string newPassword, CancellationToken ct = default);
 }
 
 public sealed class UserRepository : IUserRepository
@@ -40,37 +43,45 @@ public sealed class UserRepository : IUserRepository
             .ToListAsync(ct);
     }
 
-    public Task<User?> GetByIdAsync(string id, CancellationToken ct = default)
+    public async Task<User?> GetByIdAsync(string id, CancellationToken ct = default)
     {
-        return _col.Find(u => u.Id == id).FirstOrDefaultAsync(ct);
+        return await _col.Find(u => u.Id == id).FirstOrDefaultAsync(ct);
     }
 
-    public Task<User?> GetByEmailAsync(string email, CancellationToken ct = default)
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken ct = default)
     {
-        return _col.Find(u => u.Email == email).FirstOrDefaultAsync(ct);
+        return await _col.Find(u => u.Email == email).FirstOrDefaultAsync(ct);
     }
 
     // Enhanced registration with password validation
-    public async Task<(User? User, PasswordValidationResult ValidationResult)> RegisterAsync(User user,
+    public async Task<(User? User, RegistrationValidationResult ValidationResult)> RegisterAsync(User user,
         CancellationToken ct = default)
     {
         try
         {
+            var validationResult = new RegistrationValidationResult { IsValid = true };
+
             // Validate password first
-            var validationResult = _passwordValidation.ValidatePassword(user.Password);
-            if (!validationResult.IsValid)
+            var passwordValidation = _passwordValidation.ValidatePassword(user.Password);
+            if (!passwordValidation.IsValid)
             {
+                validationResult.PasswordErrors.AddRange(passwordValidation.Errors);
+                validationResult.IsValid = false;
                 _logger.LogWarning("Password validation failed for user {Email}: {Errors}",
-                    user.Email, string.Join(", ", validationResult.Errors));
-                return (null, validationResult);
+                    user.Email, string.Join(", ", passwordValidation.Errors));
             }
 
             // Check if user already exists
             var existingUser = await GetByEmailAsync(user.Email, ct);
             if (existingUser != null)
             {
+                validationResult.EmailErrors.Add("A user with this email already exists");
                 validationResult.IsValid = false;
-                validationResult.Errors.Add("A user with this email already exists");
+                _logger.LogWarning("Registration failed for user {Email}: Email already exists", user.Email);
+            }
+
+            if (!validationResult.IsValid)
+            {
                 return (null, validationResult);
             }
 
@@ -206,6 +217,86 @@ public sealed class UserRepository : IUserRepository
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error updating status for user {UserId}", id);
+            return false;
+        }
+    }
+
+    public async Task<User?> FindByExternalIdAsync(string provider, string externalId, CancellationToken ct = default)
+    {
+        try
+        {
+            var filter = Builders<User>.Filter.ElemMatch(
+                u => u.ExternalProviders,
+                ep => ep.Provider == provider && ep.ExternalId == externalId
+            );
+            
+            return await _col.Find(filter).FirstOrDefaultAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error finding user by external ID {Provider}:{ExternalId}", provider, externalId);
+            return null;
+        }
+    }
+
+    public async Task<User> CreateFromSsoAsync(string email, string name, string provider, string externalId, string? avatarUrl = null, CancellationToken ct = default)
+    {
+        try
+        {
+            var user = new User
+            {
+                Id = ObjectId.GenerateNewId().ToString(),
+                Name = name,
+                Email = email,
+                AvatarUrl = avatarUrl,
+                Role = UserRole.User,
+                Status = UserStatus.Active,
+                CreatedAtUtc = DateTime.UtcNow,
+                LastLoginUtc = DateTime.UtcNow,
+                ExternalProviders = new List<ExternalProvider>
+                {
+                    new() { Provider = provider, ExternalId = externalId, Email = email, LinkedAt = DateTime.UtcNow }
+                }
+            };
+
+            await _col.InsertOneAsync(user, cancellationToken: ct);
+            
+            _logger.LogInformation("SSO user created successfully: {Email} via {Provider}", email, provider);
+            return user;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating SSO user {Email} via {Provider}", email, provider);
+            throw;
+        }
+    }
+
+    public async Task<bool> ResetPasswordAsync(string userId, string newPassword, CancellationToken ct = default)
+    {
+        try
+        {
+            var passwordValidation = _passwordValidation.ValidatePassword(newPassword);
+            if (!passwordValidation.IsValid)
+            {
+                _logger.LogWarning("Password validation failed for user {UserId}: {Errors}", userId, string.Join(", ", passwordValidation.Errors));
+                return false;
+            }
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword, 12);
+            var update = Builders<User>.Update.Set(u => u.Password, hashedPassword);
+            var res = await _col.UpdateOneAsync(u => u.Id == userId, update, cancellationToken: ct);
+            var success = res.IsAcknowledged && res.ModifiedCount == 1;
+
+            if (success)
+                _logger.LogInformation("Password reset successfully for user {UserId}", userId);
+            else
+                _logger.LogWarning("Failed to reset password for user {UserId}", userId);
+
+            return success;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error resetting password for user {UserId}", userId);
             return false;
         }
     }
