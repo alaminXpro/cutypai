@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Settings Page";
+}
+
+<div class="max-w-4xl mx-auto py-10 px-6">
+    <!-- Page Title -->
+    <h1 class="text-2xl font-semibold mb-6">Settings</h1>
+
+    <!-- Tabs -->
+    <div class="flex flex-wrap gap-4 border-b border-gray-200 dark:border-gray-700 mb-8 text-sm font-medium">
+        <a asp-controller="Settings" asp-action="Articles" class="pb-3 border-b-2 @(ViewBag.ActiveTab == "Articles" ? "border-blue-500 text-blue-600" : "border-transparent hover:border-blue-500 hover:text-blue-600")">Articles</a>
+        <a asp-controller="Settings" asp-action="Profile" class="pb-3 border-b-2 @(ViewBag.ActiveTab == "Profile" ? "border-blue-500 text-blue-600" : "border-transparent hover:border-blue-500 hover:text-blue-600")">Profile</a>
+        <a asp-controller="Settings" asp-action="Team" class="pb-3 border-b-2 @(ViewBag.ActiveTab == "Team" ? "border-blue-500 text-blue-600" : "border-transparent hover:border-blue-500 hover:text-blue-600")">Team</a>
+        <a asp-controller="Settings" asp-action="Plan" class="pb-3 border-b-2 @(ViewBag.ActiveTab == "Plan" ? "border-blue-500 text-blue-600" : "border-transparent hover:border-blue-500 hover:text-blue-600")">Plan</a>
+        <a asp-controller="Settings" asp-action="Billing" class="pb-3 border-b-2 @(ViewBag.ActiveTab == "Billing" ? "border-blue-500 text-blue-600" : "border-transparent hover:border-blue-500 hover:text-blue-600")">Billing</a>
+        <a asp-controller="Settings" asp-action="Email" class="pb-3 border-b-2 @(ViewBag.ActiveTab == "Email" ? "border-blue-500 text-blue-600" : "border-transparent hover:border-blue-500 hover:text-blue-600")">Email</a>
+        <a asp-controller="Settings" asp-action="Notifications" class="pb-3 border-b-2 @(ViewBag.ActiveTab == "Notifications" ? "border-blue-500 text-blue-600" : "border-transparent hover:border-blue-500 hover:text-blue-600")">Notifications</a>
+        <a asp-controller="Settings" asp-action="Integrations" class="pb-3 border-b-2 @(ViewBag.ActiveTab == "Integrations" ? "border-blue-500 text-blue-600" : "border-transparent hover:border-blue-500 hover:text-blue-600")">Integrations</a>
+    </div>
+
+    <!-- Page Content -->
+    @RenderBody()
+</div>
