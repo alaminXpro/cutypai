@@ -193,7 +193,7 @@ export default function ActivityCalendarPage() {
   // note handlers
   const openNoteModal = (dateKey: DayKey) => {
     setNoteModalDate(dateKey);
-    setNoteModalText(notes[dateKey] ?? "");
+    setNoteModalText(typeof notes[dateKey] === "string" ? notes[dateKey] : "");
     setNoteModalOpen(true);
     setTimeout(() => {
       modalTextareaRef.current?.focus();
@@ -709,8 +709,8 @@ export default function ActivityCalendarPage() {
           <div className="mt-3">
             <textarea
               ref={modalTextareaRef}
-              value={noteModalText}
-              onChange={(e) => setNoteModalText(e.target.value)}
+              value={typeof noteModalText === "string" ? noteModalText : ""}
+              onChange={(e) => setNoteModalText(e.target.value ?? "")}
               placeholder="Write your note here... (eg. Meeting at 3pm, groceries, ideas, links, etc.)"
               className="w-full min-h-[160px] p-3 border rounded focus:outline-none focus:ring-2 focus:ring-amber-200 resize-y text-sm"
               aria-label={`Note for ${previewDate}`}

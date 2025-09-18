@@ -230,7 +230,26 @@ export default function BillingPage() {
                   </div>
                 </>
               ) : (
-                <div className="text-slate-500">No plan selected</div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+  {/* Title + Price */}
+  <div className="mb-2 flex items-center justify-between">
+    <h3 className="text-lg font-semibold text-slate-900">Basic plan</h3>
+    <span className="text-indigo-600 font-medium">$10/mth</span>
+  </div>
+
+  {/* Description */}
+  <p className="text-sm text-slate-500 mb-4">Billed annually.</p>
+
+  {/* Features */}
+  <ul className="space-y-2 text-sm text-slate-600">
+    <li>✓ Access to all basic features</li>
+    <li>✓ Basic reporting and analytics</li>
+    <li>✓ Up to 10 individual users</li>
+    <li>✓ 20 GB individual data</li>
+    <li>✓ Basic chat and email support</li>
+  </ul>
+</div>
+
               )}
             </div>
 
@@ -265,7 +284,7 @@ export default function BillingPage() {
 
       {/* Footer */}
       <footer className="mt-16 text-center text-base text-indigo-400 dark:text-pink-400 font-semibold">
-        © 2025 Untitled UI — All rights reserved
+        © 2025 Cutypai — All rights reserved
       </footer>
     </div>
   );

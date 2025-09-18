@@ -148,7 +148,7 @@ export default function BillingPage() {
         features: plan.features,
       })
     );
-    router.push(`/(main)/billing_details?plan=${planData}`);
+    router.push(`/billing_details?plan=${planData}`);
   };
 
   return (
