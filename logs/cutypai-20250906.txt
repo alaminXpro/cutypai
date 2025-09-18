@@ -1,0 +1,386 @@
+2025-09-06 01:02:54.019 +06:00 [INF] ✅ MongoDB ping OK.
+2025-09-06 01:02:54.736 +06:00 [INF] ✅ MongoDB indexes created successfully.
+2025-09-06 01:02:55.025 +06:00 [INF] Application starting...
+2025-09-06 01:02:55.190 +06:00 [INF] User profile is available. Using 'C:\Users\hariq\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-06 01:02:55.667 +06:00 [INF] Now listening on: https://localhost:7094
+2025-09-06 01:02:55.671 +06:00 [INF] Now listening on: http://localhost:5172
+2025-09-06 01:02:55.748 +06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-06 01:02:55.755 +06:00 [INF] Hosting environment: Development
+2025-09-06 01:02:55.757 +06:00 [INF] Content root path: G:\c shaRP\repos
+2025-09-06 01:02:58.869 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:02:59.127 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:02:59.159 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:02:59.186 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:02:59.421 +06:00 [INF] Executed ViewResult - view Index executed in 244.1142ms.
+2025-09-06 01:02:59.437 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 273.5ms
+2025-09-06 01:02:59.439 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:02:59.447 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 586.4669ms
+2025-09-06 01:02:59.798 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:02:59.827 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 28.6434ms
+2025-09-06 01:02:59.827 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:03:00.094 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 266.6089ms
+2025-09-06 01:03:08.350 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:03:08.359 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:03:08.361 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:03:08.365 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:03:08.371 +06:00 [INF] Executed ViewResult - view Index executed in 6.4167ms.
+2025-09-06 01:03:08.373 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 8.2053ms
+2025-09-06 01:03:08.374 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:03:08.376 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 25.9227ms
+2025-09-06 01:03:08.400 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:03:08.412 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:03:08.430 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 30.6034ms
+2025-09-06 01:03:08.445 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 33.0332ms
+2025-09-06 01:03:09.807 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:03:09.816 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:03:09.817 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:03:09.819 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:03:09.821 +06:00 [INF] Executed ViewResult - view Index executed in 2.2524ms.
+2025-09-06 01:03:09.823 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 3.714ms
+2025-09-06 01:03:09.824 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:03:09.836 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:03:09.837 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 28.139ms
+2025-09-06 01:03:09.837 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:03:09.847 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 10.2305ms
+2025-09-06 01:03:09.872 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 35.1583ms
+2025-09-06 01:04:14.093 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json - null null
+2025-09-06 01:04:14.123 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json - 404 0 null 30.1721ms
+2025-09-06 01:04:14.126 +06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json, Response status code: 404
+2025-09-06 01:04:15.039 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:04:15.060 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:04:15.062 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:04:15.065 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:04:15.067 +06:00 [INF] Executed ViewResult - view Index executed in 2.7394ms.
+2025-09-06 01:04:15.071 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 6.1955ms
+2025-09-06 01:04:15.080 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:04:15.083 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 44.4059ms
+2025-09-06 01:04:15.096 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:04:15.157 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json - null null
+2025-09-06 01:04:15.091 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:04:15.236 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json - 404 0 null 79.6598ms
+2025-09-06 01:04:15.280 +06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json, Response status code: 404
+2025-09-06 01:04:15.288 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 196.969ms
+2025-09-06 01:04:15.299 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 208.3566ms
+2025-09-06 01:04:20.979 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:04:20.998 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:04:20.999 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:04:21.002 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:04:21.004 +06:00 [INF] Executed ViewResult - view Index executed in 2.0121ms.
+2025-09-06 01:04:21.006 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 4.1387ms
+2025-09-06 01:04:21.008 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:04:21.011 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 31.9573ms
+2025-09-06 01:04:21.049 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:04:21.050 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:04:21.051 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json - null null
+2025-09-06 01:04:21.058 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 9.2608ms
+2025-09-06 01:04:21.066 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json - 404 0 null 15.3255ms
+2025-09-06 01:04:21.078 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 27.4579ms
+2025-09-06 01:04:21.086 +06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json, Response status code: 404
+2025-09-06 01:04:24.313 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:04:24.318 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:04:24.323 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:04:24.325 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:04:24.327 +06:00 [INF] Executed ViewResult - view Index executed in 2.1452ms.
+2025-09-06 01:04:24.329 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 3.6848ms
+2025-09-06 01:04:24.330 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:04:24.332 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 18.6644ms
+2025-09-06 01:04:24.377 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:04:24.381 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:04:24.383 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json - null null
+2025-09-06 01:04:24.509 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 132.4703ms
+2025-09-06 01:04:24.517 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json - 404 0 null 133.4971ms
+2025-09-06 01:04:24.528 +06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7094/.well-known/appspecific/com.chrome.devtools.json, Response status code: 404
+2025-09-06 01:04:24.534 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 152.7048ms
+2025-09-06 01:08:19.514 +06:00 [INF] ✅ MongoDB ping OK.
+2025-09-06 01:08:19.981 +06:00 [INF] ✅ MongoDB indexes created successfully.
+2025-09-06 01:08:19.982 +06:00 [INF] Application starting...
+2025-09-06 01:08:20.018 +06:00 [INF] User profile is available. Using 'C:\Users\hariq\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-06 01:08:20.268 +06:00 [INF] Now listening on: https://localhost:7094
+2025-09-06 01:08:20.269 +06:00 [INF] Now listening on: http://localhost:5172
+2025-09-06 01:08:20.327 +06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-06 01:08:20.350 +06:00 [INF] Hosting environment: Development
+2025-09-06 01:08:20.351 +06:00 [INF] Content root path: G:\c shaRP\repos
+2025-09-06 01:08:20.888 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:08:21.098 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:08:21.114 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:08:21.129 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:08:21.259 +06:00 [INF] Executed ViewResult - view Index executed in 130.4852ms.
+2025-09-06 01:08:21.280 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:08:21.287 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 170.0741ms
+2025-09-06 01:08:21.288 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:08:21.294 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 13.1466ms
+2025-09-06 01:08:21.296 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 415.7045ms
+2025-09-06 01:08:21.342 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:08:21.400 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 57.8628ms
+2025-09-06 01:10:52.143 +06:00 [INF] ✅ MongoDB ping OK.
+2025-09-06 01:10:52.566 +06:00 [INF] ✅ MongoDB indexes created successfully.
+2025-09-06 01:10:52.568 +06:00 [INF] Application starting...
+2025-09-06 01:10:52.602 +06:00 [INF] User profile is available. Using 'C:\Users\hariq\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-06 01:10:52.880 +06:00 [INF] Now listening on: https://localhost:7094
+2025-09-06 01:10:52.881 +06:00 [INF] Now listening on: http://localhost:5172
+2025-09-06 01:10:52.936 +06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-06 01:10:52.955 +06:00 [INF] Hosting environment: Development
+2025-09-06 01:10:52.957 +06:00 [INF] Content root path: G:\c shaRP\repos
+2025-09-06 01:10:53.303 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:10:53.527 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:10:53.544 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:10:53.558 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:10:53.694 +06:00 [INF] Executed ViewResult - view Index executed in 136.767ms.
+2025-09-06 01:10:53.712 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 165.8515ms
+2025-09-06 01:10:53.715 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:10:53.719 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:10:53.723 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 427.4158ms
+2025-09-06 01:10:53.726 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 7.5191ms
+2025-09-06 01:10:53.771 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:10:53.811 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 39.3124ms
+2025-09-06 01:10:59.721 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:10:59.733 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:10:59.734 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:10:59.736 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:10:59.742 +06:00 [INF] Executed ViewResult - view Index executed in 6.0675ms.
+2025-09-06 01:10:59.745 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 9.3156ms
+2025-09-06 01:10:59.747 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:10:59.754 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:10:59.754 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:10:59.755 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 34.5826ms
+2025-09-06 01:10:59.760 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 6.2343ms
+2025-09-06 01:10:59.792 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 38.5882ms
+2025-09-06 01:10:59.935 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/favicon.ico - null null
+2025-09-06 01:10:59.963 +06:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:10:59.993 +06:00 [INF] Sending file. Request path: 'favicon.ico'. Physical path: 'G:\c shaRP\repos\obj\Debug\net9.0\compressed\5c833aadfg-tt50cglzt9.gz'
+2025-09-06 01:10:59.995 +06:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:10:59.995 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/favicon.ico - 200 15439 image/x-icon 60.7139ms
+2025-09-06 01:11:06.728 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:11:06.732 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:11:06.734 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:11:06.737 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:11:06.741 +06:00 [INF] Executed ViewResult - view Index executed in 4.0422ms.
+2025-09-06 01:11:06.742 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 5.5767ms
+2025-09-06 01:11:06.745 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:11:06.753 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:11:06.753 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:11:06.754 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 26.6333ms
+2025-09-06 01:11:06.758 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 4.4159ms
+2025-09-06 01:11:06.778 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 24.3406ms
+2025-09-06 01:11:07.853 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:11:07.860 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:11:07.861 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:11:07.863 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:11:07.865 +06:00 [INF] Executed ViewResult - view Index executed in 2.1624ms.
+2025-09-06 01:11:07.866 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 3.5454ms
+2025-09-06 01:11:07.867 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:11:07.872 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 19.1281ms
+2025-09-06 01:11:07.881 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:11:07.881 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:11:07.887 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 6.1685ms
+2025-09-06 01:11:07.898 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 16.2254ms
+2025-09-06 01:11:12.569 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/signup - null null
+2025-09-06 01:11:12.577 +06:00 [INF] Executing endpoint 'cutypai.Controllers.AuthController.Signup (cutypai)'
+2025-09-06 01:11:12.580 +06:00 [INF] Route matched with {action = "Signup", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Signup() on controller cutypai.Controllers.AuthController (cutypai).
+2025-09-06 01:11:12.589 +06:00 [INF] Executing ViewResult, running view Signup.
+2025-09-06 01:11:12.713 +06:00 [INF] Executed ViewResult - view Signup executed in 124.7392ms.
+2025-09-06 01:11:12.714 +06:00 [INF] Executed action cutypai.Controllers.AuthController.Signup (cutypai) in 130.4664ms
+2025-09-06 01:11:12.717 +06:00 [INF] Executed endpoint 'cutypai.Controllers.AuthController.Signup (cutypai)'
+2025-09-06 01:11:12.725 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:11:12.726 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/lib/jquery-validation/dist/jquery.validate.min.js - null null
+2025-09-06 01:11:12.727 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/signup - 200 null text/html; charset=utf-8 158.1279ms
+2025-09-06 01:11:12.726 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js - null null
+2025-09-06 01:11:12.740 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:11:12.752 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 26.5448ms
+2025-09-06 01:11:12.757 +06:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:11:12.763 +06:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:11:12.823 +06:00 [INF] Sending file. Request path: 'lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js'. Physical path: 'G:\c shaRP\repos\obj\Debug\net9.0\compressed\z3uuljydhd-48y08845bh.gz'
+2025-09-06 01:11:12.824 +06:00 [INF] Sending file. Request path: 'lib/jquery-validation/dist/jquery.validate.min.js'. Physical path: 'G:\c shaRP\repos\obj\Debug\net9.0\compressed\468aaboo1s-gk0pw8i4co.gz'
+2025-09-06 01:11:12.826 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/images/back.png - null null
+2025-09-06 01:11:12.826 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 86.2718ms
+2025-09-06 01:11:12.828 +06:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:11:12.830 +06:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:11:12.833 +06:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:11:12.836 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js - 200 5864 text/javascript 110.3822ms
+2025-09-06 01:11:12.837 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/lib/jquery-validation/dist/jquery.validate.min.js - 200 25344 text/javascript 111.5646ms
+2025-09-06 01:11:12.839 +06:00 [INF] The file images/back.png was not modified
+2025-09-06 01:11:12.845 +06:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:11:12.846 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/images/back.png - 304 null image/png 20.3927ms
+2025-09-06 01:11:24.095 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:11:24.099 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:11:24.100 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:11:24.104 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:11:24.106 +06:00 [INF] Executed ViewResult - view Index executed in 1.9901ms.
+2025-09-06 01:11:24.107 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 3.3411ms
+2025-09-06 01:11:24.109 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:11:24.111 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 15.5347ms
+2025-09-06 01:11:24.130 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:11:24.131 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:11:24.137 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 7.5067ms
+2025-09-06 01:11:24.151 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 20.0955ms
+2025-09-06 01:11:25.023 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/Home/About - null null
+2025-09-06 01:11:25.035 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.About (cutypai)'
+2025-09-06 01:11:25.038 +06:00 [INF] Route matched with {action = "About", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult About() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:11:25.041 +06:00 [INF] Executing ViewResult, running view About.
+2025-09-06 01:11:25.047 +06:00 [INF] Executed ViewResult - view About executed in 6.4885ms.
+2025-09-06 01:11:25.048 +06:00 [INF] Executed action cutypai.Controllers.HomeController.About (cutypai) in 8.1417ms
+2025-09-06 01:11:25.049 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.About (cutypai)'
+2025-09-06 01:11:25.052 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/Home/About - 200 null text/html; charset=utf-8 28.5209ms
+2025-09-06 01:11:25.057 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/images/team1.jpg - null null
+2025-09-06 01:11:25.057 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/images/team2.jpg - null null
+2025-09-06 01:11:25.067 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/images/team1.jpg - 404 0 null 10.5273ms
+2025-09-06 01:11:25.072 +06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7094/images/team1.jpg, Response status code: 404
+2025-09-06 01:11:25.073 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:11:25.069 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/images/team2.jpg - 404 0 null 11.7995ms
+2025-09-06 01:11:25.078 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:11:25.078 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 4.9107ms
+2025-09-06 01:11:25.081 +06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7094/images/team2.jpg, Response status code: 404
+2025-09-06 01:11:25.088 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 10.2981ms
+2025-09-06 01:12:15.237 +06:00 [INF] ✅ MongoDB ping OK.
+2025-09-06 01:12:15.849 +06:00 [INF] ✅ MongoDB indexes created successfully.
+2025-09-06 01:12:15.853 +06:00 [INF] Application starting...
+2025-09-06 01:12:15.901 +06:00 [INF] User profile is available. Using 'C:\Users\hariq\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-06 01:12:16.237 +06:00 [INF] Now listening on: https://localhost:7094
+2025-09-06 01:12:16.240 +06:00 [INF] Now listening on: http://localhost:5172
+2025-09-06 01:12:16.297 +06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-06 01:12:16.299 +06:00 [INF] Hosting environment: Development
+2025-09-06 01:12:16.300 +06:00 [INF] Content root path: G:\c shaRP\repos
+2025-09-06 01:12:16.937 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:12:17.220 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:12:17.246 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:12:17.264 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:12:24.810 +06:00 [INF] ✅ MongoDB ping OK.
+2025-09-06 01:12:25.255 +06:00 [INF] ✅ MongoDB indexes created successfully.
+2025-09-06 01:12:25.256 +06:00 [INF] Application starting...
+2025-09-06 01:12:25.343 +06:00 [INF] User profile is available. Using 'C:\Users\hariq\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-06 01:12:25.608 +06:00 [INF] Now listening on: https://localhost:7094
+2025-09-06 01:12:25.609 +06:00 [INF] Now listening on: http://localhost:5172
+2025-09-06 01:12:25.663 +06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-06 01:12:25.666 +06:00 [INF] Hosting environment: Development
+2025-09-06 01:12:25.668 +06:00 [INF] Content root path: G:\c shaRP\repos
+2025-09-06 01:12:26.009 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:12:26.199 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:12:26.218 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:12:26.244 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:12:26.425 +06:00 [INF] Executed ViewResult - view Index executed in 194.2827ms.
+2025-09-06 01:12:26.444 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 224.3967ms
+2025-09-06 01:12:26.445 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:12:26.445 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:12:26.451 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 447.6556ms
+2025-09-06 01:12:26.454 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 8.6297ms
+2025-09-06 01:12:26.502 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:12:26.540 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 37.836ms
+2025-09-06 01:15:54.328 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/signup - null null
+2025-09-06 01:15:54.354 +06:00 [INF] Executing endpoint 'cutypai.Controllers.AuthController.Signup (cutypai)'
+2025-09-06 01:15:54.356 +06:00 [INF] Route matched with {action = "Signup", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Signup() on controller cutypai.Controllers.AuthController (cutypai).
+2025-09-06 01:15:54.366 +06:00 [INF] Executing ViewResult, running view Signup.
+2025-09-06 01:15:54.474 +06:00 [INF] Executed ViewResult - view Signup executed in 109.5621ms.
+2025-09-06 01:15:54.475 +06:00 [INF] Executed action cutypai.Controllers.AuthController.Signup (cutypai) in 117.0741ms
+2025-09-06 01:15:54.477 +06:00 [INF] Executed endpoint 'cutypai.Controllers.AuthController.Signup (cutypai)'
+2025-09-06 01:15:54.479 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/signup - 200 null text/html; charset=utf-8 151.0398ms
+2025-09-06 01:15:54.487 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:15:54.488 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/lib/jquery-validation/dist/jquery.validate.min.js - null null
+2025-09-06 01:15:54.488 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js - null null
+2025-09-06 01:15:54.494 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 6.9362ms
+2025-09-06 01:15:54.512 +06:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:15:54.512 +06:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:15:54.542 +06:00 [INF] Sending file. Request path: 'lib/jquery-validation/dist/jquery.validate.min.js'. Physical path: 'G:\c shaRP\repos\obj\Debug\net9.0\compressed\468aaboo1s-gk0pw8i4co.gz'
+2025-09-06 01:15:54.542 +06:00 [INF] Sending file. Request path: 'lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js'. Physical path: 'G:\c shaRP\repos\obj\Debug\net9.0\compressed\z3uuljydhd-48y08845bh.gz'
+2025-09-06 01:15:54.544 +06:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:15:54.545 +06:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:15:54.546 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/lib/jquery-validation/dist/jquery.validate.min.js - 200 25344 text/javascript 58.4982ms
+2025-09-06 01:15:54.547 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js - 200 5864 text/javascript 59.5845ms
+2025-09-06 01:15:54.559 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:15:54.575 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 16.565ms
+2025-09-06 01:15:54.703 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/images/back.png - null null
+2025-09-06 01:15:54.707 +06:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:15:54.708 +06:00 [INF] The file images/back.png was not modified
+2025-09-06 01:15:54.711 +06:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:15:54.712 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/images/back.png - 304 null image/png 8.9391ms
+2025-09-06 01:15:57.360 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:15:57.364 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 4.4037ms
+2025-09-06 01:21:42.937 +06:00 [INF] ✅ MongoDB ping OK.
+2025-09-06 01:21:43.387 +06:00 [INF] ✅ MongoDB indexes created successfully.
+2025-09-06 01:21:43.388 +06:00 [INF] Application starting...
+2025-09-06 01:21:43.425 +06:00 [INF] User profile is available. Using 'C:\Users\hariq\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-06 01:21:43.724 +06:00 [INF] Now listening on: https://localhost:7094
+2025-09-06 01:21:43.725 +06:00 [INF] Now listening on: http://localhost:5172
+2025-09-06 01:21:43.813 +06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-06 01:21:43.814 +06:00 [INF] Hosting environment: Development
+2025-09-06 01:21:43.815 +06:00 [INF] Content root path: G:\c shaRP\repos
+2025-09-06 01:21:44.108 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:21:44.377 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:21:44.395 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:21:44.412 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:21:44.545 +06:00 [INF] Executed ViewResult - view Index executed in 136.4594ms.
+2025-09-06 01:21:44.553 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 154.3639ms
+2025-09-06 01:21:44.555 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:21:44.559 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/images/logo.png - null null
+2025-09-06 01:21:44.563 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 460.9854ms
+2025-09-06 01:21:44.569 +06:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:21:44.598 +06:00 [INF] Sending file. Request path: 'images/logo.png'. Physical path: 'G:\c shaRP\repos\wwwroot\images\logo.png'
+2025-09-06 01:21:44.601 +06:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:21:44.603 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/images/logo.png - 200 53802 image/png 43.7555ms
+2025-09-06 01:21:44.612 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:21:44.620 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 7.6714ms
+2025-09-06 01:21:44.636 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:21:44.678 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 41.8522ms
+2025-09-06 01:22:04.526 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:22:04.535 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:22:04.538 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:22:04.541 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:22:04.544 +06:00 [INF] Executed ViewResult - view Index executed in 4.1722ms.
+2025-09-06 01:22:04.546 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 5.7788ms
+2025-09-06 01:22:04.547 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:22:04.560 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:22:04.550 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 23.5468ms
+2025-09-06 01:22:04.560 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/images/logo.png - null null
+2025-09-06 01:22:04.614 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 15.3995ms
+2025-09-06 01:22:04.560 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:22:04.625 +06:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:22:04.633 +06:00 [INF] The file images/logo.png was not modified
+2025-09-06 01:22:04.634 +06:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:22:04.636 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/images/logo.png - 304 null image/png 76.2787ms
+2025-09-06 01:22:04.653 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 92.6808ms
+2025-09-06 01:22:31.432 +06:00 [INF] ✅ MongoDB ping OK.
+2025-09-06 01:22:31.878 +06:00 [INF] ✅ MongoDB indexes created successfully.
+2025-09-06 01:22:31.879 +06:00 [INF] Application starting...
+2025-09-06 01:22:31.912 +06:00 [INF] User profile is available. Using 'C:\Users\hariq\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-06 01:22:32.156 +06:00 [INF] Now listening on: https://localhost:7094
+2025-09-06 01:22:32.157 +06:00 [INF] Now listening on: http://localhost:5172
+2025-09-06 01:22:32.217 +06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-06 01:22:32.219 +06:00 [INF] Hosting environment: Development
+2025-09-06 01:22:32.220 +06:00 [INF] Content root path: G:\c shaRP\repos
+2025-09-06 01:22:32.835 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:22:33.072 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:22:33.090 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:22:33.105 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:22:33.239 +06:00 [INF] Executed ViewResult - view Index executed in 136.7838ms.
+2025-09-06 01:22:33.263 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/images/logo.png - null null
+2025-09-06 01:22:33.282 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 190.233ms
+2025-09-06 01:22:33.323 +06:00 [INF] Executing endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:22:33.325 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:22:33.331 +06:00 [INF] The file images/logo.png was not modified
+2025-09-06 01:22:33.345 +06:00 [INF] Executed endpoint 'Microsoft.AspNetCore.Routing.RouteEndpoint'
+2025-09-06 01:22:33.346 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/images/logo.png - 304 null image/png 83.4324ms
+2025-09-06 01:22:33.350 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:22:33.347 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 518.563ms
+2025-09-06 01:22:33.350 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:22:33.357 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 6.8044ms
+2025-09-06 01:22:33.445 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 94.8709ms
+2025-09-06 01:22:57.312 +06:00 [INF] ✅ MongoDB ping OK.
+2025-09-06 01:22:57.783 +06:00 [INF] ✅ MongoDB indexes created successfully.
+2025-09-06 01:22:57.785 +06:00 [INF] Application starting...
+2025-09-06 01:22:57.827 +06:00 [INF] User profile is available. Using 'C:\Users\hariq\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-09-06 01:22:58.059 +06:00 [INF] Now listening on: https://localhost:7094
+2025-09-06 01:22:58.065 +06:00 [INF] Now listening on: http://localhost:5172
+2025-09-06 01:22:58.131 +06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-09-06 01:22:58.142 +06:00 [INF] Hosting environment: Development
+2025-09-06 01:22:58.143 +06:00 [INF] Content root path: G:\c shaRP\repos
+2025-09-06 01:22:58.687 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/ - null null
+2025-09-06 01:22:58.865 +06:00 [INF] Executing endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:22:58.882 +06:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller cutypai.Controllers.HomeController (cutypai).
+2025-09-06 01:22:58.897 +06:00 [INF] Executing ViewResult, running view Index.
+2025-09-06 01:22:59.046 +06:00 [INF] Executed ViewResult - view Index executed in 149.5778ms.
+2025-09-06 01:22:59.105 +06:00 [INF] Executed action cutypai.Controllers.HomeController.Index (cutypai) in 219.452ms
+2025-09-06 01:22:59.107 +06:00 [INF] Executed endpoint 'cutypai.Controllers.HomeController.Index (cutypai)'
+2025-09-06 01:22:59.112 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/ - 200 null text/html; charset=utf-8 432.2626ms
+2025-09-06 01:22:59.326 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - null null
+2025-09-06 01:22:59.327 +06:00 [INF] Request starting HTTP/2 GET https://localhost:7094/_vs/browserLink - null null
+2025-09-06 01:22:59.336 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_framework/aspnetcore-browser-refresh.js - 200 16499 application/javascript; charset=utf-8 9.5558ms
+2025-09-06 01:22:59.404 +06:00 [INF] Request finished HTTP/2 GET https://localhost:7094/_vs/browserLink - 200 null text/javascript; charset=UTF-8 77.6625ms

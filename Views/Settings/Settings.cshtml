@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Settings Page";
+}
+
+<div class="max-w-4xl mx-auto py-10 px-6">
+    <h1 class="text-2xl font-semibold mb-6">Settings</h1>
+
+    <!-- Tabs -->
+    <div class="relative flex gap-4 border-b border-gray-200 dark:border-gray-700 mb-8 text-sm font-medium" id="settings-tabs">
+        <button class="tab-btn pb-3 text-blue-600" data-tab="articles">Articles</button>
+        <button class="tab-btn pb-3 text-gray-600 dark:text-gray-300" data-tab="billing">Billing</button>
+        <button class="tab-btn pb-3 text-gray-600 dark:text-gray-300" data-tab="email">Email</button>
+        <button class="tab-btn pb-3 text-gray-600 dark:text-gray-300" data-tab="integrations">Integrations</button>
+        <button class="tab-btn pb-3 text-gray-600 dark:text-gray-300" data-tab="plan">Plan</button>
+        <!-- Active bar -->
+        <div id="active-bar" class="absolute bottom-0 left-0 h-0.5 bg-blue-500 transition-all duration-300" style="width: 0;"></div>
+    </div>
+
+    <!-- Tab Contents -->
+    <div id="tab-contents">
+        <div class="tab-content" id="tab-articles">
+            @Html.Partial("Articles")
+        </div>
+        <div class="tab-content hidden" id="tab-billing">
+            @Html.Partial("Billing")
+        </div>
+        <div class="tab-content hidden" id="tab-email">
+            @Html.Partial("Email")
+        </div>
+        <div class="tab-content hidden" id="tab-integrations">
+            @Html.Partial("Integrations")
+        </div>
+        <div class="tab-content hidden" id="tab-plan">
+            @Html.Partial("Plan")
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab switching logic and active bar movement
+    function moveActiveBar(tabBtn) {
+        const bar = document.getElementById('active-bar');
+        const rect = tabBtn.getBoundingClientRect();
+        const parentRect = tabBtn.parentElement.getBoundingClientRect();
+        bar.style.left = (rect.left - parentRect.left) + 'px';
+        bar.style.width = rect.width + 'px';
+    }
+
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            tabBtns.forEach(b => b.classList.remove('text-blue-600', 'font-semibold'));
+            this.classList.add('text-blue-600', 'font-semibold');
+            const tab = this.getAttribute('data-tab');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            moveActiveBar(this);
+        });
+    });
+    // Initialize active bar on first tab
+    window.addEventListener('DOMContentLoaded', function() {
+        moveActiveBar(tabBtns[0]);
+    });
+</script>
