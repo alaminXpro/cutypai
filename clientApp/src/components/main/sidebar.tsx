@@ -21,7 +21,8 @@ import {
     User,
     Video,
     Volume2,
-    Zap,
+    DollarSign,
+    Calendar,
 } from "lucide-react";
 import type { NavItemType } from "@/components/application/app-navigation/config";
 import { SidebarNavigationSlim } from "@/components/application/app-navigation/sidebar-navigation/sidebar-slim";
@@ -82,6 +83,16 @@ const navItemsDualTier: (NavItemType & { icon: FC<{ className?: string }> })[] =
         href: "/profile",
         icon: User,
     },
+    {
+        label: "Pricing",
+        href: "/pricing",
+        icon: DollarSign,
+    },
+    {
+        label: "Calendar",
+        href: "/calendar",
+        icon: Calendar
+    }
 ];
 
 export const SidebarNavigation = () => (
