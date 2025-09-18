@@ -61,3 +61,30 @@ public sealed class RegistrationValidationResult
     
     public bool HasErrors => PasswordErrors.Count > 0 || EmailErrors.Count > 0 || GeneralErrors.Count > 0;
 }
+
+public sealed class ForgetPasswordRequest
+{
+    [Required]
+    [EmailAddress]
+    [StringLength(320)]
+    public string Email { get; set; } = string.Empty;
+}
+
+public sealed class ResetPasswordRequest
+{
+    [Required]
+    public string Token { get; set; } = string.Empty;
+    
+    [Required]
+    [EmailAddress]
+    [StringLength(320)]
+    public string Email { get; set; } = string.Empty;
+    
+    [Required]
+    [StringLength(200, MinimumLength = 8)]
+    public string Password { get; set; } = string.Empty;
+    
+    [Required]
+    [Compare("Password")]
+    public string ConfirmPassword { get; set; } = string.Empty;
+}
