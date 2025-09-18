@@ -12,7 +12,7 @@ function MainPage() {
     <>
       <ChatProvider>
       <Loader />
-      <Leva hidden />
+      <Leva />
       <UI />
       <Canvas 
         shadows 
